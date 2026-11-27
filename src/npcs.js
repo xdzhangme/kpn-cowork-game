@@ -1,5 +1,6 @@
-// Ambient NPCs (coworkers, robots, hybrid creatures). They are decoration: never solid for the
-// player, and they only use floor tiles that are clear of props, doors and interaction slots.
+// Ambient NPCs (coworkers, robots, hybrid creatures). They are never solid for the player and only
+// use floor tiles that are clear of props, doors and interaction slots. Each NPC can be talked to
+// (E when adjacent) and hands out one Cowork tip from src/data/npc-tips.json (see npc-talk.js).
 // NPCs are placed by room id (src/data/npcs.json), so they follow the map when the layout changes.
 import { npcSprite } from './art/npc-sprites.js';
 import { tileAt } from './tilemap.js';
@@ -9,6 +10,7 @@ const SPEEDS = { human: 14, robot: 18, creature: 12 };
 const WHEELCHAIR_SPEED = 18;
 const WANDER_RADIUS = 4; // tiles
 const PLAYER_GAP = 20; // px: NPCs stop instead of walking closer than this to the player
+const TALK_RANGE = 1; // tiles: the player can talk to an NPC within this Chebyshev distance
 
 function rng(seed) {
   let a = [...seed].reduce((h, ch) => (Math.imul(h, 31) + ch.charCodeAt(0)) | 0, 7);
@@ -20,16 +22,17 @@ function rng(seed) {
   };
 }
 
-// Floor tiles of a room that NPCs may stand on: no solid props, nothing near doors or desk slots.
+// Floor tiles of a room that NPCs may stand on: no solid props, and clear of doors and of the
+// desk strip of each slot (desk, chair row and the reward tile) so they never mask the E prompt.
 export function npcTiles(map, room) {
   const blocked = new Set();
   const block = (x, y, w, h) => {
     for (let j = y; j < y + h; j++) for (let i = x; i < x + w; i++) blocked.add(`${i},${j}`);
   };
   (map.props ?? []).filter((p) => p.solid !== false && p.layer !== 'floor').forEach((p) => block(p.x, p.y, p.w ?? 1, p.h ?? 1));
-  (map.slots ?? []).forEach((s) => block(s.x - 1, s.y - 1, 3, 4));
-  (map.objects ?? []).forEach((o) => block(o.x - 1, o.y - 1, 6, 5));
-  (map.doors ?? []).forEach((d) => block(d.x - 2, d.y - 2, 5, 5));
+  (map.slots ?? []).forEach((s) => block(s.x - 1, s.y, 4, 2));
+  (map.objects ?? []).forEach((o) => block(o.x - 1, o.y, 4, 2));
+  (map.doors ?? []).forEach((d) => block(d.x - 1, d.y - 1, 3, 3));
   const tiles = [];
   for (let y = room.y; y < room.y + room.h; y++) {
     for (let x = room.x; x < room.x + room.w; x++) {
@@ -43,7 +46,7 @@ export function createNpcs(map, defs, { reduceMotion = false } = {}) {
   const t = map.tileSize;
   const list = [];
   const byRoom = new Map();
-  for (const def of defs) {
+  for (const [index, def] of defs.entries()) {
     const room = map.rooms.find((r) => r.id === def.room);
     if (!room) continue;
     if (!byRoom.has(room.id)) byRoom.set(room.id, { allowed: npcTiles(map, room), placed: [] });
@@ -51,12 +54,16 @@ export function createNpcs(map, defs, { reduceMotion = false } = {}) {
     const rand = rng(def.id);
     const set = new Set(entry.allowed.map((p) => `${p.x},${p.y}`));
     // pick a random free tile at least 3 tiles away from the NPCs already placed in this room
+    // (2 tiles in small, busy rooms so every NPC still finds a spot)
     const order = [...entry.allowed].sort(() => rand() - 0.5);
-    const home = order.find((p) => entry.placed.every((q) => Math.hypot(p.x - q.x, p.y - q.y) >= 3)) ?? null;
+    const apart = (gap) => order.find((p) => entry.placed.every((q) => Math.hypot(p.x - q.x, p.y - q.y) >= gap)) ?? null;
+    const home = apart(3) ?? apart(2);
     if (!home) continue;
     entry.placed.push(home);
     list.push({
       def,
+      index,
+      room: room.id,
       home,
       set,
       rand,
@@ -90,9 +97,43 @@ export function createNpcs(map, defs, { reduceMotion = false } = {}) {
     return null;
   }
 
-  function update(dt, player) {
+  function faceTowards(n, p) {
+    if (!p) return;
+    const dx = p.x - n.x;
+    const dy = p.y - n.y;
+    if (Math.abs(dx) >= Math.abs(dy) || n.def.kind !== 'human') {
+      if (Math.abs(dx) > 2) n.facing = dx < 0 ? 'left' : 'right';
+    } else n.facing = dy < 0 ? 'up' : 'down';
+  }
+
+  // The closest NPC within 1 tile (Chebyshev) of the tile under the player's feet, or null.
+  function nearest(player) {
+    const col = Math.floor(player.x / t);
+    const row = Math.floor(player.y / t);
+    let best = null;
+    let bestDist = Infinity;
+    for (const n of list) {
+      const dist = Math.max(Math.abs(Math.floor(n.x / t) - col), Math.abs(Math.floor((n.y - 1) / t) - row));
+      const exact = Math.hypot(n.x - player.x, n.y - player.y);
+      if (dist <= TALK_RANGE && exact < bestDist) {
+        best = n;
+        bestDist = exact;
+      }
+    }
+    return best;
+  }
+
+  function update(dt, player, focus = null) {
     for (const n of list) {
       n.time += dt;
+      if (n === focus) {
+        // The NPC the player can talk to stops and turns toward the player.
+        n.target = null;
+        n.moving = false;
+        n.wait = Math.max(n.wait, 1);
+        faceTowards(n, player);
+        continue;
+      }
       if (reduceMotion || n.def.behavior !== 'wander') continue;
       const speed = n.def.look?.wheelchair ? WHEELCHAIR_SPEED : SPEEDS[n.def.kind];
       if (!n.target) {
@@ -144,5 +185,8 @@ export function createNpcs(map, defs, { reduceMotion = false } = {}) {
     },
   }));
 
-  return { list, update, drawables };
+  // Pixel height of the NPC's current sprite, used to hang the E prompt above its head.
+  const spriteHeight = (n) => npcSprite(n.def, n.facing, frameOf(n)).h;
+
+  return { list, update, drawables, nearest, spriteHeight };
 }

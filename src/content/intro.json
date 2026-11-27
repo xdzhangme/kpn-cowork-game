@@ -1,0 +1,73 @@
+{
+  "id": "intro-chat-vs-cowork",
+  "en": {
+    "title": "Chat vs Cowork",
+    "screens": [
+      {
+        "title": "Two ways to work with Copilot",
+        "lead": "Copilot Chat answers questions. Cowork does the work.",
+        "chat": ["You paste text or one file.", "You get an answer back in the chat.", "You carry the answer into your documents yourself."],
+        "cowork": ["You point it at a folder and describe the outcome.", "It reads the files, works step by step and builds the deliverable.", "It pauses for your approval before anything leaves your hands."]
+      },
+      {
+        "title": "Why this matters at KPN",
+        "lead": "Most real work is not one question. It is a folder of exports, mails and notes that has to become one brief, one sheet or one deck.",
+        "paragraphs": [
+          "With Chat you are the project manager: you feed it every file, keep the thread on track, copy results into Word or Excel and remember to check everything.",
+          "With Cowork you write the outcome once. Cowork reads the folder, keeps an evidence trail, flags gaps instead of guessing, and shows you the result before it saves or shares anything."
+        ]
+      },
+      {
+        "title": "What stays in your hands",
+        "lead": "Cowork never sends, shares or saves without your OK.",
+        "paragraphs": [
+          "Every scenario in this office ends with a pause for approval. You review the ranking, the labels and the draft. Only then does Cowork save the brief or write the update.",
+          "You keep the judgement. Cowork removes the counting, matching and copying."
+        ]
+      },
+      {
+        "title": "How this game works",
+        "lead": "Every desk with a yellow bubble is one KPN use case.",
+        "paragraphs": [
+          "Press E at a desk to play its scenario: first the situation your colleagues face, then the Cowork prompt, then the run step by step, then the result and the Chat vs Cowork comparison.",
+          "Reaching the result completes the case and unlocks a reward in the room. Start with your own department, then explore the others."
+        ]
+      }
+    ]
+  },
+  "nl": {
+    "title": "Chat vs Cowork",
+    "screens": [
+      {
+        "title": "Twee manieren om met Copilot te werken",
+        "lead": "Copilot Chat beantwoordt vragen. Cowork doet het werk.",
+        "chat": ["Je plakt tekst of één bestand.", "Je krijgt een antwoord terug in de chat.", "Je zet het antwoord zelf over naar je documenten."],
+        "cowork": ["Je wijst een map aan en beschrijft het resultaat.", "Het leest de bestanden, werkt stap voor stap en bouwt het eindproduct.", "Het pauzeert voor jouw goedkeuring voordat er iets de deur uitgaat."]
+      },
+      {
+        "title": "Waarom dit telt bij KPN",
+        "lead": "Echt werk is zelden één vraag. Het is een map met exports, mails en notities die één brief, één sheet of één deck moet worden.",
+        "paragraphs": [
+          "Met Chat ben jij de projectleider: je voert elk bestand in, houdt de draad vast, kopieert resultaten naar Word of Excel en denkt eraan om alles te controleren.",
+          "Met Cowork schrijf je het resultaat één keer op. Cowork leest de map, houdt een bewijsspoor bij, markeert gaten in plaats van te gokken en laat je het resultaat zien voordat het iets opslaat of deelt."
+        ]
+      },
+      {
+        "title": "Wat in jouw handen blijft",
+        "lead": "Cowork verstuurt, deelt of bewaart nooit iets zonder jouw OK.",
+        "paragraphs": [
+          "Elk scenario op dit kantoor eindigt met een pauze voor goedkeuring. Jij beoordeelt de ranking, de labels en het concept. Pas daarna slaat Cowork de brief op of schrijft het de update.",
+          "Jij houdt het oordeel. Cowork haalt het tellen, matchen en kopiëren weg."
+        ]
+      },
+      {
+        "title": "Zo werkt dit spel",
+        "lead": "Elk bureau met een gele bel is één KPN-use case.",
+        "paragraphs": [
+          "Druk op E bij een bureau om het scenario te spelen: eerst de situatie van je collega's, dan de Cowork-prompt, dan de run stap voor stap, dan het resultaat en de vergelijking Chat vs Cowork.",
+          "Het resultaat bereiken voltooit de case en ontgrendelt een beloning in de ruimte. Begin bij je eigen afdeling en verken daarna de rest."
+        ]
+      }
+    ]
+  }
+}

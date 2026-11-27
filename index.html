@@ -3,19 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%236f86a8'/%3E%3Crect x='3' y='3' width='10' height='10' fill='%23f2f5f8'/%3E%3C/svg%3E" />
-    <title>Pixel Office</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2300C300'/%3E%3Crect x='3' y='3' width='10' height='10' fill='%23ffffff'/%3E%3C/svg%3E" />
+    <title>KPN Cowork game</title>
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
     <header class="hd">
+      <img class="logo" id="logo" src="/kpn-logo.svg" alt="KPN" />
       <span class="badge" id="badge"></span>
       <b id="company"></b>
+      <span class="hd-sub" data-i18n="header.sub"></span>
       <span class="sp"></span>
       <div class="lang" role="group" aria-label="Language">
         <button type="button" data-lang="en">EN</button>
         <button type="button" data-lang="nl">NL</button>
       </div>
+      <button type="button" class="dis dis--guide" id="guide-btn" data-i18n="header.guide"></button>
       <button type="button" class="dis" id="disclaimer-btn" data-i18n="disclaimer.button"></button>
     </header>
 
@@ -35,13 +38,14 @@
         <nav class="px-bottom-bar" id="bottom-bar" aria-label="Game actions"></nav>
       </section>
       <section role="tabpanel" id="panel-library" aria-labelledby="tab-library" hidden>
-        <div id="library-list"></div>
+        <a class="skip" href="#lib-results" data-i18n="skip.results"></a>
+        <div id="library-list" class="pane kpn-doc"></div>
       </section>
       <section role="tabpanel" id="panel-start" aria-labelledby="tab-start" hidden>
-        <div data-content="start"></div>
+        <div id="start-pane" class="kpn-doc"></div>
       </section>
       <section role="tabpanel" id="panel-rai" aria-labelledby="tab-rai" hidden>
-        <div data-content="rai"></div>
+        <div id="rai-pane" class="kpn-doc"></div>
       </section>
     </main>
 

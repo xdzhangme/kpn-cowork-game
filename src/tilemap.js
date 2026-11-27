@@ -87,6 +87,10 @@ export function createMapView(canvas, container, map, drawOverlay) {
       redraw();
     },
     redraw,
+    // Current camera position (map pixels), for converting screen clicks to map coordinates.
+    camera() {
+      return cam ? { x: Math.round(cam.x), y: Math.round(cam.y) } : clampCamera(target.x, target.y, view, size);
+    },
     // Jumps the camera straight to the target (no easing); applied on the next redraw/resize.
     snap() {
       cam = null;

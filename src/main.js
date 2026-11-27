@@ -1,17 +1,24 @@
 import { config } from './config.js';
 import { applyI18n, setLang } from './i18n.js';
-import { initLibrary } from './library.js';
+import { initLibraryUI } from './library-ui.js';
+import { initStartPane } from './start-pane.js';
+import { initGovernancePane } from './governance-pane.js';
+import './styles/ref-shell.css';
+import './styles/ref-cards.css';
+import './styles/kpn-doc.css';
 import { loadTheme } from './theme.js';
 import officeMap from './data/office-map.json';
-import { blocked, createPlayer, drawPlayer } from './player.js';
-import { OPEN_USE_CASE } from './rules.js';
-import { createMapView } from './tilemap.js';
-import useCases from './data/use-cases.json';
-import { drawInteractables, loadObjects, nearestInteractable } from './interactables.js';
+import { blocked, createPlayer, drawPlayer, feetAt, tileOf } from './player.js';
+import { OPEN_USE_CASE, TALK_NPC } from './rules.js';
+import { createMapView, SCALE } from './tilemap.js';
+import { loadUseCases } from './usecases.js';
+import { EXPLAINER_ID, initScenarioPlayer } from './scenario.js';
+import { drawInteractables, drawPromptAt, loadObjects, nearestInteractable } from './interactables.js';
 import { initRules } from './rules.js';
+import { initNpcTalk } from './npc-talk.js';
 import { drawProp, propBase, sprite } from './art/atlas.js';
 import { initCardPanel } from './panel.js';
-import { initButtons } from './buttons.js';
+import { initButtons, OPEN_GUIDE } from './buttons.js';
 import { playBlip } from './sound.js';
 import { isCompleted, completedIds, onProgressChange } from './progress.js';
 import { decorLevel, decorSpots, doorFor, roomAtPixel, roomProgress } from './rooms.js';
@@ -19,9 +26,28 @@ import { initGuide } from './guide.js';
 import { createNpcs } from './npcs.js';
 import npcData from './data/npcs.json';
 
-document.title = config.companyName;
-document.getElementById('badge').textContent = config.badge;
-document.getElementById('company').textContent = config.companyName;
+document.title = `${config.companyName} Cowork game`;
+const logo = document.getElementById('logo');
+if (config.logo) {
+  if (!logo.getAttribute('src').endsWith(config.logo)) logo.src = `${import.meta.env.BASE_URL}${config.logo}`;
+  logo.alt = config.companyName;
+  document.getElementById('badge').hidden = true;
+  document.getElementById('company').hidden = true;
+} else {
+  logo.hidden = true;
+  document.getElementById('badge').textContent = config.badge;
+  document.getElementById('company').textContent = config.companyName;
+}
+
+// The intro room's explainer object shares the object/progress pipeline with real cases.
+const EXPLAINER_STUB = {
+  id: EXPLAINER_ID,
+  icon: 'intro',
+  capabilities: [],
+  meta: { department: 'intro', code: 'INTRO' },
+  title: { en: 'Chat vs Cowork: start here', nl: 'Chat vs Cowork: begin hier' },
+  hook: { en: 'A three-minute tour of why Cowork beats pasting into Chat.', nl: 'Een rondleiding van drie minuten over waarom Cowork wint van plakken in Chat.' },
+};
 
 // A free tile next to the object (below first), as feet position; null if none is free.
 function standingSpot(map, o) {
@@ -63,8 +89,17 @@ document.querySelectorAll('.lang button').forEach((b) =>
 const dialog = document.getElementById('disclaimer-dialog');
 document.getElementById('disclaimer-btn').addEventListener('click', () => dialog.showModal());
 document.getElementById('disclaimer-close').addEventListener('click', () => dialog.close());
+// The header Guide button switches to the game tab and reopens the How to play guide.
+document.getElementById('guide-btn').addEventListener('click', () => {
+  document.getElementById('tab-game')?.click();
+  window.dispatchEvent(new CustomEvent(OPEN_GUIDE));
+});
 
 const gamePanel = document.getElementById('panel-game');
+
+async function boot() {
+const kpnCases = await loadUseCases();
+const useCases = [EXPLAINER_STUB, ...kpnCases];
 const player = createPlayer(officeMap, () => !gamePanel.hidden);
 const objects = loadObjects(officeMap, useCases);
 
@@ -75,6 +110,7 @@ function openInGame(useCaseId) {
   if (!object) return false;
   const spot = standingSpot(officeMap, object);
   if (spot) {
+    player.clearPath();
     player.x = spot.x;
     player.y = spot.y;
     player.facing = spot.facing;
@@ -87,14 +123,19 @@ function openInGame(useCaseId) {
   return true;
 }
 
-initLibrary(document.getElementById('library-list'), {
+initLibraryUI(document.getElementById('library-list'), {
+  useCases: kpnCases,
   hasObject: (id) => objects.some((o) => o.useCaseId === id),
   onOpenInGame: openInGame,
 });
+initStartPane(document.getElementById('start-pane'));
+initGovernancePane(document.getElementById('rai-pane'));
 applyI18n();
 let active = null;
 initRules(window, () => active, () => !gamePanel.hidden);
-initCardPanel(document.getElementById('card'), useCases);
+const guide = initGuide(officeMap, document.body);
+initCardPanel(document.getElementById('card'), useCases, { introSeen: guide.introSeen });
+initScenarioPlayer({ useCases: kpnCases });
 
 // Each bound object has a reward item two tiles to its right: grey silhouette until the case is finished.
 const rewardProps = objects
@@ -134,8 +175,28 @@ function playerColors() {
 }
 
 const npcs = createNpcs(officeMap, npcData.npcs, { reduceMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches });
-const guide = initGuide(officeMap, document.body);
-const caseRooms = officeMap.rooms.filter((r) => r.type === 'department' || r.type === 'general');
+initNpcTalk(window);
+// Objects win over NPCs when both are in range; otherwise the nearest NPC becomes the E target.
+// Objects and NPCs share the E key. The one in front of the player wins; otherwise the closer
+// one does, so an NPC standing next to a desk can still be talked to. Ties go to the use case.
+function pickActive() {
+  const object = nearestInteractable(officeMap, objects, player);
+  const npc = npcs.nearest(player);
+  if (!npc) return object;
+  if (!object) return { npc };
+  const t = officeMap.tileSize;
+  const obj = { dx: (object.x + 0.5) * t - player.x, dy: (object.y + 0.5) * t - player.y };
+  const per = { dx: npc.x - player.x, dy: npc.y - player.y };
+  const inFront = ({ dx, dy }) => {
+    if (player.facing === 'up') return dy < 0 && Math.abs(dx) <= -dy;
+    if (player.facing === 'down') return dy > 0 && Math.abs(dx) <= dy;
+    if (player.facing === 'left') return dx < 0 && Math.abs(dy) <= -dx;
+    return dx > 0 && Math.abs(dy) <= dx;
+  };
+  if (inFront(per) !== inFront(obj)) return inFront(per) ? { npc } : object;
+  return Math.hypot(per.dx, per.dy) < Math.hypot(obj.dx, obj.dy) - 1 ? { npc } : object;
+}
+const caseRooms = officeMap.rooms.filter((r) => r.type === 'department' || r.type === 'general' || r.type === 'intro');
 const signs = new Map(
   caseRooms.map((r) => [r.id, officeMap.props.find((p) => p.sprite.startsWith('sign-') && p.x >= r.x && p.x < r.x + r.w && p.y === r.y - 1)]),
 );
@@ -181,6 +242,82 @@ function drawGuideArrow(ctx, now, camX, camY) {
   ctx.drawImage(sprite('guide-arrow'), Math.round(door.x * t + t / 2 - 7 - camX), Math.round(door.y * t - 20 - camY + bob));
 }
 
+// Click-to-move: a click on a walkable tile walks the player there; a click on a desk or an NPC
+// walks next to it and then triggers the same interaction as pressing E. Ignored while a dialog
+// is open (the Map overlay has its own jump-to-room click) and when the tile is unreachable.
+const canvas = document.getElementById('game');
+let missMark = null; // { x, y, at } for the brief "x" on an unreachable click
+function tileFromEvent(e) {
+  const rect = canvas.getBoundingClientRect();
+  const cam = mapView.camera();
+  const t = officeMap.tileSize;
+  return {
+    col: Math.floor((((e.clientX - rect.left) * canvas.width) / rect.width + cam.x) / t),
+    row: Math.floor((((e.clientY - rect.top) * canvas.height) / rect.height + cam.y) / t),
+  };
+}
+// A free tile next to a tile (below first, then the sides), or null.
+function adjacentTile(col, row) {
+  const sides = [[0, 1], [-1, 0], [1, 0], [0, -1], [-1, 1], [1, 1], [-1, -1], [1, -1]];
+  for (const [dx, dy] of sides) {
+    const f = feetAt(officeMap, col + dx, row + dy);
+    if (!blocked(officeMap, f.x, f.y)) return { col: col + dx, row: row + dy };
+  }
+  return null;
+}
+canvas.addEventListener('click', (e) => {
+  if (gamePanel.hidden || document.querySelector('dialog[open]')) return;
+  const tile = tileFromEvent(e);
+  const t = officeMap.tileSize;
+  const object = objects.find((o) => o.x === tile.col && (o.y === tile.row || o.y === tile.row + 1));
+  const npc = npcs.list.find((n) => Math.floor(n.x / t) === tile.col && Math.floor((n.y - 1) / t) === tile.row);
+  let ok = false;
+  if (object) {
+    const spot = adjacentTile(object.x, object.y);
+    ok = Boolean(spot) && player.walkTo(spot, () => {
+      player.facing = spot.row > object.y ? 'up' : spot.row < object.y ? 'down' : spot.col < object.x ? 'right' : 'left';
+      active = pickActive();
+      window.dispatchEvent(new CustomEvent(OPEN_USE_CASE, { detail: { useCaseId: object.useCaseId, objectId: object.id } }));
+    });
+  } else if (npc) {
+    const spot = adjacentTile(tile.col, tile.row);
+    ok = Boolean(spot) && player.walkTo(spot, () => {
+      const dx = npc.x - player.x;
+      const dy = npc.y - player.y;
+      player.facing = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : dy < 0 ? 'up' : 'down';
+      active = pickActive();
+      window.dispatchEvent(new CustomEvent(TALK_NPC, { detail: { npc } }));
+    });
+  } else {
+    ok = player.walkTo(tile);
+  }
+  if (!ok) missMark = { x: (tile.col + 0.5) * t, y: (tile.row + 0.5) * t, at: performance.now() };
+});
+
+// Pulsing pixel target where the player is walking to; a small "x" where a click could not go.
+function drawTarget(ctx, now, camX, camY, colors) {
+  const dest = player.destination();
+  if (dest) {
+    const x = Math.round(dest.x - camX);
+    const y = Math.round(dest.y - camY - 3);
+    const r = 4 + (Math.floor(now / 250) % 2);
+    ctx.fillStyle = colors.outline;
+    ctx.fillRect(x - r - 1, y - 1, 2 * r + 2, 3);
+    ctx.fillRect(x - 1, y - r - 1, 3, 2 * r + 2);
+    ctx.fillStyle = colors.marker;
+    ctx.fillRect(x - r, y, 2 * r, 1);
+    ctx.fillRect(x, y - r, 1, 2 * r);
+  }
+  if (missMark && now - missMark.at < 500) {
+    const x = Math.round(missMark.x - camX);
+    const y = Math.round(missMark.y - camY);
+    ctx.fillStyle = colors.outline;
+    for (let i = -3; i <= 3; i++) {
+      ctx.fillRect(x + i, y + i, 1, 1);
+      ctx.fillRect(x + i, y - i, 1, 1);
+    }
+  } else missMark = null;
+}
 const mapView = createMapView(
   document.getElementById('game'),
   document.getElementById('viewport'),
@@ -212,14 +349,19 @@ const mapView = createMapView(
       if (unlocked && at !== undefined && now - at < SPARKLE_MS) drawSparkle(ctx, officeMap, p, camX, camY, (now - at) / SPARKLE_MS);
     });
     const room = roomAtPixel(officeMap, player.x, player.y - 2);
-    if (room && room.id === guide.target()) guide.arrive();
+    if (room) guide.arrive(room.id);
     drawRoomSigns(ctx, camX, camY, colors);
     drawInteractables(ctx, officeMap, objects, active, camX, camY, colors, room, isCompleted);
+    if (active?.npc) drawPromptAt(ctx, Math.round(active.npc.x - camX), Math.round(active.npc.y - camY - npcs.spriteHeight(active.npc) - 4), colors);
     drawGuideArrow(ctx, now, camX, camY);
+    drawTarget(ctx, now, camX, camY, colors);
   },
 );
 loadTheme();
+
 initButtons({ container: document.getElementById('bottom-bar'), map: officeMap, useCases, player, mapView });
+// `?debug` exposes the live player and NPC list for headless smoke tests (see docs/SMOKE-CHECKLIST.md).
+if (new URLSearchParams(location.search).has('debug')) window.__kpnGame = { player, npcs, objects, map: officeMap, camera: () => mapView.camera() };
 
 let last = performance.now();
 function frame(now) {
@@ -227,11 +369,18 @@ function frame(now) {
   last = now;
   if (!gamePanel.hidden) {
     player.update(dt);
-    npcs.update(dt, player);
-    active = nearestInteractable(officeMap, objects, player);
+    npcs.update(dt, player, active?.npc ?? null);
+    active = pickActive();
     mapView.setTarget(player.x, player.y - 8);
     mapView.step(dt);
   }
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
+}
+
+boot().catch((e) => {
+  console.error(e);
+  const card = document.getElementById('card');
+  if (card) card.textContent = `Could not load the KPN use cases: ${e.message}`;
+});

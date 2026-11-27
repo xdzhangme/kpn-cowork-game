@@ -3,12 +3,11 @@ import { tileAt } from './tilemap.js';
 
 export const DEPT_KEY = 'department';
 
-// Rooms that carry use cases: department rooms and the general meeting room.
-const caseRoom = (r) => r.type === 'department' || r.type === 'general';
-// Room dept ids that differ from the use case department ids.
-const DEPT_ALIAS = { ops: 'operations' };
+// Rooms that carry use cases: department rooms, the general room and the Chat vs Cowork intro room.
+const caseRoom = (r) => r.type === 'department' || r.type === 'general' || r.type === 'intro';
 
-export const roomDept = (room) => (room.type === 'general' ? 'general' : DEPT_ALIAS[room.dept] ?? room.dept);
+// Room ids double as use case department ids (con, sme, ... , general, intro).
+export const roomDept = (room) => (room.type === 'department' ? room.dept : room.id);
 
 export function roomAtPixel(map, x, y) {
   const t = map.tileSize;
@@ -72,12 +71,17 @@ export function decorSpots(map, room) {
   return spots;
 }
 
-// The door tile (map coordinates) that leads into a room from the corridor.
+// The door tile (map coordinates) that leads into a room from the corridor. Doors may sit in any of the
+// four walls around the room's interior rect (top doors occupy the wall row and the back-wall face row).
 export function doorFor(map, room) {
-  const side = map.doors.filter((d) => d.y >= room.y && d.y < room.y + room.h && (d.x === room.x - 1 || d.x === room.x + room.w));
-  return side[0] ?? null;
+  const own = map.doors.filter((d) => d.x >= room.x - 1 && d.x <= room.x + room.w && d.y >= room.y - 2 && d.y <= room.y + room.h);
+  // prefer the tile closest to the corridor (outermost), so the guide arrow points at the doorway itself
+  own.sort((a, b) => Math.abs(b.y - room.y) - Math.abs(a.y - room.y));
+  return own[0] ?? null;
 }
 
 export function pickableRooms(map) {
-  return map.rooms.filter(caseRoom).filter((r) => r.type === 'department');
+  return map.rooms.filter((r) => r.type === 'department');
 }
+
+export const introRoom = (map) => map.rooms.find((r) => r.type === 'intro') ?? null;
