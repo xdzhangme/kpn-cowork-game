@@ -2,7 +2,7 @@
   "en": {
     "start": {
       "title": "How to start",
-      "intro": "Play one case in the game, then take its prompt into Cowork at work. Use the Guide button in the header for the controls.",
+      "intro": "Play one case in the game, then take its prompt into Cowork at work. Use the Guide button in the header for the controls, and talk to the colleagues in the office (press E) for short Cowork tips from Microsoft's official guidance.",
       "steps": [
         "Play: walk to a desk with a yellow bubble and press E. Follow the four acts (Situation, Prompt, Cowork runs, Result). Start in the Chat vs Cowork room.",
         "Copy: in the Prompt or Result act, press Copy prompt. Replace the [square bracket] placeholders with your own folder, names and dates.",
@@ -32,7 +32,7 @@
   "nl": {
     "start": {
       "title": "Hoe begin je",
-      "intro": "Speel één case in het spel en neem de prompt daarna mee naar Cowork op je werk. Gebruik de knop Gids in de kop voor de besturing.",
+      "intro": "Speel één case in het spel en neem de prompt daarna mee naar Cowork op je werk. Gebruik de knop Gids in de kop voor de besturing en praat met de collega's op kantoor (druk op E) voor korte Cowork-tips uit de officiële Microsoft-documentatie.",
       "steps": [
         "Speel: loop naar een bureau met een gele bel en druk op E. Volg de vier aktes (Situatie, Prompt, Cowork werkt, Resultaat). Begin in de ruimte Chat vs Cowork.",
         "Kopieer: druk in de akte Prompt of Resultaat op Prompt kopiëren. Vervang de [vierkante haken] door je eigen map, namen en datums.",

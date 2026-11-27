@@ -58,6 +58,8 @@
     { "id": "workspace-hauler", "room": "workspace", "kind": "robot", "model": "hauler", "color": "tintLavender", "behavior": "wander" },
     { "id": "workspace-scarf-1", "room": "workspace", "kind": "human", "behavior": "idle", "look": { "skin": "#ecc19a", "hair": "hijab", "scarf": "tintSage", "top": "accent", "bottom": "accentDark", "glasses": "clear" } },
     { "id": "workspace-snowl", "room": "workspace", "kind": "creature", "model": "snowl", "color": "tintSky", "accent": "tintPeach", "behavior": "wander" },
-    { "id": "workspace-prosth-arm-1", "room": "workspace", "kind": "human", "behavior": "wander", "look": { "skin": "#f6d5b8", "hair": "long", "hairColor": "#8a4a2c", "top": "leafDark", "bottom": "accentDark", "prosthArm": true, "build": "slim" } }
+    { "id": "workspace-prosth-arm-1", "room": "workspace",     "kind": "human", "behavior": "wander", "look": { "skin": "#f6d5b8", "hair": "long", "hairColor": "#8a4a2c", "top": "leafDark", "bottom": "accentDark", "prosthArm": true, "build": "slim" } },
+       { "id": "cafeteria-lunch-1", "room": "cafeteria", "kind": "human", "behavior": "wander", "look": { "skin": "#c98a5a", "hair": "short", "hairColor": "#2b2320", "top": "accentDark", "bottom": "leafDark", "glasses": "clear" } },
+       { "id": "cafeteria-mothcat", "room": "cafeteria", "kind": "creature", "model": "mothcat", "color": "tintSage", "accent": "tintPeach", "behavior": "wander" }
   ]
 }

@@ -3,11 +3,11 @@
 Run against the deployed GitHub Pages site (or `npm run preview`) in a desktop browser. Open the developer console first and keep it visible.
 
 ## Load
-- [ ] On first visit a department picker appears, followed by the six-screen "How to play" guide (movement and E, yellow bubbles, the four acts, the Chat vs Cowork room, progress, taking a prompt to work). Next walks through it; the last button reads "Start playing"; Esc or x closes it at any time.
+- [ ] On first visit a department picker appears, followed by the six-screen "How to play" guide (movement and E, talking to colleagues for tips, yellow bubbles, the four acts, the Chat vs Cowork room, progress, taking a prompt to work). Next walks through it; the last button reads "Start playing"; Esc or x closes it at any time.
 - [ ] The guide can be reopened with the green Guide button in the header (also from other tabs; it switches to the game) and with How to play in the bottom bar. It always restarts at screen 1.
 - [ ] Page loads with no errors or warnings in the console.
 - [ ] Header shows the KPN logo, "Cowork tutorial game", the Guide button and the Disclaimer button; fonts render as pixel/legible fonts (no fallback serif). The browser tab title is "KPN Cowork game".
-- [ ] The office map renders on the canvas and the player is visible. Room signs read Consumer, Business SME, Tailored Solutions, Business LCE, Network Ops & IT, Wholesale, People & Learning, Finance & Control, General and Chat vs Cowork.
+- [ ] The office map renders on the canvas and the player is visible in the lobby at the bottom of the building. Room signs read Consumer, Business SME, Tailored Solutions, Business LCE, Network Ops & IT, Wholesale, People & Learning, Finance & Control, General and Chat vs Cowork.
 
 ## Tabs
 - [ ] Four tabs are present: Tutorial Game, Use Case Library, How to start, Responsible AI.
@@ -45,8 +45,16 @@ Run against the deployed GitHub Pages site (or `npm run preview`) in a desktop b
 - [ ] Move with arrow keys / WASD; the player cannot walk through walls or furniture.
 - [ ] Tasks panel shows progress, unlocked rewards and the next recommended case.
 - [ ] Today's tasks lists only "Start here" (the explainer) and "Required" (your department plus the general cases); there is no "Optional exploration" section.
-- [ ] Map button shows the whole office: reception, Chat vs Cowork room and lounge at the top, a central spine with branching corridors, department rooms mixed with the print room, workspace and cafeteria. Every room's short name is drawn inside its rectangle; clicking a room on the map or its button in the list moves the player there (check a top-door room such as Consumer and a left-door room such as Wholesale). The department picker shows an arrow to the chosen room's door.
+- [ ] Map button shows the whole office: department rooms across the upper and middle floors along branching corridors, General and Chat vs Cowork on the right of the main corridor, and the workspace, cafeteria, lounge, print room and lobby scattered along the bottom. Every room's short name is drawn inside its rectangle; clicking a room on the map or its button in the list moves the player there (check a top-door room such as Consumer and a left-door room such as General). The department picker shows an arrow to the chosen room's door.
 - [ ] Reload the page: progress and rewards are kept.
+
+## Talking NPCs
+- [ ] Walk next to any NPC (human, robot or creature; there is at least one in every room): the yellow E prompt appears above the NPC and the NPC turns to face you.
+- [ ] Press E: a small speech dialog opens with the NPC's name (or Colleague / Office bot / Office critter), a portrait, one short Cowork tip and a "Source: Microsoft Learn" (or "Microsoft Adoption") link that opens the official page in a new tab. Movement is blocked while it is open.
+- [ ] E, Enter, Esc, the x button or Thanks! closes the dialog and the game does not reopen it on the same key press.
+- [ ] Talk to three NPCs in the same room: they give different tips. In Dutch the dialog shows "Collega" / "Bron:" / "Bedankt!" and a Dutch tip.
+- [ ] Standing between a use-case desk and an NPC, E opens the scenario (desks win over NPCs).
+- [ ] Debugging aid: open the site with `?debug` to get `window.__kpnGame` (`player`, `npcs`, `objects`, `map`) in the console.
 
 ## Reset
 - [ ] Menu > Reset progress shows a confirmation.

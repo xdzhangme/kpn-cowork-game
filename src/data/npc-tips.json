@@ -1,0 +1,391 @@
+{
+  "tips": [
+    {
+      "id": "tip-01",
+      "topic": "prompting",
+      "en": "Build a prompt from four ingredients: context, goal, source and expectations. A clear goal is the foundation, and the other three make the answer more accurate.",
+      "nl": "Bouw je prompt op uit vier ingrediënten: context, doel, bron en verwachtingen. Een helder doel is de basis; de andere drie maken het antwoord nauwkeuriger.",
+      "source": "https://learn.microsoft.com/en-us/training/modules/write-effective-prompts-do-more-prompting/2-write-effective-prompt",
+      "sourceTitle": "Write an effective prompt - Training",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-02",
+      "topic": "prompting",
+      "en": "Give context: tell Copilot why you need something and who is involved, for example a client meeting you are preparing for. Chat works best with detailed prompts, not search-style keywords.",
+      "nl": "Geef context: vertel Copilot waarom je iets nodig hebt en wie erbij betrokken is, bijvoorbeeld een klantgesprek waarvoor je je voorbereidt. Chat werkt het best met uitgebreide prompts, niet met zoekwoorden.",
+      "source": "https://learn.microsoft.com/en-us/training/modules/write-effective-prompts-do-more-prompting/2-write-effective-prompt",
+      "sourceTitle": "Write an effective prompt - Training",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-03",
+      "topic": "prompting",
+      "en": "Name the result you want: bullet points, an email, a short essay or a brainstorm. Adding an example helps, because generative AI is good at imitating.",
+      "nl": "Benoem het resultaat dat je wilt: opsommingstekens, een e-mail, een kort essay of een brainstorm. Een voorbeeld helpt, want generatieve AI is goed in nabootsen.",
+      "source": "https://learn.microsoft.com/en-us/training/modules/write-effective-prompts-do-more-prompting/2-write-effective-prompt",
+      "sourceTitle": "Write an effective prompt - Training",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-04",
+      "topic": "sources",
+      "en": "Tell Copilot where to look: text or files you provide, web content, or work data you have access to. Naming the source helps it stay focused.",
+      "nl": "Vertel Copilot waar het moet zoeken: tekst of bestanden die je aanlevert, webinhoud of werkgegevens waar jij toegang toe hebt. Als je de bron noemt, blijft het antwoord gerichter.",
+      "source": "https://learn.microsoft.com/en-us/training/modules/write-effective-prompts-do-more-prompting/2-write-effective-prompt",
+      "sourceTitle": "Write an effective prompt - Training",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-05",
+      "topic": "prompting",
+      "en": "Set expectations: say who the answer is for and what tone you want. A line about who you are and what you are trying to achieve helps a lot.",
+      "nl": "Stel verwachtingen: zeg voor wie het antwoord bedoeld is en welke toon je wilt. Een zin over wie je bent en wat je wilt bereiken helpt enorm.",
+      "source": "https://learn.microsoft.com/en-us/training/modules/write-effective-prompts-do-more-prompting/2-write-effective-prompt",
+      "sourceTitle": "Write an effective prompt - Training",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-06",
+      "topic": "iterating",
+      "en": "Treat the first answer as a starting point. Read it, then send follow-up prompts to clarify details or refine the result until it fits.",
+      "nl": "Zie het eerste antwoord als een beginpunt. Lees het door en stuur vervolgprompts om details te verduidelijken of het resultaat bij te schaven tot het past.",
+      "source": "https://learn.microsoft.com/en-us/training/modules/write-effective-prompts-do-more-prompting/2-write-effective-prompt",
+      "sourceTitle": "Write an effective prompt - Training",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-07",
+      "topic": "sources",
+      "en": "In Copilot Chat, type / to link a file or folder, # to point to a topic or meeting, and @ to mention a person. That saves you from explaining what you mean.",
+      "nl": "Typ in Copilot Chat / om naar een bestand of map te verwijzen, # voor een onderwerp of vergadering en @ om een persoon te noemen. Dan hoef je minder uit te leggen.",
+      "source": "https://learn.microsoft.com/en-us/training/modules/write-effective-prompts-do-more-prompting/2-write-effective-prompt",
+      "sourceTitle": "Write an effective prompt - Training",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-08",
+      "topic": "prompting",
+      "en": "Be clear and specific: give the topic, the purpose, the tone and the length you need. Avoid vague wording and slang.",
+      "nl": "Wees duidelijk en specifiek: noem het onderwerp, het doel, de toon en de gewenste lengte. Vermijd vage formuleringen en jargon of slang.",
+      "source": "https://learn.microsoft.com/en-us/training/modules/write-effective-prompts-do-more-prompting/3-review-prompting-best-practices",
+      "sourceTitle": "Review prompting best practices - Training",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-09",
+      "topic": "iterating",
+      "en": "Keep it conversational. Give Copilot feedback on what it returned, and refine your prompt and try again if the output isn't right yet.",
+      "nl": "Houd het een gesprek. Geef Copilot feedback op wat het teruggaf, en pas je prompt aan en probeer het opnieuw als het resultaat nog niet goed is.",
+      "source": "https://learn.microsoft.com/en-us/training/modules/write-effective-prompts-do-more-prompting/3-review-prompting-best-practices",
+      "sourceTitle": "Review prompting best practices - Training",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-10",
+      "topic": "prompting",
+      "en": "Don't mix conflicting instructions in one prompt, and finish one task before you switch to a new topic.",
+      "nl": "Stop geen tegenstrijdige instructies in één prompt en rond eerst één taak af voordat je op een nieuw onderwerp overstapt.",
+      "source": "https://learn.microsoft.com/en-us/training/modules/write-effective-prompts-do-more-prompting/3-review-prompting-best-practices",
+      "sourceTitle": "Review prompting best practices - Training",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-11",
+      "topic": "verification",
+      "en": "Always check Copilot's answer for accuracy, grammar and style before you use it.",
+      "nl": "Controleer het antwoord van Copilot altijd op juistheid, grammatica en stijl voordat je het gebruikt.",
+      "source": "https://learn.microsoft.com/en-us/training/modules/write-effective-prompts-do-more-prompting/3-review-prompting-best-practices",
+      "sourceTitle": "Review prompting best practices - Training",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-12",
+      "topic": "citations",
+      "en": "After Copilot answers, open its sources to see how the response was cited. AI-generated content can be wrong, so the sources are there for you to check.",
+      "nl": "Open na het antwoord van Copilot de bronnen om te zien hoe het antwoord is onderbouwd. AI-content kan fout zijn, dus de bronnen staan er zodat jij ze kunt controleren.",
+      "source": "https://learn.microsoft.com/en-us/training/modules/write-effective-prompts-do-more-prompting/2-write-effective-prompt",
+      "sourceTitle": "Write an effective prompt - Training",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-13",
+      "topic": "prompt-library",
+      "en": "Found a prompt that works? Save it in Prompt Lab so you can reuse it later. You can also edit a Microsoft-curated prompt to fit your own work.",
+      "nl": "Prompt gevonden die werkt? Bewaar hem in Prompt Lab zodat je hem later opnieuw kunt gebruiken. Je kunt ook een door Microsoft samengestelde prompt aanpassen aan je eigen werk.",
+      "source": "https://learn.microsoft.com/en-us/training/modules/write-effective-prompts-do-more-prompting/4-discover-share-save-prompts-copilot-prompt-gallery",
+      "sourceTitle": "Discover, share, and save prompts with Prompt Lab - Training",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-14",
+      "topic": "sharing",
+      "en": "Share your favorite prompts with colleagues straight from Prompt Lab, by link or with a whole team. Your organization's admin can also publish prompt collections for everyone.",
+      "nl": "Deel je favoriete prompts met collega's rechtstreeks vanuit Prompt Lab, via een link of met een heel team. Je beheerder kan ook promptcollecties voor iedereen publiceren.",
+      "source": "https://learn.microsoft.com/en-us/training/modules/write-effective-prompts-do-more-prompting/4-discover-share-save-prompts-copilot-prompt-gallery",
+      "sourceTitle": "Discover, share, and save prompts with Prompt Lab - Training",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-15",
+      "topic": "cowork-basics",
+      "en": "Copilot Cowork carries out tasks for you, such as sending emails, scheduling meetings, creating documents and posting in Teams. It shows each step, and you approve actions before they happen.",
+      "nl": "Copilot Cowork voert taken voor je uit, zoals e-mails versturen, vergaderingen plannen, documenten maken en berichten in Teams plaatsen. Het toont elke stap en jij keurt acties goed voordat ze gebeuren.",
+      "source": "https://learn.microsoft.com/en-us/copilot/cowork/",
+      "sourceTitle": "Copilot Cowork overview",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-16",
+      "topic": "agents",
+      "en": "A typical Cowork session: describe your task, watch the steps, steer or pause if needed, approve key actions, then review the results.",
+      "nl": "Een typische Cowork-sessie: beschrijf je taak, volg de stappen, stuur bij of pauzeer als dat nodig is, keur belangrijke acties goed en bekijk daarna het resultaat.",
+      "source": "https://learn.microsoft.com/en-us/copilot/cowork/",
+      "sourceTitle": "Copilot Cowork overview",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-17",
+      "topic": "approval",
+      "en": "Before an important action like sending an email or scheduling a meeting, Cowork pauses and asks for your go-ahead. You decide whether it goes ahead.",
+      "nl": "Voor een belangrijke actie, zoals een e-mail versturen of een vergadering inplannen, pauzeert Cowork en vraagt om jouw akkoord. Jij beslist of het doorgaat.",
+      "source": "https://learn.microsoft.com/en-us/copilot/cowork/",
+      "sourceTitle": "Copilot Cowork overview",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-18",
+      "topic": "approval",
+      "en": "Read the approval preview before you click. Check the recipients, the content and the other details, because Cowork shows exactly what it plans to do.",
+      "nl": "Lees de voorvertoning bij een goedkeuring voordat je klikt. Controleer de ontvangers, de inhoud en de overige details, want Cowork laat precies zien wat het van plan is.",
+      "source": "https://learn.microsoft.com/en-us/copilot/cowork/use-cowork",
+      "sourceTitle": "Use Copilot Cowork",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-19",
+      "topic": "approval",
+      "en": "If you pick \"Always allow\" or another \"don't ask again\" option, it only applies to the current conversation. You can review those choices in the Permissions section of the side panel.",
+      "nl": "Kies je 'Altijd toestaan' of een andere optie om niet meer te vragen, dan geldt dat alleen voor het huidige gesprek. Je kunt die keuzes teruglezen in het onderdeel Permissions van het zijpaneel.",
+      "source": "https://learn.microsoft.com/en-us/copilot/cowork/use-cowork",
+      "sourceTitle": "Use Copilot Cowork",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-20",
+      "topic": "cowork-control",
+      "en": "Not happy with where a task is going? Pause softly to let Cowork finish its current step so you can check progress, or cancel to change direction completely.",
+      "nl": "Gaat een taak de verkeerde kant op? Pauzeer zacht zodat Cowork de huidige stap afrondt en jij de voortgang kunt bekijken, of annuleer om helemaal van koers te veranderen.",
+      "source": "https://learn.microsoft.com/en-us/copilot/cowork/use-cowork",
+      "sourceTitle": "Use Copilot Cowork",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-21",
+      "topic": "prompting",
+      "en": "Be specific with Cowork. \"Email Sarah about the Q2 review tomorrow at 2pm\" works better than \"Send that email.\"",
+      "nl": "Wees specifiek tegen Cowork. 'Mail Sarah over de Q2-review van morgen om 14.00 uur' werkt beter dan 'Stuur die mail'.",
+      "source": "https://learn.microsoft.com/en-us/copilot/cowork/best-practices",
+      "sourceTitle": "Best practices for Copilot Cowork",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-22",
+      "topic": "cowork-control",
+      "en": "Complex jobs like building a deck or researching across email and Teams take longer, so allow some time. If the steps keep updating, Cowork is still working; retry only if progress stops for a minute or more.",
+      "nl": "Complexe klussen, zoals een presentatie bouwen of onderzoek doen in e-mail en Teams, kosten meer tijd. Blijven de stappen verversen, dan is Cowork nog bezig; probeer het pas opnieuw als de voortgang een minuut of langer stilstaat.",
+      "source": "https://learn.microsoft.com/en-us/copilot/cowork/best-practices",
+      "sourceTitle": "Best practices for Copilot Cowork",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-23",
+      "topic": "automation",
+      "en": "For work you do again and again, just say something like \"do this every morning\" and Cowork sets up the recurring task for you.",
+      "nl": "Voor werk dat je steeds opnieuw doet, zeg je gewoon iets als 'doe dit elke ochtend' en Cowork zet de terugkerende taak voor je op.",
+      "source": "https://learn.microsoft.com/en-us/copilot/cowork/best-practices",
+      "sourceTitle": "Best practices for Copilot Cowork",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-24",
+      "topic": "sources",
+      "en": "Give Cowork the right files: drag them onto the chat box, or use the + button to add work context, upload from your device, or attach files from OneDrive, SharePoint or Teams.",
+      "nl": "Geef Cowork de juiste bestanden: sleep ze naar het chatvak, of gebruik de +-knop om werkcontext toe te voegen, bestanden van je apparaat te uploaden of bestanden uit OneDrive, SharePoint of Teams te koppelen.",
+      "source": "https://learn.microsoft.com/en-us/copilot/cowork/get-started",
+      "sourceTitle": "Get started with Copilot Cowork",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-25",
+      "topic": "cowork-control",
+      "en": "Sometimes Cowork asks you a clarifying question and offers choices. Pick one, type your own answer, or skip it and let Cowork continue with what it knows.",
+      "nl": "Soms stelt Cowork je een verduidelijkende vraag met keuzes. Kies een optie, typ je eigen antwoord of sla de vraag over en laat Cowork doorgaan met wat het al weet.",
+      "source": "https://learn.microsoft.com/en-us/copilot/cowork/get-started",
+      "sourceTitle": "Get started with Copilot Cowork",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-26",
+      "topic": "office-apps",
+      "en": "Cowork can edit an existing Word, Excel or PowerPoint file in OneDrive or SharePoint and saves to the same shared file. Earlier versions stay available in the file's version history.",
+      "nl": "Cowork kan een bestaand Word-, Excel- of PowerPoint-bestand in OneDrive of SharePoint bewerken en slaat op in hetzelfde gedeelde bestand. Eerdere versies blijven beschikbaar in de versiegeschiedenis.",
+      "source": "https://learn.microsoft.com/en-us/copilot/cowork/use-cowork",
+      "sourceTitle": "Use Copilot Cowork",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-27",
+      "topic": "chat-vs-agent",
+      "en": "Use Copilot Chat for a quick draft, answer or insight in one conversation. Use Cowork when you want Copilot to take action across apps and files in a multi-step task.",
+      "nl": "Gebruik Copilot Chat voor een snel concept, antwoord of inzicht in één gesprek. Gebruik Cowork als Copilot in meerdere stappen actie moet ondernemen in apps en bestanden.",
+      "source": "https://learn.microsoft.com/en-us/copilot/cowork/cowork-faq",
+      "sourceTitle": "Copilot Cowork common questions",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-28",
+      "topic": "permissions",
+      "en": "Cowork inherits your permissions. It can only reach the files and emails you can already open yourself, and it shows the sensitivity label of referenced items.",
+      "nl": "Cowork erft jouw rechten. Het kan alleen bij bestanden en e-mails waar jij zelf al bij kunt, en het toont het vertrouwelijkheidslabel van de items waar je naar verwijst.",
+      "source": "https://learn.microsoft.com/en-us/copilot/cowork/cowork-faq",
+      "sourceTitle": "Copilot Cowork common questions",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-29",
+      "topic": "privacy",
+      "en": "Your prompts, Copilot's responses and the data it reads through Microsoft Graph are not used to train the foundation language models behind Copilot.",
+      "nl": "Je prompts, de antwoorden van Copilot en de gegevens die het via Microsoft Graph leest, worden niet gebruikt om de onderliggende taalmodellen van Copilot te trainen.",
+      "source": "https://learn.microsoft.com/en-us/copilot/plan/microsoft-365-copilot-privacy",
+      "sourceTitle": "Data, Privacy, and Security for Microsoft Copilot",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-30",
+      "topic": "permissions",
+      "en": "Copilot only surfaces organizational data that you personally have at least view permission for. Good permissions in SharePoint and Teams matter.",
+      "nl": "Copilot toont alleen organisatiegegevens waarvoor jij zelf minimaal leesrechten hebt. Goede rechten in SharePoint en Teams zijn dus belangrijk.",
+      "source": "https://learn.microsoft.com/en-us/copilot/plan/microsoft-365-copilot-privacy",
+      "sourceTitle": "Data, Privacy, and Security for Microsoft Copilot",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-31",
+      "topic": "verification",
+      "en": "Generative AI isn't guaranteed to be fully factual, so use your own judgment before you send Copilot's output to others. Think of its drafts and summaries as a chance to review, not a finished product.",
+      "nl": "Generatieve AI is niet gegarandeerd volledig feitelijk juist, dus gebruik je eigen oordeel voordat je de output van Copilot naar anderen stuurt. Zie de concepten en samenvattingen als een kans om te controleren, niet als een eindproduct.",
+      "source": "https://learn.microsoft.com/en-us/copilot/plan/microsoft-365-copilot-privacy",
+      "sourceTitle": "Data, Privacy, and Security for Microsoft Copilot",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-32",
+      "topic": "responsible-use",
+      "en": "Copilot works within existing permissions, so overshared or poorly governed content can affect its results and add risk. Tidy up who can see what.",
+      "nl": "Copilot werkt binnen bestaande rechten, dus te ruim gedeelde of slecht beheerde content kan de resultaten beïnvloeden en risico's vergroten. Ruim op wie wat mag zien.",
+      "source": "https://learn.microsoft.com/en-us/copilot/plan/security-microsoft-copilot",
+      "sourceTitle": "Security for Microsoft Copilot",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-33",
+      "topic": "agents",
+      "en": "Agents are specialized AI assistants with their own knowledge, skills and tools. They extend Copilot by connecting to internal knowledge sources and other services for more specialized workflows.",
+      "nl": "Agents zijn gespecialiseerde AI-assistenten met eigen kennis, vaardigheden en hulpmiddelen. Ze breiden Copilot uit door te koppelen met interne kennisbronnen en andere diensten voor meer gespecialiseerde werkstromen.",
+      "source": "https://learn.microsoft.com/en-us/agents/design-guidelines/intro-to-agents",
+      "sourceTitle": "Introduction to agents",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-34",
+      "topic": "responsible-use",
+      "en": "When you use an agent, check its privacy statement and terms of use to see how it handles your organization's data.",
+      "nl": "Als je een agent gebruikt, lees dan de privacyverklaring en gebruiksvoorwaarden om te zien hoe die met de gegevens van je organisatie omgaat.",
+      "source": "https://learn.microsoft.com/en-us/copilot/plan/microsoft-365-copilot-privacy",
+      "sourceTitle": "Data, Privacy, and Security for Microsoft Copilot",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-35",
+      "topic": "office-apps",
+      "en": "Copilot in Word helps you draft, rewrite and summarize documents. In PowerPoint it can build a presentation from a prompt or an existing document.",
+      "nl": "Copilot in Word helpt je documenten opstellen, herschrijven en samenvatten. In PowerPoint kan het een presentatie maken op basis van een prompt of een bestaand document.",
+      "source": "https://learn.microsoft.com/en-us/copilot/plan/copilot-overview",
+      "sourceTitle": "What is Microsoft Copilot?",
+      "sourceSite": "Microsoft Learn"
+    },
+    {
+      "id": "tip-36",
+      "topic": "office-apps",
+      "en": "Copilot in Excel can help with data analysis, trend spotting, formula generation and visualizations, all in one place.",
+      "nl": "Copilot in Excel kan helpen met data-analyse, het herkennen van trends, het maken van formules en visualisaties, allemaal op één plek.",
+      "source": "https://adoption.microsoft.com/en-us/copilot/users/",
+      "sourceTitle": "Microsoft Copilot for AI Users",
+      "sourceSite": "Microsoft Adoption"
+    },
+    {
+      "id": "tip-37",
+      "topic": "office-apps",
+      "en": "Copilot in Outlook can summarize threads, pull out action items and draft replies. In Teams, the Facilitator agent supports your meeting workflows.",
+      "nl": "Copilot in Outlook kan mailthreads samenvatten, actiepunten eruit halen en antwoorden opstellen. In Teams ondersteunt de Facilitator-agent je vergaderingen.",
+      "source": "https://adoption.microsoft.com/en-us/copilot/users/",
+      "sourceTitle": "Microsoft Copilot for AI Users",
+      "sourceSite": "Microsoft Adoption"
+    },
+    {
+      "id": "tip-38",
+      "topic": "prompt-library",
+      "en": "Not sure where to start? Browse the Prompt Gallery, copy a ready-made prompt for Chat or Cowork, customize it, and see what Copilot can do.",
+      "nl": "Weet je niet waar je moet beginnen? Blader door de Prompt Gallery, kopieer een kant-en-klare prompt voor Chat of Cowork, pas hem aan en kijk wat Copilot kan.",
+      "source": "https://adoption.microsoft.com/en-us/copilot/prompt-gallery/",
+      "sourceTitle": "Prompt Gallery",
+      "sourceSite": "Microsoft Adoption"
+    },
+    {
+      "id": "tip-39",
+      "topic": "agents",
+      "en": "With Cowork, describe the outcome you want, such as \"prep me for Thursday's client review\". Cowork plans the steps and gathers inputs from your emails, meetings, messages and files, while you stay in control.",
+      "nl": "Beschrijf bij Cowork het resultaat dat je wilt, zoals 'bereid me voor op de klantreview van donderdag'. Cowork plant de stappen en verzamelt input uit je e-mails, vergaderingen, berichten en bestanden, terwijl jij de controle houdt.",
+      "source": "https://adoption.microsoft.com/en-us/copilot/cowork/ai-user/",
+      "sourceTitle": "Microsoft 365 Copilot Cowork",
+      "sourceSite": "Microsoft Adoption"
+    },
+    {
+      "id": "tip-40",
+      "topic": "responsible-use",
+      "en": "Decide which AI outputs need a human review before they are used, shared or acted on. The level of checking should match how the result will be used, for example more care for a customer-facing proposal.",
+      "nl": "Bepaal welke AI-uitvoer door een mens moet worden gecontroleerd voordat die wordt gebruikt, gedeeld of uitgevoerd. De mate van controle moet passen bij hoe het resultaat wordt gebruikt, bijvoorbeeld extra zorg bij een voorstel voor een klant.",
+      "source": "https://adoption.microsoft.com/en-gb/copilot/set-guardrails/",
+      "sourceTitle": "Set guardrails before you scale your AI initiative",
+      "sourceSite": "Microsoft Adoption"
+    },
+    {
+      "id": "tip-41",
+      "topic": "responsible-use",
+      "en": "Every AI agent should have a named owner who understands what it is meant to do and makes sure its access and permissions fit that purpose.",
+      "nl": "Elke AI-agent hoort een benoemde eigenaar te hebben die weet waarvoor de agent bedoeld is en erop let dat toegang en rechten daarbij passen.",
+      "source": "https://adoption.microsoft.com/en-gb/copilot/set-guardrails/",
+      "sourceTitle": "Set guardrails before you scale your AI initiative",
+      "sourceSite": "Microsoft Adoption"
+    },
+    {
+      "id": "tip-42",
+      "topic": "starting-small",
+      "en": "Start with a simple, familiar request, like asking Copilot to list the action items agreed in a meeting or to find insights in a workbook. Then build up from there.",
+      "nl": "Begin met een eenvoudig, vertrouwd verzoek, zoals Copilot vragen de afgesproken actiepunten uit een vergadering te noemen of inzichten in een werkmap te zoeken. Bouw het daarna stap voor stap uit.",
+      "source": "https://adoption.microsoft.com/en-us/copilot/champions/",
+      "sourceTitle": "Microsoft Copilot for Champions",
+      "sourceSite": "Microsoft Adoption"
+    },
+    {
+      "id": "tip-43",
+      "topic": "champions",
+      "en": "Adoption champions help their peers get comfortable with Copilot and bring new ways of working to life across teams. Share what works for you with your own team.",
+      "nl": "Adoptiechampions helpen hun collega's wegwijs te raken met Copilot en brengen nieuwe manieren van werken tot leven in teams. Deel wat voor jou werkt met je eigen team.",
+      "source": "https://adoption.microsoft.com/en-us/champions-community/",
+      "sourceTitle": "Microsoft Champions Community",
+      "sourceSite": "Microsoft Adoption"
+    }
+  ]
+}

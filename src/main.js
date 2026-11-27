@@ -8,8 +8,9 @@ import { OPEN_USE_CASE } from './rules.js';
 import { createMapView } from './tilemap.js';
 import { loadUseCases } from './usecases.js';
 import { EXPLAINER_ID, initScenarioPlayer } from './scenario.js';
-import { drawInteractables, loadObjects, nearestInteractable } from './interactables.js';
+import { drawInteractables, drawPromptAt, loadObjects, nearestInteractable } from './interactables.js';
 import { initRules } from './rules.js';
+import { initNpcTalk } from './npc-talk.js';
 import { drawProp, propBase, sprite } from './art/atlas.js';
 import { initCardPanel } from './panel.js';
 import { initButtons, OPEN_GUIDE } from './buttons.js';
@@ -166,6 +167,27 @@ function playerColors() {
 }
 
 const npcs = createNpcs(officeMap, npcData.npcs, { reduceMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches });
+initNpcTalk(window);
+// Objects win over NPCs when both are in range; otherwise the nearest NPC becomes the E target.
+// Objects and NPCs share the E key. The one in front of the player wins; otherwise the closer
+// one does, so an NPC standing next to a desk can still be talked to. Ties go to the use case.
+function pickActive() {
+  const object = nearestInteractable(officeMap, objects, player);
+  const npc = npcs.nearest(player);
+  if (!npc) return object;
+  if (!object) return { npc };
+  const t = officeMap.tileSize;
+  const obj = { dx: (object.x + 0.5) * t - player.x, dy: (object.y + 0.5) * t - player.y };
+  const per = { dx: npc.x - player.x, dy: npc.y - player.y };
+  const inFront = ({ dx, dy }) => {
+    if (player.facing === 'up') return dy < 0 && Math.abs(dx) <= -dy;
+    if (player.facing === 'down') return dy > 0 && Math.abs(dx) <= dy;
+    if (player.facing === 'left') return dx < 0 && Math.abs(dy) <= -dx;
+    return dx > 0 && Math.abs(dy) <= dx;
+  };
+  if (inFront(per) !== inFront(obj)) return inFront(per) ? { npc } : object;
+  return Math.hypot(per.dx, per.dy) < Math.hypot(obj.dx, obj.dy) - 1 ? { npc } : object;
+}
 const caseRooms = officeMap.rooms.filter((r) => r.type === 'department' || r.type === 'general' || r.type === 'intro');
 const signs = new Map(
   caseRooms.map((r) => [r.id, officeMap.props.find((p) => p.sprite.startsWith('sign-') && p.x >= r.x && p.x < r.x + r.w && p.y === r.y - 1)]),
@@ -246,11 +268,14 @@ const mapView = createMapView(
     if (room) guide.arrive(room.id);
     drawRoomSigns(ctx, camX, camY, colors);
     drawInteractables(ctx, officeMap, objects, active, camX, camY, colors, room, isCompleted);
+    if (active?.npc) drawPromptAt(ctx, Math.round(active.npc.x - camX), Math.round(active.npc.y - camY - npcs.spriteHeight(active.npc) - 4), colors);
     drawGuideArrow(ctx, now, camX, camY);
   },
 );
 loadTheme();
 initButtons({ container: document.getElementById('bottom-bar'), map: officeMap, useCases, player, mapView });
+// `?debug` exposes the live player and NPC list for headless smoke tests (see docs/SMOKE-CHECKLIST.md).
+if (new URLSearchParams(location.search).has('debug')) window.__kpnGame = { player, npcs, objects, map: officeMap };
 
 let last = performance.now();
 function frame(now) {
@@ -258,8 +283,8 @@ function frame(now) {
   last = now;
   if (!gamePanel.hidden) {
     player.update(dt);
-    npcs.update(dt, player);
-    active = nearestInteractable(officeMap, objects, player);
+    npcs.update(dt, player, active?.npc ?? null);
+    active = pickActive();
     mapView.setTarget(player.x, player.y - 8);
     mapView.step(dt);
   }

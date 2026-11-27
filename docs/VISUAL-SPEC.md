@@ -43,7 +43,7 @@ Scenario player (opens over the map on E):
 
 - **Final art target** is `art-direction-pixel.png`: chunky visible pixels, hard edges, no anti-aliasing or gradients, limited palette, flat shading. It is a direction, not a shippable asset sheet: production tiles and props are redrawn or cleaned up as true pixel art in that style. `sample.png` is the layout mockup (art target map + card + buttons).
 - 16x16 tiles, thin blue-grey outline, 1 px top highlight and 1-2 px bottom shade on props.
-- Same structure as the floor-plan reference: irregular portrait building outline, reception at the top next to the Chat vs Cowork intro room and the lounge, a wide entrance corridor, a central spine with branching side corridors, department rooms of different sizes and offsets interleaved with the functional rooms (print room, workspace, cafeteria) on both wings, doorways on whichever wall faces a corridor, thick pale walls with a tinted back-wall face (2 tiles) and a wainscot band, subtle tile grid floors.
+- Same structure as the floor-plan reference: irregular portrait building outline (40x61 tiles), department rooms of different sizes and offsets across the upper and middle floors along branching side corridors, the General meeting room and the Chat vs Cowork intro room on the right of the main vertical corridor, and the functional rooms (open workspace, cafeteria, lounge, print room, lobby) scattered along the bottom band where the player spawns. Doorways on whichever wall faces a corridor, thick pale walls with a tinted back-wall face (2 tiles) and a wainscot band, subtle tile grid floors.
 - Dense decoration: rugs with borders, floor lamps, bins, water coolers, boxes, book piles, coat racks, wall frames, windows, clocks, posters, plants, desks with monitors, shelves, sofas, vending machines. People sit or stand at desks.
 - UI panels and buttons use the same palette: pale panel, thin slate outline with inner white line, bottom bevel, no rounded corners, no gradients.
 - **Text must be readable.** Do not bake text into the map PNG except short room signs. Card and button text is real HTML text in bundled OFL fonts, minimum 14 px on screen, supports lowercase and Dutch characters. Pixel text (titles, buttons, labels, signs) uses Jersey 10 (`docs/visual/Jersey10.ttf`); Pixelify Sans is not used because its "f" and "5" are misread. Long card and dialog text (prompt block, descriptions) uses Atkinson Hyperlegible (`docs/visual/AtkinsonHyperlegible-*.ttf`) at 16 px or larger, line height 1.7, high contrast, ligatures disabled. The pixel frame stays around the card. Scope rule: a player's required tasks are their own department's cases plus the general cases; Today's tasks lists only those (other departments can still be explored freely on the map, but are not listed as tasks). The UI mock lives in `docs/ui/index.html`. Room signs use a pixel font drawn into the sprite.
@@ -72,11 +72,13 @@ Room floor tints (soft, one per room, from config): mint `#c9e8d8`, lavender `#d
 
 One default character, 16x24 px, small head with a dark outline (our earlier procedural version, not the larger concept-image figures), 4 directions x 3 walk frames (+ idle). Later: palette swaps as look rewards.
 
-### 5.1 Ambient NPCs
+### 5.1 Talking NPCs
 
-Decorative NPCs (human coworkers, robots, hybrid creatures) idle or wander in rooms. They never block the player (not solid) and keep out of interaction slots, objects and doors.
+NPCs (human coworkers, robots, hybrid creatures) idle or wander in every room. They never block the player (not solid) and keep clear of desk slots, objects and doors so they cannot mask the E prompt. Every NPC can be talked to: when the player stands next to one (and no use-case object is closer) the E prompt appears above the NPC, and E opens a small speech dialog.
 
-- Data: `src/data/npcs.json` lists NPCs by room id and look only; tiles are chosen at load time from each room's free floor, so NPCs follow layout changes.
+- Data: `src/data/npcs.json` lists NPCs by room id and look only; tiles are chosen at load time from each room's free floor, so NPCs follow layout changes. An optional `tip` field pins a specific tip id.
+- Tips: `src/data/npc-tips.json` holds ~40 short Cowork usage tips (EN + NL) paraphrased from Microsoft Learn and the Microsoft Adoption site, each with a `source` URL. A tip is assigned by NPC index so neighbours never repeat.
+- Dialog (`src/npc-talk.js`): pixel panel with a green title bar (the NPC's name or "Colleague" / "Office bot" / "Office critter"), a 4x portrait of the NPC's sprite, a speech bubble with the tip, a "Source: Microsoft Learn" link line and a Thanks! button. E, Enter, Esc or the x close it.
 - Sprites: `src/art/npc-sprites.js` generates them procedurally (humans 16x24, 4 directions, walk frames). Outfits, robots and creatures use theme tokens; skin and hair use fixed natural tones.
 - Humans: 7 skin tones, hair styles (short, bald, long, braids, bun, curly, scarf), builds, heights, glasses, beards, and mobility aids (wheelchair, cane, white cane, prosthetic leg or arm). All are depicted with equal dignity and no stereotypes.
 - Wandering is disabled under `prefers-reduced-motion`.
@@ -86,8 +88,8 @@ Decorative NPCs (human coworkers, robots, hybrid creatures) idle or wander in ro
 Data-driven tile map (15 spaces):
 - 8 KPN department rooms (5 use cases each): Consumer, Business SME, Tailored Solutions, Business LCE, Network Ops & IT, Wholesale, People & Learning, Finance & Control.
 - 1 big General meeting room (10 GEN cases).
-- 1 **Chat vs Cowork** intro room near the spawn point with a single explainer object (monitor sign icon). New players are nudged to visit it first.
-- Tip rooms showing Cowork tips: Reception/lobby, Print, Open workspace, Lounge/pantry.
+- 1 **Chat vs Cowork** intro room halfway up the main corridor, on the right, with a single explainer object (monitor sign icon). New players are nudged to visit it first.
+- Tip rooms along the bottom band: Lobby (spawn), Print, Open workspace, Cafeteria, Lounge/pantry. Cowork tips are given by the NPCs there and in every other room.
 - 51 interactable objects (50 use cases plus the explainer). The plan can grow by adding rooms along any corridor in `scripts/build-map.mjs` (`PLAN`).
 
 ## 7. Rewards and states

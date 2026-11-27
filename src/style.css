@@ -583,6 +583,77 @@ dialog.px-dialog.px-dialog--map {
   width: min(1040px, 94vw);
 }
 
+/* NPC speech dialog: portrait on the left, a speech bubble with the tip and its source on the right. */
+dialog.px-dialog.px-dialog--npc {
+  width: min(560px, 92vw);
+}
+
+.npc-talk {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.npc-talk-portrait {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-width: 96px;
+  min-height: 112px;
+  padding: 8px;
+  border: 3px solid var(--ink);
+  background: var(--panel-dark);
+}
+
+.npc-talk-sprite {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.npc-talk-bubble {
+  position: relative;
+  padding: 12px 14px;
+  border: 3px solid var(--ink);
+  background: #fff;
+}
+
+.npc-talk-bubble::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: -12px;
+  width: 9px;
+  height: 9px;
+  background: #fff;
+  border-left: 3px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
+  transform: rotate(45deg);
+}
+
+.npc-talk-text {
+  margin: 0 0 10px;
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+.npc-talk-source {
+  margin: 0;
+  font-family: var(--font-pixel);
+  font-size: 16px;
+  color: var(--kpn-grey-600);
+}
+
+.npc-talk-link {
+  color: var(--kpn-blue-700);
+  text-decoration: underline;
+}
+
+.npc-talk .px-dialog-foot {
+  grid-column: 1 / -1;
+  margin-top: 4px;
+}
+
 .px-overview-wrap {
   display: flex;
   justify-content: center;

@@ -44,9 +44,12 @@ export function drawInteractables(ctx, map, objects, active, camX, camY, colors,
     if (!room || o.x < room.x || o.x >= room.x + room.w || o.y < room.y || o.y >= room.y + room.h) continue;
     ctx.drawImage(isDone(o.useCaseId) ? done : open, Math.round(o.x * t - camX + t / 2 - 6), Math.round(o.y * t - camY - 24));
   }
-  if (!active) return;
-  const px = active.x * t - camX + t / 2;
-  const py = active.y * t - camY - 24;
+  if (!active || active.npc) return;
+  drawPromptAt(ctx, active.x * t - camX + t / 2, active.y * t - camY - 24, colors);
+}
+
+// The small "E" key prompt, centred on px and sitting on py (screen pixels).
+export function drawPromptAt(ctx, px, py, colors) {
   ctx.fillStyle = colors.outline;
   ctx.fillRect(px - 6, py - 14, 12, 12);
   ctx.fillStyle = colors.marker;

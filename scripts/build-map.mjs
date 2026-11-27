@@ -2,11 +2,13 @@
 // Run with `npm run build:map`, then `npm run check:map`. The JSON is committed; edit this script to change the layout.
 //
 // Floor plan (tile coordinates, 40 x 61):
-//   - a top band with the reception (spawn), the Chat vs Cowork intro room and the lounge, opening onto
-//     the wide entrance corridor H1;
-//   - a central spine V1 running down from H1, with three branch corridors (H2 left, H3 right, H4 left);
-//   - department rooms interleaved with the functional rooms on both wings, in different sizes, with
-//     doors on the top, bottom, left or right side depending on which corridor they touch.
+//   - a top band with four department rooms (Consumer, Business SME, Network & IT, Tailored Solutions)
+//     opening onto the wide corridor H1;
+//   - a central spine V1 running down from H1 to the reception, with branch corridors H2, H3 and H4 on the
+//     left and H5 on the right; Finance, People & Learning and the big General room sit in the middle band,
+//     Business LCE, Wholesale and the Chat vs Cowork room in the lower-middle band;
+//   - the functional rooms (open workspace, cafeteria, lounge, print room and the reception where the
+//     player spawns) are scattered along the bottom, so new players walk up through the office.
 // Rooms are interior rectangles {x, y, w, h}; the generator wraps them in a wall band (top wall at y-2,
 // tinted back-wall face at y-1, bottom wall at y+h, side walls at x-1 and x+w). Corridors are only drawn
 // on void cells and every doorway is checked to open onto a corridor tile. Outer walls are added
@@ -33,10 +35,11 @@ function set(x, y, ch) {
 // Drawn first so rooms can share walls with them; a corridor cell must be void.
 const CORRIDORS = [
   { id: 'H1', x0: 1, y0: 11, x1: 38, y1: 13 },
-  { id: 'V1', x0: 22, y0: 14, x1: 24, y1: 57 },
-  { id: 'H2', x0: 1, y0: 32, x1: 21, y1: 34 },
-  { id: 'H3', x0: 25, y0: 31, x1: 37, y1: 33 },
-  { id: 'H4', x0: 1, y0: 54, x1: 21, y1: 56 },
+  { id: 'V1', x0: 22, y0: 14, x1: 24, y1: 50 },
+  { id: 'H2', x0: 1, y0: 24, x1: 21, y1: 26 },
+  { id: 'H3', x0: 1, y0: 36, x1: 21, y1: 38 },
+  { id: 'H4', x0: 1, y0: 47, x1: 21, y1: 49 },
+  { id: 'H5', x0: 25, y0: 41, x1: 37, y1: 43 },
 ];
 for (const c of CORRIDORS) {
   for (let y = c.y0; y <= c.y1; y++) {
@@ -269,14 +272,7 @@ function furnish(def, apron) {
     return true;
   };
   if (decor.rug) rug(decor.rug[0], x + decor.rug[1], y + 2, decor.rug[2], decor.rug[3]);
-  decor.items.forEach(place);
-  (decor.desks ?? []).forEach(([dx, dy]) => {
-    const cells = [key(x + dx, y - 2 + dy), key(x + dx + 1, y - 2 + dy), key(x + dx, y - 1 + dy), key(x + dx + 1, y - 1 + dy)];
-    if (cells.some((c) => apron.has(c) || doorCells.has(c) || taken.has(c))) return;
-    add('desk', x + dx, y - 2 + dy, 2, 1);
-    chair(x + dx, y - 1 + dy);
-    occupy({ x: x + dx, y: y - 2 + dy, w: 2, h: 2 });
-  });
+  // Slot desks go first (they must always fit); decorative pieces then fill the remaining cells.
   const layout = def.layout ?? decor.layout;
   if (layout) {
     LAYOUTS[layout].forEach(([dx, dy], i) => {
@@ -288,6 +284,15 @@ function furnish(def, apron) {
       occupy({ x: x + dx, y: y - 2 + dy, w: 2, h: 2 });
     });
   }
+  decor.items.forEach(place);
+  (decor.desks ?? []).forEach(([dx, dy]) => {
+    const cells = [key(x + dx, y - 2 + dy), key(x + dx + 1, y - 2 + dy), key(x + dx, y - 1 + dy), key(x + dx + 1, y - 1 + dy)];
+    if (x + dx + 1 >= x + w || y - 1 + dy >= y + h) return;
+    if (cells.some((c) => apron.has(c) || doorCells.has(c) || taken.has(c))) return;
+    add('desk', x + dx, y - 2 + dy, 2, 1);
+    chair(x + dx, y - 1 + dy);
+    occupy({ x: x + dx, y: y - 2 + dy, w: 2, h: 2 });
+  });
   [...(decor.extra ?? []), ...(MORE[def.decor ?? def.id] ?? [])].forEach(place);
 }
 
@@ -296,25 +301,25 @@ function furnish(def, apron) {
 // `decor` a furniture set, `layout` overrides the desk arrangement so the desks keep clear of the doorway.
 const dept = (def) => ({ type: 'department', dept: def.id, ...def });
 const PLAN = [
-  // top band, opening onto the entrance corridor H1
-  { id: 'lobby', name: 'Reception', type: 'tip', tint: 'ice', floor: 'diamond', x: 2, y: 2, w: 12, h: 8, door: { side: 'bottom', at: 5 }, signX: 12 },
-  // The intro room sits right next to the reception so new players reach it first.
-  { id: 'intro', name: 'Chat vs Cowork', type: 'intro', tint: 'blush', floor: 'stripes', sign: 'intro', decor: 'intro', x: 16, y: 4, w: 10, h: 6, door: { side: 'bottom', at: 2 } },
-  { id: 'lounge', name: 'Lounge and pantry', type: 'tip', tint: 'peach', floor: 'planks', x: 28, y: 2, w: 10, h: 8, door: { side: 'bottom', at: 2 } },
-  // left wing: off H1, the spine V1, H2 and H4
-  dept({ id: 'con', name: 'Consumer', tint: 'mint', floor: 'checker', sign: 'service', decor: 'finance', layout: 'ring', x: 1, y: 16, w: 10, h: 7, door: { side: 'top', at: 4 } }),
-  { id: 'print', name: 'Print room', type: 'tip', tint: 'grey', floor: 'hatch', x: 12, y: 16, w: 9, h: 6, door: { side: 'right', at: 2 } },
-  dept({ id: 'sme', name: 'Business SME', tint: 'lavender', floor: 'dots', sign: 'sales', decor: 'hr', x: 1, y: 25, w: 9, h: 6, door: { side: 'bottom', at: 6 } }),
-  { id: 'workspace', name: 'Open workspace', type: 'tip', tint: 'sky', floor: 'dots', x: 11, y: 25, w: 10, h: 6, door: { side: 'right', at: 2 } },
-  dept({ id: 'noi', name: 'Network, Ops & IT', tint: 'ice', floor: 'tiles8', sign: 'it', decor: 'it', layout: 'ring', x: 1, y: 37, w: 10, h: 7, door: { side: 'top', at: 5 } }),
-  dept({ id: 'fin', name: 'Finance & Control', tint: 'butter', floor: 'zigzag', sign: 'finance', decor: 'procurement', layout: 'leftpack', x: 12, y: 37, w: 9, h: 7, door: { side: 'right', at: 2 } }),
-  dept({ id: 'pla', name: 'People & Learning', tint: 'sand', floor: 'bands', sign: 'hr', decor: 'service', layout: 'pods', x: 1, y: 47, w: 9, h: 6, door: { side: 'bottom', at: 6 } }),
-  { id: 'cafeteria', name: 'Cafeteria', type: 'tip', tint: 'butter', floor: 'checker', x: 11, y: 47, w: 10, h: 6, door: { side: 'right', at: 3 } },
-  // right wing: off V1 and H3
+  // top band: four department rooms with doors onto H1
+  dept({ id: 'con', name: 'Consumer', tint: 'mint', floor: 'checker', sign: 'service', decor: 'finance', layout: 'leftpack', x: 1, y: 3, w: 8, h: 7, door: { side: 'bottom', at: 2 } }),
+  dept({ id: 'sme', name: 'Business SME', tint: 'lavender', floor: 'dots', sign: 'sales', decor: 'hr', x: 10, y: 4, w: 9, h: 6, door: { side: 'bottom', at: 6 } }),
+  dept({ id: 'noi', name: 'Network, Ops & IT', tint: 'ice', floor: 'tiles8', sign: 'it', decor: 'it', layout: 'ring', x: 20, y: 3, w: 9, h: 7, door: { side: 'bottom', at: 7 }, signX: 24 }),
+  dept({ id: 'tso', name: 'Tailored Solutions', tint: 'sky', floor: 'planks', sign: 'legal', decor: 'legal', layout: 'leftpack', x: 30, y: 3, w: 8, h: 7, door: { side: 'bottom', at: 2 } }),
+  // middle band: Finance and People & Learning hang below H1, the General room sits off the spine
+  dept({ id: 'fin', name: 'Finance & Control', tint: 'butter', floor: 'zigzag', sign: 'finance', decor: 'procurement', layout: 'leftpack', x: 1, y: 16, w: 9, h: 7, door: { side: 'top', at: 6 }, signX: 3 }),
+  dept({ id: 'pla', name: 'People & Learning', tint: 'sand', floor: 'bands', sign: 'hr', decor: 'service', layout: 'ring', x: 11, y: 16, w: 10, h: 7, door: { side: 'top', at: 4 } }),
   { id: 'general', name: 'General', type: 'general', tint: 'grey', floor: 'grid', x: 26, y: 16, w: 11, h: 14, door: { side: 'left', at: 2 } },
-  dept({ id: 'tso', name: 'Tailored Solutions', tint: 'sky', floor: 'planks', sign: 'legal', decor: 'legal', x: 26, y: 36, w: 10, h: 6, door: { side: 'top', at: 4 } }),
-  dept({ id: 'lce', name: 'Business LCE', tint: 'sage', floor: 'hatch', sign: 'ops', decor: 'ops', layout: 'rightpack', x: 26, y: 45, w: 11, h: 6, door: { side: 'left', at: 1 } }),
-  dept({ id: 'who', name: 'Wholesale', tint: 'peach', floor: 'diamond', sign: 'procurement', decor: 'marketing', layout: 'rightpack', x: 26, y: 54, w: 10, h: 6, door: { side: 'left', at: 2 } }),
+  // lower-middle band: LCE and Wholesale below H2, the Chat vs Cowork room off the spine (first room on the way up from the reception)
+  dept({ id: 'lce', name: 'Business LCE', tint: 'sage', floor: 'hatch', sign: 'ops', decor: 'ops', x: 1, y: 29, w: 10, h: 6, door: { side: 'top', at: 7 }, signX: 5 }),
+  dept({ id: 'who', name: 'Wholesale', tint: 'peach', floor: 'diamond', sign: 'procurement', decor: 'marketing', x: 12, y: 29, w: 9, h: 6, door: { side: 'top', at: 7 }, signX: 16 }),
+  { id: 'intro', name: 'Chat vs Cowork', type: 'intro', tint: 'blush', floor: 'stripes', sign: 'intro', decor: 'intro', x: 26, y: 33, w: 10, h: 6, door: { side: 'left', at: 2 } },
+  // bottom band: the functional rooms, with the reception (spawn) at the foot of the spine
+  { id: 'workspace', name: 'Open workspace', type: 'tip', tint: 'sky', floor: 'dots', x: 1, y: 41, w: 10, h: 5, door: { side: 'top', at: 7 } },
+  { id: 'cafeteria', name: 'Cafeteria', type: 'tip', tint: 'butter', floor: 'checker', x: 13, y: 41, w: 8, h: 5, door: { side: 'top', at: 2 } },
+  { id: 'lounge', name: 'Lounge and pantry', type: 'tip', tint: 'peach', floor: 'planks', x: 26, y: 46, w: 10, h: 7, door: { side: 'top', at: 2 } },
+  { id: 'print', name: 'Print room', type: 'tip', tint: 'grey', floor: 'hatch', x: 1, y: 52, w: 8, h: 6, door: { side: 'top', at: 3 } },
+  { id: 'lobby', name: 'Reception', type: 'tip', tint: 'ice', floor: 'diamond', x: 12, y: 53, w: 12, h: 7, door: { side: 'top', at: 10 }, signX: 20 },
 ];
 
 PLAN.forEach(carve);
@@ -322,21 +327,20 @@ const aprons = new Map(PLAN.map((def) => [def.id, door(def)]));
 
 // Hand-furnished rooms: reception, lounge and the general meeting room.
 function furnishLobby(def) {
-  const { x, y } = def; // 12 x 8, bottom door at columns x+5..x+6
+  const { x, y } = def; // 12 x 7, top door at columns x+10..x+11 (the back wall there is cut open)
   wallDecor('window', x + 1, y - 1);
   wallDecor('poster', x + 3, y - 1);
-  wallDecor('frame', x + 6, y - 1);
-  wallDecor('clock', x + 9, y - 1);
+  wallDecor('frame', x + 5, y - 1);
+  wallDecor('clock', x + 7, y - 1);
   add('vending-red', x, y);
   add('vending-blue', x + 1, y);
   add('cooler', x + 2, y);
   add('bin', x + 3, y);
   add('trophy', x + 4, y);
-  add('plant', x + 10, y);
-  add('coat-rack', x + 11, y);
-  add('reception', x + 4, y + 1, 3, 1);
-  add('plant', x + 7, y + 1);
-  add('stairs', x + 10, y + 1, 2, 3);
+  add('coat-rack', x + 9, y);
+  add('reception', x + 5, y + 1, 3, 1);
+  add('plant', x + 8, y + 1);
+  add('stairs', x + 10, y + 3, 2, 3);
   rug('rug-4x3', x + 4, y + 3, 4, 3);
   add('sofa', x + 4, y + 3, 2, 1);
   add('coffee-table', x + 5, y + 4);
@@ -345,23 +349,22 @@ function furnishLobby(def) {
   add('lamp', x + 8, y + 3);
   add('lamp', x, y + 2);
   add('armchair', x, y + 4);
-  add('plant', x, y + 7);
+  add('plant', x, y + 6);
   add('plant', x + 3, y + 6);
-  add('cactus', x + 10, y + 6);
-  add('bin', x + 11, y + 7);
+  add('cactus', x + 9, y + 6);
+  add('bin', x + 11, y + 6);
 }
 function furnishLounge(def) {
-  const { x, y, w } = def; // 10 x 8, bottom door at columns x+2..x+3
+  const { x, y, w } = def; // 10 x 7, top door at columns x+2..x+3
   wallDecor('window', x, y - 1);
-  wallDecor('poster', x + 2, y - 1);
-  wallDecor('frame', x + 4, y - 1);
-  wallDecor('poster', x + 6, y - 1);
-  add('counter', x + 1, y, 2, 1);
-  add('coffee-machine', x + 3, y);
-  add('fridge', x + 5, y);
-  add('cooler', x + 6, y);
-  add('microwave', x + 7, y);
-  add('plant', x + w - 1, y);
+  wallDecor('frame', x + 5, y - 1);
+  wallDecor('poster', x + 7, y - 1);
+  add('plant', x, y);
+  add('counter', x + 4, y, 2, 1);
+  add('coffee-machine', x + 6, y);
+  add('fridge', x + 7, y);
+  add('microwave', x + 8, y);
+  add('cooler', x + w - 1, y);
   rug('rug-4x3', x + 3, y + 3, 4, 3);
   add('sofa', x + 3, y + 3, 2, 1);
   add('coffee-table', x + 4, y + 4);
@@ -372,7 +375,7 @@ function furnishLounge(def) {
   add('cactus', x + 1, y + 4);
   add('plant', x, y + 6);
   add('boxes', x + w - 2, y + 6);
-  add('bin', x + w - 1, y + 7);
+  add('bin', x + w - 1, y + 6);
 }
 function furnishGeneral(def) {
   const { x, y, w, h } = def; // 11 x 14, left door at rows y+2..y+3
@@ -416,11 +419,12 @@ function corridorProp(sprite, x, y) {
   add(sprite, x, y);
 }
 [
-  ['plant', 1, 11], ['lamp', 1, 13], ['plant', 12, 11], ['bin', 14, 13], ['lamp', 27, 11], ['cooler', 36, 13], ['plant', 38, 11], ['bin', 38, 13],
-  ['lamp', 24, 15], ['plant', 22, 22], ['bin', 24, 24], ['lamp', 22, 30], ['plant', 24, 36], ['bin', 22, 43], ['lamp', 24, 44], ['plant', 22, 47], ['cooler', 24, 52], ['bin', 22, 57],
-  ['plant', 1, 32], ['lamp', 1, 34], ['bin', 12, 32], ['cooler', 16, 34],
-  ['plant', 37, 31], ['lamp', 37, 33], ['bin', 27, 33], ['cooler', 34, 31],
-  ['plant', 1, 54], ['lamp', 1, 56], ['cooler', 12, 54], ['bin', 14, 56], ['plant', 18, 54],
+  ['plant', 1, 11], ['lamp', 1, 13], ['bin', 12, 13], ['cooler', 21, 11], ['lamp', 30, 13], ['plant', 38, 11], ['bin', 38, 13],
+  ['lamp', 22, 15], ['plant', 24, 22], ['bin', 22, 29], ['cooler', 24, 32], ['plant', 22, 40], ['lamp', 24, 46], ['bin', 24, 49],
+  ['plant', 1, 24], ['lamp', 1, 26], ['bin', 13, 26], ['cooler', 16, 24],
+  ['plant', 1, 36], ['lamp', 1, 38], ['bin', 12, 38], ['cooler', 20, 36],
+  ['plant', 1, 47], ['lamp', 1, 49], ['cooler', 12, 49], ['bin', 18, 47], ['plant', 21, 47],
+  ['cooler', 26, 41], ['bin', 33, 43], ['plant', 37, 41], ['lamp', 37, 43],
 ].forEach(([s, x, y]) => corridorProp(s, x, y));
 
 // ---- outer walls ----
@@ -454,7 +458,7 @@ const objects = slots
   .map((s) => ({ id: `obj-${useCaseFor(s)}`, x: s.x, y: s.y, useCaseId: useCaseFor(s) }))
   .filter((o) => o.useCaseId);
 
-const spawn = { x: 8, y: 8 };
+const spawn = { x: 14, y: 58 }; // in the reception, left of the sofa corner
 if (at(spawn.x, spawn.y) !== '.' || props.some((p) => p.solid !== false && p.layer !== 'floor' && spawn.x >= p.x && spawn.x < p.x + p.w && spawn.y >= p.y && spawn.y < p.y + p.h)) {
   throw new Error('Spawn tile is not free floor');
 }
