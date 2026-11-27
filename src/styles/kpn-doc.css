@@ -53,16 +53,63 @@
 .kpn-doc .run-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; }
 .kpn-doc .run-replay { margin-left: auto; }
 .kpn-doc .gs-rec { margin: 0 0 3.25rem; }
-.kpn-doc .journey-list,
-.kpn-doc .rec-list { margin: 0; padding-left: 1.4rem; display: grid; gap: .85rem; }
-.kpn-doc .journey-list li::marker,
-.kpn-doc .rec-list li::marker { color: var(--ui-text); font-weight: 700; }
-.kpn-doc .rec-label { display: block; font-weight: 600; margin-bottom: .2rem; }
-.kpn-doc .requirements { margin: .35rem 0 0; padding-left: 1.1rem; color: var(--muted); font-size: var(--ui-type-label); }
-.kpn-doc .requirements li { margin: .15rem 0; }
+/* Library folder + workflow lifecycle ring (reference page effects). The reference paints the
+   accent surfaces in KPN yellow with white text; we keep the yellow but use dark text for contrast. */
+#panel-start .gs-enhanced { --ui-guide-accent: #ddff44; --guide-soft: #fdfdf0; --guide-ink: #131313; }
+#panel-start .gs-library { margin-bottom: 3.25rem; }
+#panel-start .gs-library > p { margin: 0; }
+.kpn-doc .folder-front { color: var(--guide-ink); box-shadow: 0 10px 16px -12px rgb(19 19 19 / 45%); }
+.kpn-doc .folder-front span { color: #4b5a12; }
+.kpn-doc .folder-front:focus-visible { outline: 3px solid #008200; outline-offset: 2px; }
+.kpn-doc .folder-back { background: #325f6b; }
+.kpn-doc .folder-paper { text-decoration: none; }
+.kpn-doc .folder-paper span { display: block; }
+.kpn-doc .folder-paper[aria-current="true"] { border-color: #a7bf1f; background: #fbffe6; }
+.kpn-doc .folder-stage.is-open .folder-paper:hover, .kpn-doc .folder-stage.is-open .folder-paper:focus-visible { border-color: #a7bf1f; }
+.kpn-doc .folder-open-link { color: #008200; font-weight: 600; }
+.kpn-doc .orbit-node[aria-pressed="true"] { color: var(--guide-ink); }
+.kpn-doc .orbit-node:focus-visible { outline: 3px solid #008200; outline-offset: 2px; }
+.kpn-doc .orbit-marker span { background: #c9e62a; }
+.kpn-doc .orbit-center strong { color: var(--ink); }
+.kpn-doc .requirements { list-style: none; padding: 0; margin: 25px 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; }
+.kpn-doc .requirements li { border-top: 1px solid var(--line); padding: 13px 0; color: var(--muted); font-size: var(--ui-type-body); }
+@media (max-width: 560px) { .kpn-doc .requirements { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) {
+  .kpn-doc .folder-front, .kpn-doc .folder-paper, .kpn-doc .orbit-node { transition: none; }
+}
 
 /* Responsible AI */
 .kpn-doc .gv-banner-ic { flex: none; display: grid; place-items: center; width: 32px; height: 32px; }
 .kpn-doc .gv-banner-ic svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .kpn-doc .gv-banner h3 { margin: 0 0 .25rem; font-size: var(--ui-type-title); }
 .kpn-doc .gv-banner p { margin: 0; }
+
+/* Department landing (reference "company-landing" block, re-scoped) */
+.kpn-doc #co-landing { margin: 0 0 1.5rem; }
+.kpn-doc .lib-main.co-tiles-on > :not(#co-landing) { display: none !important; }
+.kpn-doc .lib-main:not(.co-tiles-on) #co-landing { display: none; }
+.kpn-doc .lib-main.co-tiles-on #co-bar { display: none !important; }
+.kpn-doc #co-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin: 0 0 1rem; }
+.kpn-doc .co-back { appearance: none; border: 2px solid #131313; background: #fff; color: #131313; font: inherit; font-weight: 700; padding: .5rem 1rem; border-radius: 4px; cursor: pointer; }
+.kpn-doc .co-back:hover { background: #131313; color: #fff; }
+.kpn-doc .co-current { display: inline-block; padding: .45rem 1rem; font-weight: 700; background: #131313; color: #fff; border-radius: 4px; }
+.kpn-doc .co-head h2 { margin: 0 0 .4rem; font-size: 1.9rem; line-height: 1.2; color: #1f2933; }
+.kpn-doc .co-head p { margin: 0 0 1.5rem; max-width: none; color: #4e5356; }
+.kpn-doc .co-group { margin: 0 0 1.75rem; }
+.kpn-doc .co-group h3 { margin: 0 0 .75rem; font-size: 1.05rem; text-transform: uppercase; letter-spacing: .06em; color: #4e5356; border-bottom: 3px solid #00c300; padding-bottom: .35rem; display: inline-block; }
+.kpn-doc .co-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 1rem; }
+.kpn-doc .co-themes .co-grid,
+.kpn-doc .co-grp-general .co-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1100px) { .kpn-doc .co-themes .co-grid, .kpn-doc .co-grp-general .co-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.kpn-doc .co-tile { appearance: none; position: relative; display: grid; grid-template-rows: auto 1fr auto; align-content: start; gap: .5rem; text-align: left; min-height: 190px; padding: 1.1rem 1.1rem 2.6rem; border: 2px solid transparent; border-radius: 0; font: inherit; cursor: pointer; background: var(--tile-bg, #fff); color: var(--tile-fg, #1f2933); box-shadow: 0 1px 2px rgba(30,30,30,.15); transition: transform .12s ease, box-shadow .12s ease; }
+.kpn-doc .co-tile:hover, .kpn-doc .co-tile:focus-visible { transform: translateY(-3px); box-shadow: 0 10px 22px -10px rgba(30,30,30,.45); }
+.kpn-doc .co-tile:focus-visible { outline: 3px solid #131313; outline-offset: 3px; }
+.kpn-doc .co-ico { display: block; line-height: 0; }
+.kpn-doc .co-name { font-size: 1.3rem; font-weight: 700; line-height: 1.2; }
+.kpn-doc .co-count { font-size: .95rem; opacity: .92; }
+.kpn-doc .co-arrow { position: absolute; right: 1rem; bottom: .8rem; font-size: 1.4rem; font-weight: 700; }
+.kpn-doc .co-general { background: #fff; color: #131313; border-color: #131313; border-width: 3px; }
+.kpn-doc .co-browse { margin-top: .25rem; }
+@media (prefers-reduced-motion: reduce) { .kpn-doc .co-tile { transition: none; } .kpn-doc .co-tile:hover, .kpn-doc .co-tile:focus-visible { transform: none; } }
+@media (max-width: 760px) { .kpn-doc .co-themes .co-grid, .kpn-doc .co-grp-general .co-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .kpn-doc .co-grid, .kpn-doc .co-grp-general .co-grid { grid-template-columns: 1fr 1fr; } .kpn-doc .co-tile { min-height: 160px; } .kpn-doc .co-name { font-size: 1.1rem; } }

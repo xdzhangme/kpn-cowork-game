@@ -25,10 +25,10 @@ button) and four tabs:
 
 1. **Tutorial Game** (first/default tab): the pixel-office game.
 2. **Use Case Library**: all use cases as full, readable cards (search, suggestions, department/role rail, more filters, active-filter chips, count), each with prompt, See it run, Fit it into your work, How it works and a Why Cowork section with a Chat/Cowork toggle.
-3. **How to start**: mock Cowork run, Cowork vs Chat comparison, five steps, extension options, library guide and recurring workflows.
-4. **Responsible AI**: grouped governance tiles (Data, Oversight, Region and cost, Limits) and tenant-setting chips.
+3. **How to start**: mock Cowork run, Cowork vs Chat comparison, five steps, extension options, the interactive library folder (pages fan out, hover/focus previews guidance, links switch tabs) and the recurring-workflows lifecycle ring (five stages, marker dot and highlight pill, auto-advance until the reader picks a stage).
+4. **Responsible AI**: grouped governance tiles (Data, Oversight, Region and cost, Limits) with the reference's hover/focus lift, tilt and pixel-texture effect, and tenant-setting chips.
 
-Tabs 2-4 follow the approved KPN use-case landing page design (its `card-styles` and `shell-styles` CSS, re-scoped under `.kpn-doc`; Segoe UI 17px body; ink/blue/wash/line/muted/teal tokens with KPN green as brand). The game tab keeps the pixel style. The reference page's opening "company landing" screen is not adopted because it depends on a multi-megabyte embedded preview.
+Tabs 2-4 follow the approved KPN use-case landing page design (its `card-styles` and `shell-styles` CSS, re-scoped under `.kpn-doc`; Segoe UI 17px body; ink/blue/wash/line/muted/teal tokens with KPN green as brand). The game tab keeps the pixel style. The Library opens on the reference page's "company landing": a Choose-a-department grid of eight department tiles (KPN green / black / yellow fills) plus a General tile; picking a tile filters to that department, and clearing every filter returns to the grid. The reference's separate opening screen (multi-megabyte embedded preview) is not adopted.
 
 The Library is the content source. It serves two purposes: readable directly by users,
 and shared as the data that drives the game.
@@ -71,7 +71,7 @@ Fields per case (KPN library export, see `docs/USE-CASE-SCHEMA.md`):
 
 | Concept | Description |
 | --- | --- |
-| Player | Moves with arrow keys/WASD, interacts with E |
+| Player | Moves with arrow keys/WASD or by clicking a floor tile (BFS path on walkable tiles; keyboard cancels the route), interacts with E; clicking a desk or NPC walks adjacent and opens it |
 | Interactable | Map object bound to a use case id (or the intro explainer) |
 | Scenario player | Four-act overlay (Situation, Prompt, Run, Outcome); Next/Back/Esc |
 | Use case state | `new` -> `completed` (on reaching Act 4); optional `tried at work` flag |

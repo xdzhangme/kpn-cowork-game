@@ -181,6 +181,7 @@ export function initButtons({ container, map, useCases, player, mapView }) {
       }
     }
     if (spot) {
+      player.clearPath?.();
       player.x = spot.x;
       player.y = spot.y;
       mapView.setTarget(player.x, player.y - 8);

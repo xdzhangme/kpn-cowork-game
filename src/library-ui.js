@@ -16,12 +16,18 @@ const FIXED = {
 };
 const TRY = ['meeting', 'report', 'email', 'budget', 'contract', 'customer'];
 const slug = (s) => String(s).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+// KPN department order (as on the approved landing page); unknown departments sort after these.
+const DEPT_ORDER = ['consumer', 'business-sme', 'business-tailored-solutions', 'business-lce',
+  'network-operations-it-noi', 'wholesale', 'people-learning-adoption', 'finance-tax-business-control'];
+// Tile fills cycle green / black / yellow, as on the approved landing page.
+const TILE_FILLS = [['#00c300', '#ffffff'], ['#131313', '#ffffff'], ['#ddff44', '#111111']];
+const GRID_ICON = '<svg viewBox="0 0 48 48" width="44" height="44" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2"/><rect x="27" y="8" width="13" height="13" rx="2"/><rect x="8" y="27" width="13" height="13" rx="2"/><rect x="27" y="27" width="13" height="13" rx="2"/></g></svg>';
 
 // Facet values of one case: { department: ['consumer'] | ['general'], role: [...], ... }.
 function facetValues(c) {
   return {
     department: c.applicability?.allDepartments || !c.department ? ['general'] : [slug(c.department)],
-    role: c.applicability?.allRoles || !c.roles?.length ? ['general'] : c.roles.map(slug),
+    role: c.applicability?.allRoles ? ['general'] : c.roles?.length ? c.roles.map(slug) : ['unclassified'],
     workload: c.workload ? [slug(c.workload)] : [],
     scope: c.collaborationScope ? [slug(c.collaborationScope)] : [],
     capability: (c.capabilities ?? []).map(slug),
@@ -34,6 +40,7 @@ export function initLibraryUI(root, { useCases, hasObject = () => false, onOpenI
   let cards = [];
   let labels = {};
   let openId = null;
+  let browseAll = false;
 
   const prepare = () => {
     const lang = getLang();
@@ -42,7 +49,7 @@ export function initLibraryUI(root, { useCases, hasObject = () => false, onOpenI
       const c = text(uc);
       const values = facetValues(c);
       values.department.forEach((id) => labels.department.set(id, c.department || tr('lib.general')));
-      values.role.forEach((id, i) => labels.role.set(id, id === 'general' ? tr('lib.allRoles') : c.roles[i]));
+      values.role.forEach((id, i) => { if (id !== 'general' && id !== 'unclassified') labels.role.set(id, c.roles[i]); });
       values.capability.forEach((id, i) => labels.capability.set(id, c.capabilities[i]));
       const searchable = [c.title, c.hook, c.situation, c.department, ...(c.roles ?? []), ...(c.capabilities ?? []),
         c.prompt?.outcome, c.why?.lead, uc.title.en, uc.hook.en].filter(Boolean).join(' ').toLowerCase();
@@ -53,29 +60,42 @@ export function initLibraryUI(root, { useCases, hasObject = () => false, onOpenI
   const labelFor = (group, id) => {
     if (FIXED[group]) return tr(`value.${group}.${id}`);
     if (id === 'general') return tr(group === 'role' ? 'lib.allRoles' : 'lib.general');
+    if (id === 'unclassified') return tr('lib.unclassified');
     return labels[group].get(id) ?? id;
   };
   const optionIds = (group) => {
     if (FIXED[group]) return FIXED[group].filter((id) => cards.some((k) => k.values[group].includes(id)));
     const ids = [...new Set(cards.flatMap((k) => k.values[group]))];
     const general = ids.filter((id) => id === 'general');
-    const rest = ids.filter((id) => id !== 'general').sort((a, b) => labelFor(group, a).localeCompare(labelFor(group, b), getLang()));
+    const rest = ids.filter((id) => id !== 'general');
+    if (group === 'department') {
+      const rank = (id) => (DEPT_ORDER.includes(id) ? DEPT_ORDER.indexOf(id) : DEPT_ORDER.length);
+      rest.sort((a, b) => rank(a) - rank(b) || labelFor(group, a).localeCompare(labelFor(group, b), getLang()));
+      return [...general, ...rest];
+    }
+    rest.sort((a, b) => labelFor(group, a).localeCompare(labelFor(group, b), getLang()));
+    if (group === 'role') {
+      // All-roles cases match every role selection, so they are not listed as an option of their own.
+      const tail = rest.filter((id) => id === 'unclassified');
+      return [...rest.filter((id) => id !== 'unclassified'), ...tail];
+    }
     return [...rest, ...general];
   };
 
   // Matching: text AND every group; capability is AND across its selection, other groups OR.
-  // A "general" case applies to all departments and roles, so it matches any such selection.
+  // A "general" case applies to all roles, so it matches any role selection. Departments are
+  // exact: General is its own entry on the landing page and in the rail.
   const groupMatch = (card, group, sel) => {
     if (!sel.size) return true;
     const v = card.values[group];
     if (group === 'capability') return [...sel].every((id) => v.includes(id));
-    if (PRIMARY.includes(group) && v.includes('general')) return true;
+    if (group === 'role' && v.includes('general') && [...sel].some((id) => id !== 'unclassified')) return true;
     return v.some((id) => sel.has(id));
   };
   const matches = (card, except = null) =>
     (!state.q || card.searchable.includes(state.q)) &&
     GROUPS.every((g) => g === except || groupMatch(card, g, state.sel[g]));
-  const countFor = (group, id) => cards.filter((k) => matches(k, group) && (k.values[group].includes(id) || (PRIMARY.includes(group) && k.values[group].includes('general')))).length;
+  const countFor = (group, id) => cards.filter((k) => matches(k, group) && (k.values[group].includes(id) || (group === 'role' && id !== 'unclassified' && k.values[group].includes('general')))).length;
   const availableRoles = () => {
     const depts = state.sel.department;
     const pool = depts.size ? cards.filter((k) => groupMatch(k, 'department', depts)) : cards;
@@ -106,6 +126,12 @@ export function initLibraryUI(root, { useCases, hasObject = () => false, onOpenI
   const emptyReset = el('button', { type: 'button', id: 'empty-reset', class: 'btn' });
   const empty = el('div', { id: 'lib-empty', hidden: true }, emptyTitle, emptyHelp, emptyReset);
   const results = el('div', { id: 'lib-results' });
+  const landing = el('section', { id: 'co-landing', 'aria-labelledby': 'co-title' });
+  const bar = el('div', { id: 'co-bar' });
+  const main = el('div', { class: 'lib-main' },
+    bar, landing,
+    el('div', { class: 'lib-status' }, count, notice, chips),
+    empty, results);
   root.append(el('section', { id: 'library-top', 'aria-labelledby': 'lib-title' },
     el('div', { class: 'lib-head' }, title, intro),
     el('div', { class: 'lib-searchpanel' },
@@ -114,9 +140,7 @@ export function initLibraryUI(root, { useCases, hasObject = () => false, onOpenI
       suggestions),
     el('div', { class: 'lib-layout' },
       el('aside', { class: 'lib-rail', 'aria-labelledby': 'lib-rail-title' }, railTitle, railToggle, railBody),
-      el('div', { class: 'lib-main' },
-        el('div', { class: 'lib-status' }, count, notice, chips),
-        empty, results))));
+      main)));
   railTitle.id = 'lib-rail-title';
 
   // ---- rendering ----
@@ -186,13 +210,63 @@ export function initLibraryUI(root, { useCases, hasObject = () => false, onOpenI
     renderFacets();
     renderChips();
     renderResults();
+    renderLanding();
   };
   function reset() {
     state.q = '';
     search.value = '';
     GROUPS.forEach((g) => state.sel[g].clear());
+    browseAll = false;
     update();
   }
+
+  // ---- department landing (shown while nothing is searched or filtered) ----
+  const isFiltered = () => Boolean(state.q) || GROUPS.some((g) => state.sel[g].size > 0);
+  const deptCount = (id) => cards.filter((k) => k.values.department.includes(id)).length;
+  const tile = (id, fill) => {
+    const name = labelFor('department', id);
+    const n = deptCount(id);
+    const b = el('button', { type: 'button', class: `co-tile ${id === 'general' ? 'co-general' : 'co-theme'}`, 'data-department': id,
+      'aria-label': tr('lib.tileLabel', { name, n }) });
+    if (fill) { b.style.setProperty('--tile-bg', fill[0]); b.style.setProperty('--tile-fg', fill[1]); }
+    const countText = n === 1 ? tr('lib.caseOne') : tr('lib.caseMany', { n });
+    b.append(el('span', { class: 'co-ico', html: GRID_ICON }), el('span', { class: 'co-name', text: name }),
+      el('span', { class: 'co-count', text: id === 'general' ? `${countText} · ${tr('lib.generalNote')}` : countText }),
+      el('span', { class: 'co-arrow', 'aria-hidden': 'true', text: '→' }));
+    b.addEventListener('click', () => {
+      state.sel.department.clear();
+      state.sel.department.add(id);
+      browseAll = false;
+      update();
+      main.querySelector('.lib-status').scrollIntoView({ block: 'start' });
+    });
+    return b;
+  };
+  const group = (heading, tiles, cls) => el('div', { class: `co-group ${cls}` }, el('h3', { text: heading }), el('div', { class: 'co-grid' }, ...tiles));
+  const renderLanding = () => {
+    const tiles = !isFiltered() && !browseAll;
+    main.classList.toggle('co-tiles-on', tiles);
+    const ids = optionIds('department');
+    const depts = ids.filter((id) => id !== 'general');
+    const browse = el('button', { type: 'button', class: 'co-browse btn secondary', text: tr('lib.browseAll') });
+    browse.addEventListener('click', () => { browseAll = true; update(); });
+    landing.replaceChildren(
+      el('div', { class: 'co-head' }, el('h2', { id: 'co-title', text: tr('lib.landingTitle') }), el('p', { text: tr('lib.landingLead') })),
+      group(tr('lib.businessAreas'), depts.map((id, i) => tile(id, TILE_FILLS[i % TILE_FILLS.length])), 'co-themes'),
+      ...(ids.includes('general') ? [group(tr('lib.general'), [tile('general')], 'co-grp-general')] : []),
+      browse);
+    // Bar above the results: back to the landing, plus the single selected department.
+    const back = el('button', { type: 'button', class: 'co-back', text: `← ${tr('lib.back')}` });
+    back.addEventListener('click', () => { reset(); landing.querySelector('#co-title')?.scrollIntoView({ block: 'start' }); });
+    bar.replaceChildren(back);
+    const sel = [...state.sel.department];
+    if (sel.length === 1 && !state.q && GROUPS.every((g) => g === 'department' || !state.sel[g].size)) {
+      const cur = el('span', { class: 'co-current', text: labelFor('department', sel[0]) });
+      const i = depts.indexOf(sel[0]);
+      if (i >= 0) { const fill = TILE_FILLS[i % TILE_FILLS.length]; cur.style.background = fill[0]; cur.style.color = fill[1]; }
+      bar.append(cur);
+    }
+  };
 
   const openCase = (id, { scroll = true } = {}) => {
     openId = id;
