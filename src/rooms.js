@@ -71,10 +71,13 @@ export function decorSpots(map, room) {
   return spots;
 }
 
-// The door tile (map coordinates) that leads into a room from the corridor.
+// The door tile (map coordinates) that leads into a room from the corridor. Doors may sit in any of the
+// four walls around the room's interior rect (top doors occupy the wall row and the back-wall face row).
 export function doorFor(map, room) {
-  const side = map.doors.filter((d) => d.y >= room.y && d.y < room.y + room.h && (d.x === room.x - 1 || d.x === room.x + room.w));
-  return side[0] ?? null;
+  const own = map.doors.filter((d) => d.x >= room.x - 1 && d.x <= room.x + room.w && d.y >= room.y - 2 && d.y <= room.y + room.h);
+  // prefer the tile closest to the corridor (outermost), so the guide arrow points at the doorway itself
+  own.sort((a, b) => Math.abs(b.y - room.y) - Math.abs(a.y - room.y));
+  return own[0] ?? null;
 }
 
 export function pickableRooms(map) {

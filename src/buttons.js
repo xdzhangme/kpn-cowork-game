@@ -50,6 +50,37 @@ function roomLabel(room) {
   return label === key ? room.name : label;
 }
 
+// Short name drawn inside the room on the minimap; falls back to the full label.
+function roomShortLabel(room) {
+  const key = `room.short.${room.id}`;
+  const label = t(key);
+  return label === key ? roomLabel(room) : label;
+}
+
+// Draws every room's short name centred in its rectangle on the overview canvas. `scale` is the canvas
+// pixels per map pixel; the label font stays at screen size so it is readable however small the map is drawn.
+// Labels wider than the room are truncated with an ellipsis.
+export function drawRoomLabels(ctx, map, rooms, { ink, panel, scale = 1 }) {
+  const ts = map.tileSize * scale;
+  ctx.save();
+  ctx.font = '12px "Jersey 10", monospace';
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = 'center';
+  for (const room of rooms) {
+    const maxW = room.w * ts - 6;
+    let text = roomShortLabel(room);
+    while (text.length > 1 && ctx.measureText(text).width > maxW) text = `${text.replace(/…$/, '').slice(0, -1)}…`;
+    const tw = Math.ceil(ctx.measureText(text).width);
+    const cx = Math.round((room.x + room.w / 2) * ts);
+    const cy = Math.round((room.y + room.h / 2) * ts);
+    ctx.fillStyle = ink;
+    ctx.fillRect(cx - Math.ceil(tw / 2) - 3, cy - 8, tw + 6, 16);
+    ctx.fillStyle = panel;
+    ctx.fillText(text, cx, cy + 1);
+  }
+  ctx.restore();
+}
+
 function bar(done, total) {
   const wrap = el('div', 'px-bar');
   wrap.setAttribute('role', 'progressbar');
@@ -100,7 +131,6 @@ export function initButtons({ container, map, useCases, player, mapView }) {
     const mine = deptRooms.find((r) => r.id === dept);
     const intro = useCases.filter((u) => u.meta.department === 'intro');
     const required = useCases.filter((u) => u.meta.department === 'general' || (mine && u.meta.department === mine.id));
-    const optional = useCases.filter((u) => !required.includes(u) && !intro.includes(u));
     const count = (list) => list.filter((u) => done.has(u.id)).length;
 
     const label = el('label', 'px-field', t('tasks.department'));
@@ -131,8 +161,6 @@ export function initButtons({ container, map, useCases, player, mapView }) {
     if (intro.length) section('tasks.intro', intro, count(intro));
     section('tasks.required', required, count(required));
     body.append(el('p', 'placeholder', t('tasks.required.hint')));
-    section('tasks.optional', optional, count(optional));
-    body.append(el('p', 'placeholder', t('tasks.optional.hint')));
   }
 
   // ---- Map ----
@@ -162,19 +190,42 @@ export function initButtons({ container, map, useCases, player, mapView }) {
 
   function mapBody(body) {
     const size = mapSize(map);
+    // Render the map once at 1x, then fit the whole floor plan into the dialog so every room is visible
+    // at a glance; labels and the player marker are drawn on top at screen size so they stay crisp.
+    const full = document.createElement('canvas');
+    full.width = size.width;
+    full.height = size.height;
+    drawMap(full.getContext('2d'), map, { x: 0, y: 0 }, size);
+    const availW = Math.min(1040, window.innerWidth * 0.94) - 2 * 16 - 6 - 200 - 16 - 6;
+    const availH = window.innerHeight * 0.7;
+    const scale = Math.min(availW / size.width, availH / size.height, 2);
     const canvas = el('canvas', 'px-overview');
-    canvas.width = size.width;
-    canvas.height = size.height;
-    drawMap(canvas.getContext('2d'), map, { x: 0, y: 0 }, size);
+    canvas.width = Math.round(size.width * scale);
+    canvas.height = Math.round(size.height * scale);
     const ctx = canvas.getContext('2d');
-    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--marker').trim();
-    const px = Math.round(player.x);
-    const py = Math.round(player.y);
-    ctx.fillRect(px - 4, py - 8, 8, 8);
-    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim();
-    ctx.strokeRect(px - 4.5, py - 8.5, 9, 9);
+    ctx.imageSmoothingEnabled = scale >= 1 ? false : true;
+    ctx.drawImage(full, 0, 0, canvas.width, canvas.height);
+    const css = getComputedStyle(document.documentElement);
+    const ink = css.getPropertyValue('--ink').trim();
+    const panel = css.getPropertyValue('--panel').trim();
+    drawRoomLabels(ctx, map, rooms, { ink, panel, scale });
+    const px = Math.round(player.x * scale);
+    const py = Math.round((player.y - 4) * scale);
+    ctx.fillStyle = css.getPropertyValue('--marker').trim();
+    ctx.fillRect(px - 5, py - 5, 10, 10);
+    ctx.strokeStyle = ink;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(px - 5, py - 5, 10, 10);
     canvas.setAttribute('role', 'img');
     canvas.setAttribute('aria-label', t('map.overview'));
+    // Clicking a room on the minimap jumps there too.
+    canvas.addEventListener('click', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const tx = ((e.clientX - rect.left) / rect.width) * size.width / map.tileSize;
+      const ty = ((e.clientY - rect.top) / rect.height) * size.height / map.tileSize;
+      const room = rooms.find((r) => tx >= r.x - 1 && tx < r.x + r.w + 1 && ty >= r.y - 2 && ty < r.y + r.h + 1);
+      if (room) jumpTo(room);
+    });
     const wrap = el('div', 'px-overview-wrap');
     wrap.append(canvas);
     const list = el('ul', 'px-rooms');
@@ -269,6 +320,7 @@ export function initButtons({ container, map, useCases, player, mapView }) {
   const builders = { tasks: tasksBody, map: mapBody, tutorial: tutorialBody, menu: menuBody, reset: resetBody };
   const titles = { tasks: 'bar.tasks', map: 'bar.map', tutorial: 'bar.tutorial', menu: 'bar.menu', reset: 'reset.title' };
   Object.entries(titles).forEach(([id, key]) => makeDialog(id, key));
+  dialogs.map.dlg.classList.add('px-dialog--map');
 
   function refresh(id) {
     const d = dialogs[id];

@@ -44,7 +44,8 @@ Run against the deployed GitHub Pages site (or `npm run preview`) in a desktop b
 ## Game loop
 - [ ] Move with arrow keys / WASD; the player cannot walk through walls or furniture.
 - [ ] Tasks panel shows progress, unlocked rewards and the next recommended case.
-- [ ] Map button shows the office map; the department picker shows an arrow to the chosen room.
+- [ ] Today's tasks lists only "Start here" (the explainer) and "Required" (your department plus the general cases); there is no "Optional exploration" section.
+- [ ] Map button shows the whole office: reception, Chat vs Cowork room and lounge at the top, a central spine with branching corridors, department rooms mixed with the print room, workspace and cafeteria. Every room's short name is drawn inside its rectangle; clicking a room on the map or its button in the list moves the player there (check a top-door room such as Consumer and a left-door room such as Wholesale). The department picker shows an arrow to the chosen room's door.
 - [ ] Reload the page: progress and rewards are kept.
 
 ## Reset

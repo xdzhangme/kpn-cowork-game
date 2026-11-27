@@ -578,18 +578,23 @@ dialog.px-dialog::backdrop {
   align-items: start;
 }
 
+/* The Map overlay is wider so the 40-tile floor plan and its room labels stay legible. */
+dialog.px-dialog.px-dialog--map {
+  width: min(1040px, 94vw);
+}
+
 .px-overview-wrap {
-  max-height: 55vh;
-  overflow: auto;
+  display: flex;
+  justify-content: center;
   border: 3px solid var(--ink);
   background: #1a1c2c;
 }
 
 .px-overview {
   display: block;
-  width: 100%;
+  max-width: 100%;
   height: auto;
-  image-rendering: pixelated;
+  cursor: pointer;
 }
 
 .px-rooms li {

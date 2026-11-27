@@ -34,7 +34,7 @@ Scenario player (opens over the map on E):
                       ===========                          <- stand
 ```
 
-- Desktop only. The map is a portrait world shown through a viewport that scrolls with the player at an integer scale (2x) with `image-rendering: pixelated`. The Map button opens a full-map overview and a room jump list.
+- Desktop only. The map is a portrait world shown through a viewport that scrolls with the player at an integer scale (2x) with `image-rendering: pixelated`. The Map button opens a full-map overview with every room's short name drawn inside its rectangle (click a room on the map or in the room list to jump there).
 - Side panel (idle): a nudge to visit the Chat vs Cowork room until it has been seen, progress, unlocked rewards and the next recommended case. It no longer hosts the use case card.
 - **Scenario player**: a `<dialog>` overlay with a pixel-art computer-monitor frame (grey bezel with a green LED, 4 px outline, screen inset, stand). Inside the screen the content is real HTML text, minimum 15 px, in Atkinson Hyperlegible with Jersey 10 for act titles. Act tabs across the top, a Back / position / Next footer. Message bubbles (colleague grey, you blue, Cowork green), file icons coloured per app (Word blue, Excel green, PowerPoint orange, Outlook blue, Teams purple), a typewriter prompt with a blinking caret, step list with a pixel progress bar and a highlighted approval card, mock app windows for the deliverable, and a two-column Chat vs Cowork comparison (Cowork column in KPN green). Timers and typing are instant under `prefers-reduced-motion`.
 - Bottom buttons: Today's tasks (progress), Map, Tutorial, Menu (language EN/NL, sound, reset progress).
@@ -43,10 +43,10 @@ Scenario player (opens over the map on E):
 
 - **Final art target** is `art-direction-pixel.png`: chunky visible pixels, hard edges, no anti-aliasing or gradients, limited palette, flat shading. It is a direction, not a shippable asset sheet: production tiles and props are redrawn or cleaned up as true pixel art in that style. `sample.png` is the layout mockup (art target map + card + buttons).
 - 16x16 tiles, thin blue-grey outline, 1 px top highlight and 1-2 px bottom shade on props.
-- Same structure as the floor-plan reference: irregular portrait building outline, top lobby, stairwell, one narrow central corridor, rooms of different sizes and offsets on both sides, open doorways, thick pale walls with a tinted back-wall face (2 tiles) and a wainscot band, subtle tile grid floors.
+- Same structure as the floor-plan reference: irregular portrait building outline, reception at the top next to the Chat vs Cowork intro room and the lounge, a wide entrance corridor, a central spine with branching side corridors, department rooms of different sizes and offsets interleaved with the functional rooms (print room, workspace, cafeteria) on both wings, doorways on whichever wall faces a corridor, thick pale walls with a tinted back-wall face (2 tiles) and a wainscot band, subtle tile grid floors.
 - Dense decoration: rugs with borders, floor lamps, bins, water coolers, boxes, book piles, coat racks, wall frames, windows, clocks, posters, plants, desks with monitors, shelves, sofas, vending machines. People sit or stand at desks.
 - UI panels and buttons use the same palette: pale panel, thin slate outline with inner white line, bottom bevel, no rounded corners, no gradients.
-- **Text must be readable.** Do not bake text into the map PNG except short room signs. Card and button text is real HTML text in bundled OFL fonts, minimum 14 px on screen, supports lowercase and Dutch characters. Pixel text (titles, buttons, labels, signs) uses Jersey 10 (`docs/visual/Jersey10.ttf`); Pixelify Sans is not used because its "f" and "5" are misread. Long card and dialog text (prompt block, descriptions) uses Atkinson Hyperlegible (`docs/visual/AtkinsonHyperlegible-*.ttf`) at 16 px or larger, line height 1.7, high contrast, ligatures disabled. The pixel frame stays around the card. Scope rule: a player's required tasks are their own department's cases plus the general cases; other departments are optional, encouraged exploration with bonus rewards. The UI mock lives in `docs/ui/index.html`. Room signs use a pixel font drawn into the sprite.
+- **Text must be readable.** Do not bake text into the map PNG except short room signs. Card and button text is real HTML text in bundled OFL fonts, minimum 14 px on screen, supports lowercase and Dutch characters. Pixel text (titles, buttons, labels, signs) uses Jersey 10 (`docs/visual/Jersey10.ttf`); Pixelify Sans is not used because its "f" and "5" are misread. Long card and dialog text (prompt block, descriptions) uses Atkinson Hyperlegible (`docs/visual/AtkinsonHyperlegible-*.ttf`) at 16 px or larger, line height 1.7, high contrast, ligatures disabled. The pixel frame stays around the card. Scope rule: a player's required tasks are their own department's cases plus the general cases; Today's tasks lists only those (other departments can still be explored freely on the map, but are not listed as tasks). The UI mock lives in `docs/ui/index.html`. Room signs use a pixel font drawn into the sprite.
 
 ## 4. Palette (theme tokens, overridable per customer)
 
@@ -88,7 +88,7 @@ Data-driven tile map (15 spaces):
 - 1 big General meeting room (10 GEN cases).
 - 1 **Chat vs Cowork** intro room near the spawn point with a single explainer object (monitor sign icon). New players are nudged to visit it first.
 - Tip rooms showing Cowork tips: Reception/lobby, Print, Open workspace, Lounge/pantry.
-- 51 interactable objects (50 use cases plus the explainer). The plan can grow by adding rooms along the corridor.
+- 51 interactable objects (50 use cases plus the explainer). The plan can grow by adding rooms along any corridor in `scripts/build-map.mjs` (`PLAN`).
 
 ## 7. Rewards and states
 
