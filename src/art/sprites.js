@@ -201,6 +201,18 @@ const SIGN_ICONS = {
     r(2, 0, 1, 3, 'W');
     r(5, 0, 1, 3, 'W');
   },
+  // Two speech bubbles: a small outline "chat" bubble and a filled "Cowork" bubble with a check mark.
+  intro: (r) => {
+    r(0, 0, 6, 4, 'W');
+    r(1, 1, 4, 2, 'a');
+    r(1, 4, 1, 1, 'W');
+    r(3, 4, 7, 5, 'W');
+    r(5, 9, 1, 1, 'W');
+    r(5, 7, 1, 1, 'a');
+    r(6, 6, 1, 1, 'a');
+    r(7, 5, 1, 1, 'a');
+    r(4, 6, 1, 1, 'a');
+  },
 };
 
 function signPlaque(name) {

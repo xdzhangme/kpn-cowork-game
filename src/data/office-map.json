@@ -13,10 +13,10 @@
  },
  "rooms": [
   {
-   "id": "finance",
-   "name": "Finance",
+   "id": "con",
+   "name": "Consumer",
    "type": "department",
-   "dept": "finance",
+   "dept": "con",
    "tint": "mint",
    "floor": "checker",
    "x": 1,
@@ -37,10 +37,10 @@
    "h": 6
   },
   {
-   "id": "hr",
-   "name": "HR",
+   "id": "sme",
+   "name": "Business SME",
    "type": "department",
-   "dept": "hr",
+   "dept": "sme",
    "tint": "lavender",
    "floor": "dots",
    "x": 3,
@@ -49,10 +49,10 @@
    "h": 6
   },
   {
-   "id": "it",
-   "name": "IT",
+   "id": "noi",
+   "name": "Network, Ops & IT",
    "type": "department",
-   "dept": "it",
+   "dept": "noi",
    "tint": "ice",
    "floor": "tiles8",
    "x": 3,
@@ -61,10 +61,10 @@
    "h": 6
   },
   {
-   "id": "procurement",
-   "name": "Procurement",
+   "id": "fin",
+   "name": "Finance & Control",
    "type": "department",
-   "dept": "procurement",
+   "dept": "fin",
    "tint": "butter",
    "floor": "zigzag",
    "x": 2,
@@ -73,10 +73,10 @@
    "h": 6
   },
   {
-   "id": "sales",
-   "name": "Sales",
-   "type": "department",
-   "dept": "sales",
+   "id": "intro",
+   "name": "Chat vs Cowork",
+   "type": "intro",
+   "dept": null,
    "tint": "blush",
    "floor": "stripes",
    "x": 18,
@@ -97,10 +97,10 @@
    "h": 6
   },
   {
-   "id": "legal",
-   "name": "Legal",
+   "id": "tso",
+   "name": "Tailored Solutions",
    "type": "department",
-   "dept": "legal",
+   "dept": "tso",
    "tint": "sky",
    "floor": "planks",
    "x": 18,
@@ -109,10 +109,10 @@
    "h": 6
   },
   {
-   "id": "ops",
-   "name": "Operations",
+   "id": "lce",
+   "name": "Business LCE",
    "type": "department",
-   "dept": "ops",
+   "dept": "lce",
    "tint": "sage",
    "floor": "hatch",
    "x": 18,
@@ -133,10 +133,10 @@
    "h": 6
   },
   {
-   "id": "marketing",
-   "name": "Marketing",
+   "id": "who",
+   "name": "Wholesale",
    "type": "department",
-   "dept": "marketing",
+   "dept": "who",
    "tint": "peach",
    "floor": "diamond",
    "x": 18,
@@ -145,10 +145,10 @@
    "h": 6
   },
   {
-   "id": "service",
-   "name": "Service",
+   "id": "pla",
+   "name": "People & Learning",
    "type": "department",
-   "dept": "service",
+   "dept": "pla",
    "tint": "sand",
    "floor": "bands",
    "x": 18,
@@ -158,7 +158,7 @@
   },
   {
    "id": "general",
-   "name": "General meeting room",
+   "name": "General",
    "type": "general",
    "dept": null,
    "tint": "grey",
@@ -195,316 +195,288 @@
  ],
  "slots": [
   {
-   "id": "finance-1",
-   "room": "finance",
+   "id": "con-1",
+   "room": "con",
    "x": 2,
    "y": 13,
    "prop": "desk"
   },
   {
-   "id": "finance-2",
-   "room": "finance",
+   "id": "con-2",
+   "room": "con",
    "x": 5,
    "y": 13,
    "prop": "desk"
   },
   {
-   "id": "finance-3",
-   "room": "finance",
+   "id": "con-3",
+   "room": "con",
    "x": 8,
    "y": 13,
    "prop": "desk"
   },
   {
-   "id": "finance-4",
-   "room": "finance",
+   "id": "con-4",
+   "room": "con",
    "x": 2,
    "y": 16,
    "prop": "desk"
   },
   {
-   "id": "finance-5",
-   "room": "finance",
+   "id": "con-5",
+   "room": "con",
    "x": 6,
    "y": 16,
    "prop": "desk"
   },
   {
-   "id": "hr-1",
-   "room": "hr",
+   "id": "sme-1",
+   "room": "sme",
    "x": 4,
    "y": 29,
    "prop": "desk"
   },
   {
-   "id": "hr-2",
-   "room": "hr",
+   "id": "sme-2",
+   "room": "sme",
    "x": 7,
    "y": 29,
    "prop": "desk"
   },
   {
-   "id": "hr-3",
-   "room": "hr",
+   "id": "sme-3",
+   "room": "sme",
    "x": 4,
    "y": 32,
    "prop": "desk"
   },
   {
-   "id": "hr-4",
-   "room": "hr",
+   "id": "sme-4",
+   "room": "sme",
    "x": 7,
    "y": 32,
    "prop": "desk"
   },
   {
-   "id": "hr-5",
-   "room": "hr",
+   "id": "sme-5",
+   "room": "sme",
    "x": 10,
    "y": 30,
    "prop": "desk"
   },
   {
-   "id": "it-1",
-   "room": "it",
+   "id": "noi-1",
+   "room": "noi",
    "x": 4,
    "y": 53,
    "prop": "desk"
   },
   {
-   "id": "it-2",
-   "room": "it",
+   "id": "noi-2",
+   "room": "noi",
    "x": 7,
    "y": 54,
    "prop": "desk"
   },
   {
-   "id": "it-3",
-   "room": "it",
+   "id": "noi-3",
+   "room": "noi",
    "x": 10,
    "y": 53,
    "prop": "desk"
   },
   {
-   "id": "it-4",
-   "room": "it",
+   "id": "noi-4",
+   "room": "noi",
    "x": 5,
    "y": 56,
    "prop": "desk"
   },
   {
-   "id": "it-5",
-   "room": "it",
+   "id": "noi-5",
+   "room": "noi",
    "x": 9,
    "y": 56,
    "prop": "desk"
   },
   {
-   "id": "procurement-1",
-   "room": "procurement",
+   "id": "fin-1",
+   "room": "fin",
    "x": 3,
    "y": 61,
    "prop": "desk"
   },
   {
-   "id": "procurement-2",
-   "room": "procurement",
+   "id": "fin-2",
+   "room": "fin",
    "x": 6,
    "y": 62,
    "prop": "desk"
   },
   {
-   "id": "procurement-3",
-   "room": "procurement",
+   "id": "fin-3",
+   "room": "fin",
    "x": 9,
    "y": 61,
    "prop": "desk"
   },
   {
-   "id": "procurement-4",
-   "room": "procurement",
+   "id": "fin-4",
+   "room": "fin",
    "x": 4,
    "y": 64,
    "prop": "desk"
   },
   {
-   "id": "procurement-5",
-   "room": "procurement",
+   "id": "fin-5",
+   "room": "fin",
    "x": 8,
    "y": 64,
    "prop": "desk"
   },
   {
-   "id": "sales-1",
-   "room": "sales",
-   "x": 19,
-   "y": 13,
-   "prop": "desk"
-  },
-  {
-   "id": "sales-2",
-   "room": "sales",
+   "id": "intro-1",
+   "room": "intro",
    "x": 22,
-   "y": 13,
+   "y": 14,
    "prop": "desk"
   },
   {
-   "id": "sales-3",
-   "room": "sales",
-   "x": 25,
-   "y": 13,
-   "prop": "desk"
-  },
-  {
-   "id": "sales-4",
-   "room": "sales",
-   "x": 20,
-   "y": 15,
-   "prop": "desk"
-  },
-  {
-   "id": "sales-5",
-   "room": "sales",
-   "x": 24,
-   "y": 15,
-   "prop": "desk"
-  },
-  {
-   "id": "legal-1",
-   "room": "legal",
+   "id": "tso-1",
+   "room": "tso",
    "x": 19,
    "y": 29,
    "prop": "desk"
   },
   {
-   "id": "legal-2",
-   "room": "legal",
+   "id": "tso-2",
+   "room": "tso",
    "x": 19,
    "y": 31,
    "prop": "desk"
   },
   {
-   "id": "legal-3",
-   "room": "legal",
+   "id": "tso-3",
+   "room": "tso",
    "x": 25,
    "y": 29,
    "prop": "desk"
   },
   {
-   "id": "legal-4",
-   "room": "legal",
+   "id": "tso-4",
+   "room": "tso",
    "x": 25,
    "y": 31,
    "prop": "desk"
   },
   {
-   "id": "legal-5",
-   "room": "legal",
+   "id": "tso-5",
+   "room": "tso",
    "x": 22,
    "y": 32,
    "prop": "desk"
   },
   {
-   "id": "ops-1",
-   "room": "ops",
+   "id": "lce-1",
+   "room": "lce",
    "x": 20,
    "y": 37,
    "prop": "desk"
   },
   {
-   "id": "ops-2",
-   "room": "ops",
+   "id": "lce-2",
+   "room": "lce",
    "x": 23,
    "y": 37,
    "prop": "desk"
   },
   {
-   "id": "ops-3",
-   "room": "ops",
+   "id": "lce-3",
+   "room": "lce",
    "x": 19,
    "y": 39,
    "prop": "desk"
   },
   {
-   "id": "ops-4",
-   "room": "ops",
+   "id": "lce-4",
+   "room": "lce",
    "x": 22,
    "y": 40,
    "prop": "desk"
   },
   {
-   "id": "ops-5",
-   "room": "ops",
+   "id": "lce-5",
+   "room": "lce",
    "x": 25,
    "y": 39,
    "prop": "desk"
   },
   {
-   "id": "marketing-1",
-   "room": "marketing",
+   "id": "who-1",
+   "room": "who",
    "x": 20,
    "y": 53,
    "prop": "desk"
   },
   {
-   "id": "marketing-2",
-   "room": "marketing",
+   "id": "who-2",
+   "room": "who",
    "x": 23,
    "y": 53,
    "prop": "desk"
   },
   {
-   "id": "marketing-3",
-   "room": "marketing",
+   "id": "who-3",
+   "room": "who",
    "x": 19,
    "y": 55,
    "prop": "desk"
   },
   {
-   "id": "marketing-4",
-   "room": "marketing",
+   "id": "who-4",
+   "room": "who",
    "x": 22,
    "y": 56,
    "prop": "desk"
   },
   {
-   "id": "marketing-5",
-   "room": "marketing",
+   "id": "who-5",
+   "room": "who",
    "x": 25,
    "y": 55,
    "prop": "desk"
   },
   {
-   "id": "service-1",
-   "room": "service",
+   "id": "pla-1",
+   "room": "pla",
    "x": 19,
    "y": 61,
    "prop": "desk"
   },
   {
-   "id": "service-2",
-   "room": "service",
+   "id": "pla-2",
+   "room": "pla",
    "x": 19,
    "y": 63,
    "prop": "desk"
   },
   {
-   "id": "service-3",
-   "room": "service",
+   "id": "pla-3",
+   "room": "pla",
    "x": 25,
    "y": 61,
    "prop": "desk"
   },
   {
-   "id": "service-4",
-   "room": "service",
+   "id": "pla-4",
+   "room": "pla",
    "x": 25,
    "y": 63,
    "prop": "desk"
   },
   {
-   "id": "service-5",
-   "room": "service",
+   "id": "pla-5",
+   "room": "pla",
    "x": 22,
    "y": 64,
    "prop": "desk"
@@ -582,33 +554,315 @@
  ],
  "objects": [
   {
-   "id": "obj-finance-variance-summary",
+   "id": "obj-CON-01",
    "x": 2,
    "y": 13,
-   "useCaseId": "finance-variance-summary"
+   "useCaseId": "CON-01"
   },
   {
-   "id": "obj-hr-onboarding-plan",
+   "id": "obj-CON-02",
+   "x": 5,
+   "y": 13,
+   "useCaseId": "CON-02"
+  },
+  {
+   "id": "obj-CON-03",
+   "x": 8,
+   "y": 13,
+   "useCaseId": "CON-03"
+  },
+  {
+   "id": "obj-CON-04",
+   "x": 2,
+   "y": 16,
+   "useCaseId": "CON-04"
+  },
+  {
+   "id": "obj-CON-05",
+   "x": 6,
+   "y": 16,
+   "useCaseId": "CON-05"
+  },
+  {
+   "id": "obj-SME-01",
    "x": 4,
    "y": 29,
-   "useCaseId": "hr-onboarding-plan"
+   "useCaseId": "SME-01"
   },
   {
-   "id": "obj-sales-meeting-brief",
+   "id": "obj-SME-02",
+   "x": 7,
+   "y": 29,
+   "useCaseId": "SME-02"
+  },
+  {
+   "id": "obj-SME-03",
+   "x": 4,
+   "y": 32,
+   "useCaseId": "SME-03"
+  },
+  {
+   "id": "obj-SME-04",
+   "x": 7,
+   "y": 32,
+   "useCaseId": "SME-04"
+  },
+  {
+   "id": "obj-SME-05",
+   "x": 10,
+   "y": 30,
+   "useCaseId": "SME-05"
+  },
+  {
+   "id": "obj-NOI-01",
+   "x": 4,
+   "y": 53,
+   "useCaseId": "NOI-01"
+  },
+  {
+   "id": "obj-NOI-02",
+   "x": 7,
+   "y": 54,
+   "useCaseId": "NOI-02"
+  },
+  {
+   "id": "obj-NOI-03",
+   "x": 10,
+   "y": 53,
+   "useCaseId": "NOI-03"
+  },
+  {
+   "id": "obj-NOI-04",
+   "x": 5,
+   "y": 56,
+   "useCaseId": "NOI-04"
+  },
+  {
+   "id": "obj-NOI-05",
+   "x": 9,
+   "y": 56,
+   "useCaseId": "NOI-05"
+  },
+  {
+   "id": "obj-FIN-01",
+   "x": 3,
+   "y": 61,
+   "useCaseId": "FIN-01"
+  },
+  {
+   "id": "obj-FIN-02",
+   "x": 6,
+   "y": 62,
+   "useCaseId": "FIN-02"
+  },
+  {
+   "id": "obj-FIN-03",
+   "x": 9,
+   "y": 61,
+   "useCaseId": "FIN-03"
+  },
+  {
+   "id": "obj-FIN-04",
+   "x": 4,
+   "y": 64,
+   "useCaseId": "FIN-04"
+  },
+  {
+   "id": "obj-FIN-05",
+   "x": 8,
+   "y": 64,
+   "useCaseId": "FIN-05"
+  },
+  {
+   "id": "obj-intro-chat-vs-cowork",
+   "x": 22,
+   "y": 14,
+   "useCaseId": "intro-chat-vs-cowork"
+  },
+  {
+   "id": "obj-TSO-01",
    "x": 19,
-   "y": 13,
-   "useCaseId": "sales-meeting-brief"
+   "y": 29,
+   "useCaseId": "TSO-01"
   },
   {
-   "id": "obj-general-inbox-triage",
+   "id": "obj-TSO-02",
+   "x": 19,
+   "y": 31,
+   "useCaseId": "TSO-02"
+  },
+  {
+   "id": "obj-TSO-03",
+   "x": 25,
+   "y": 29,
+   "useCaseId": "TSO-03"
+  },
+  {
+   "id": "obj-TSO-04",
+   "x": 25,
+   "y": 31,
+   "useCaseId": "TSO-04"
+  },
+  {
+   "id": "obj-TSO-05",
+   "x": 22,
+   "y": 32,
+   "useCaseId": "TSO-05"
+  },
+  {
+   "id": "obj-LCE-01",
+   "x": 20,
+   "y": 37,
+   "useCaseId": "LCE-01"
+  },
+  {
+   "id": "obj-LCE-02",
+   "x": 23,
+   "y": 37,
+   "useCaseId": "LCE-02"
+  },
+  {
+   "id": "obj-LCE-03",
+   "x": 19,
+   "y": 39,
+   "useCaseId": "LCE-03"
+  },
+  {
+   "id": "obj-LCE-04",
+   "x": 22,
+   "y": 40,
+   "useCaseId": "LCE-04"
+  },
+  {
+   "id": "obj-LCE-05",
+   "x": 25,
+   "y": 39,
+   "useCaseId": "LCE-05"
+  },
+  {
+   "id": "obj-WHO-01",
+   "x": 20,
+   "y": 53,
+   "useCaseId": "WHO-01"
+  },
+  {
+   "id": "obj-WHO-02",
+   "x": 23,
+   "y": 53,
+   "useCaseId": "WHO-02"
+  },
+  {
+   "id": "obj-WHO-03",
+   "x": 19,
+   "y": 55,
+   "useCaseId": "WHO-03"
+  },
+  {
+   "id": "obj-WHO-04",
+   "x": 22,
+   "y": 56,
+   "useCaseId": "WHO-04"
+  },
+  {
+   "id": "obj-WHO-05",
+   "x": 25,
+   "y": 55,
+   "useCaseId": "WHO-05"
+  },
+  {
+   "id": "obj-PLA-01",
+   "x": 19,
+   "y": 61,
+   "useCaseId": "PLA-01"
+  },
+  {
+   "id": "obj-PLA-02",
+   "x": 19,
+   "y": 63,
+   "useCaseId": "PLA-02"
+  },
+  {
+   "id": "obj-PLA-03",
+   "x": 25,
+   "y": 61,
+   "useCaseId": "PLA-03"
+  },
+  {
+   "id": "obj-PLA-04",
+   "x": 25,
+   "y": 63,
+   "useCaseId": "PLA-04"
+  },
+  {
+   "id": "obj-PLA-05",
+   "x": 22,
+   "y": 64,
+   "useCaseId": "PLA-05"
+  },
+  {
+   "id": "obj-GEN-01",
    "x": 2,
    "y": 37,
-   "useCaseId": "general-inbox-triage"
+   "useCaseId": "GEN-01"
+  },
+  {
+   "id": "obj-GEN-02",
+   "x": 5,
+   "y": 37,
+   "useCaseId": "GEN-02"
+  },
+  {
+   "id": "obj-GEN-03",
+   "x": 8,
+   "y": 37,
+   "useCaseId": "GEN-03"
+  },
+  {
+   "id": "obj-GEN-04",
+   "x": 2,
+   "y": 40,
+   "useCaseId": "GEN-04"
+  },
+  {
+   "id": "obj-GEN-05",
+   "x": 5,
+   "y": 40,
+   "useCaseId": "GEN-05"
+  },
+  {
+   "id": "obj-GEN-06",
+   "x": 8,
+   "y": 40,
+   "useCaseId": "GEN-06"
+  },
+  {
+   "id": "obj-GEN-07",
+   "x": 1,
+   "y": 43,
+   "useCaseId": "GEN-07"
+  },
+  {
+   "id": "obj-GEN-08",
+   "x": 4,
+   "y": 43,
+   "useCaseId": "GEN-08"
+  },
+  {
+   "id": "obj-GEN-09",
+   "x": 7,
+   "y": 43,
+   "useCaseId": "GEN-09"
+  },
+  {
+   "id": "obj-GEN-10",
+   "x": 10,
+   "y": 43,
+   "useCaseId": "GEN-10"
   }
  ],
  "props": [
   {
-   "sprite": "sign-finance",
+   "sprite": "sign-service",
    "x": 10,
    "y": 11,
    "w": 2,
@@ -689,7 +943,7 @@
    "y": 13,
    "w": 2,
    "h": 1,
-   "slot": "finance-1"
+   "slot": "con-1"
   },
   {
    "sprite": "chair",
@@ -706,7 +960,7 @@
    "y": 13,
    "w": 2,
    "h": 1,
-   "slot": "finance-2"
+   "slot": "con-2"
   },
   {
    "sprite": "chair",
@@ -723,7 +977,7 @@
    "y": 13,
    "w": 2,
    "h": 1,
-   "slot": "finance-3"
+   "slot": "con-3"
   },
   {
    "sprite": "chair",
@@ -740,7 +994,7 @@
    "y": 16,
    "w": 2,
    "h": 1,
-   "slot": "finance-4"
+   "slot": "con-4"
   },
   {
    "sprite": "chair",
@@ -757,7 +1011,7 @@
    "y": 16,
    "w": 2,
    "h": 1,
-   "slot": "finance-5"
+   "slot": "con-5"
   },
   {
    "sprite": "chair",
@@ -997,7 +1251,7 @@
    "h": 1
   },
   {
-   "sprite": "sign-hr",
+   "sprite": "sign-sales",
    "x": 10,
    "y": 27,
    "w": 2,
@@ -1078,7 +1332,7 @@
    "y": 29,
    "w": 2,
    "h": 1,
-   "slot": "hr-1"
+   "slot": "sme-1"
   },
   {
    "sprite": "chair",
@@ -1095,7 +1349,7 @@
    "y": 29,
    "w": 2,
    "h": 1,
-   "slot": "hr-2"
+   "slot": "sme-2"
   },
   {
    "sprite": "chair",
@@ -1112,7 +1366,7 @@
    "y": 32,
    "w": 2,
    "h": 1,
-   "slot": "hr-3"
+   "slot": "sme-3"
   },
   {
    "sprite": "chair",
@@ -1129,7 +1383,7 @@
    "y": 32,
    "w": 2,
    "h": 1,
-   "slot": "hr-4"
+   "slot": "sme-4"
   },
   {
    "sprite": "chair",
@@ -1146,7 +1400,7 @@
    "y": 30,
    "w": 2,
    "h": 1,
-   "slot": "hr-5"
+   "slot": "sme-5"
   },
   {
    "sprite": "chair",
@@ -1286,7 +1540,7 @@
    "y": 53,
    "w": 2,
    "h": 1,
-   "slot": "it-1"
+   "slot": "noi-1"
   },
   {
    "sprite": "chair",
@@ -1303,7 +1557,7 @@
    "y": 54,
    "w": 2,
    "h": 1,
-   "slot": "it-2"
+   "slot": "noi-2"
   },
   {
    "sprite": "chair",
@@ -1320,7 +1574,7 @@
    "y": 53,
    "w": 2,
    "h": 1,
-   "slot": "it-3"
+   "slot": "noi-3"
   },
   {
    "sprite": "chair",
@@ -1337,7 +1591,7 @@
    "y": 56,
    "w": 2,
    "h": 1,
-   "slot": "it-4"
+   "slot": "noi-4"
   },
   {
    "sprite": "chair",
@@ -1354,7 +1608,7 @@
    "y": 56,
    "w": 2,
    "h": 1,
-   "slot": "it-5"
+   "slot": "noi-5"
   },
   {
    "sprite": "chair",
@@ -1437,7 +1691,7 @@
    "h": 1
   },
   {
-   "sprite": "sign-procurement",
+   "sprite": "sign-finance",
    "x": 10,
    "y": 59,
    "w": 2,
@@ -1516,7 +1770,7 @@
    "y": 61,
    "w": 2,
    "h": 1,
-   "slot": "procurement-1"
+   "slot": "fin-1"
   },
   {
    "sprite": "chair",
@@ -1533,7 +1787,7 @@
    "y": 62,
    "w": 2,
    "h": 1,
-   "slot": "procurement-2"
+   "slot": "fin-2"
   },
   {
    "sprite": "chair",
@@ -1550,7 +1804,7 @@
    "y": 61,
    "w": 2,
    "h": 1,
-   "slot": "procurement-3"
+   "slot": "fin-3"
   },
   {
    "sprite": "chair",
@@ -1567,7 +1821,7 @@
    "y": 64,
    "w": 2,
    "h": 1,
-   "slot": "procurement-4"
+   "slot": "fin-4"
   },
   {
    "sprite": "chair",
@@ -1584,7 +1838,7 @@
    "y": 64,
    "w": 2,
    "h": 1,
-   "slot": "procurement-5"
+   "slot": "fin-5"
   },
   {
    "sprite": "chair",
@@ -1668,7 +1922,7 @@
    "h": 1
   },
   {
-   "sprite": "sign-sales",
+   "sprite": "sign-intro",
    "x": 27,
    "y": 11,
    "w": 2,
@@ -1686,7 +1940,15 @@
   },
   {
    "sprite": "whiteboard",
-   "x": 20,
+   "x": 19,
+   "y": 11,
+   "w": 2,
+   "h": 1,
+   "solid": false
+  },
+  {
+   "sprite": "monitors",
+   "x": 22,
    "y": 11,
    "w": 2,
    "h": 1,
@@ -1694,22 +1956,29 @@
   },
   {
    "sprite": "frame",
-   "x": 23,
+   "x": 25,
    "y": 11,
    "w": 1,
    "h": 1,
    "solid": false
   },
   {
-   "sprite": "globe",
+   "sprite": "plant",
    "x": 18,
    "y": 12,
    "w": 1,
    "h": 1
   },
   {
+   "sprite": "sofa",
+   "x": 19,
+   "y": 12,
+   "w": 2,
+   "h": 1
+  },
+  {
    "sprite": "shelf",
-   "x": 20,
+   "x": 22,
    "y": 12,
    "w": 2,
    "h": 1
@@ -1730,114 +1999,24 @@
   },
   {
    "sprite": "desk",
-   "x": 19,
-   "y": 13,
-   "w": 2,
-   "h": 1,
-   "slot": "sales-1"
-  },
-  {
-   "sprite": "chair",
-   "x": 19,
-   "y": 14,
-   "w": 1,
-   "h": 1,
-   "solid": false,
-   "dx": 8
-  },
-  {
-   "sprite": "desk",
    "x": 22,
-   "y": 13,
+   "y": 14,
    "w": 2,
    "h": 1,
-   "slot": "sales-2"
+   "slot": "intro-1"
   },
   {
    "sprite": "chair",
    "x": 22,
-   "y": 14,
-   "w": 1,
-   "h": 1,
-   "solid": false,
-   "dx": 8
-  },
-  {
-   "sprite": "desk",
-   "x": 25,
-   "y": 13,
-   "w": 2,
-   "h": 1,
-   "slot": "sales-3"
-  },
-  {
-   "sprite": "chair",
-   "x": 25,
-   "y": 14,
-   "w": 1,
-   "h": 1,
-   "solid": false,
-   "dx": 8
-  },
-  {
-   "sprite": "desk",
-   "x": 20,
    "y": 15,
-   "w": 2,
-   "h": 1,
-   "slot": "sales-4"
-  },
-  {
-   "sprite": "chair",
-   "x": 20,
-   "y": 16,
    "w": 1,
    "h": 1,
    "solid": false,
    "dx": 8
   },
   {
-   "sprite": "desk",
-   "x": 24,
-   "y": 15,
-   "w": 2,
-   "h": 1,
-   "slot": "sales-5"
-  },
-  {
-   "sprite": "chair",
-   "x": 24,
-   "y": 16,
-   "w": 1,
-   "h": 1,
-   "solid": false,
-   "dx": 8
-  },
-  {
-   "sprite": "chart",
-   "x": 25,
-   "y": 11,
-   "w": 2,
-   "h": 1,
-   "solid": false
-  },
-  {
-   "sprite": "trophy",
-   "x": 22,
-   "y": 12,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "sprite": "trophy",
-   "x": 23,
-   "y": 12,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "sprite": "frame",
-   "x": 19,
+   "sprite": "poster",
+   "x": 26,
    "y": 11,
    "w": 1,
    "h": 1,
@@ -1865,8 +2044,8 @@
    "h": 1
   },
   {
-   "sprite": "mug",
-   "x": 19,
+   "sprite": "coffee-machine",
+   "x": 25,
    "y": 12,
    "w": 1,
    "h": 1
@@ -1874,13 +2053,6 @@
   {
    "sprite": "mug",
    "x": 24,
-   "y": 12,
-   "w": 1,
-   "h": 1
-  },
-  {
-   "sprite": "folders",
-   "x": 26,
    "y": 12,
    "w": 1,
    "h": 1
@@ -2126,7 +2298,7 @@
    "y": 29,
    "w": 2,
    "h": 1,
-   "slot": "legal-1"
+   "slot": "tso-1"
   },
   {
    "sprite": "chair",
@@ -2143,7 +2315,7 @@
    "y": 31,
    "w": 2,
    "h": 1,
-   "slot": "legal-2"
+   "slot": "tso-2"
   },
   {
    "sprite": "chair",
@@ -2160,7 +2332,7 @@
    "y": 29,
    "w": 2,
    "h": 1,
-   "slot": "legal-3"
+   "slot": "tso-3"
   },
   {
    "sprite": "chair",
@@ -2177,7 +2349,7 @@
    "y": 31,
    "w": 2,
    "h": 1,
-   "slot": "legal-4"
+   "slot": "tso-4"
   },
   {
    "sprite": "chair",
@@ -2194,7 +2366,7 @@
    "y": 32,
    "w": 2,
    "h": 1,
-   "slot": "legal-5"
+   "slot": "tso-5"
   },
   {
    "sprite": "chair",
@@ -2329,7 +2501,7 @@
    "y": 37,
    "w": 2,
    "h": 1,
-   "slot": "ops-1"
+   "slot": "lce-1"
   },
   {
    "sprite": "chair",
@@ -2346,7 +2518,7 @@
    "y": 37,
    "w": 2,
    "h": 1,
-   "slot": "ops-2"
+   "slot": "lce-2"
   },
   {
    "sprite": "chair",
@@ -2363,7 +2535,7 @@
    "y": 39,
    "w": 2,
    "h": 1,
-   "slot": "ops-3"
+   "slot": "lce-3"
   },
   {
    "sprite": "chair",
@@ -2380,7 +2552,7 @@
    "y": 40,
    "w": 2,
    "h": 1,
-   "slot": "ops-4"
+   "slot": "lce-4"
   },
   {
    "sprite": "chair",
@@ -2397,7 +2569,7 @@
    "y": 39,
    "w": 2,
    "h": 1,
-   "slot": "ops-5"
+   "slot": "lce-5"
   },
   {
    "sprite": "chair",
@@ -2722,7 +2894,7 @@
    "h": 1
   },
   {
-   "sprite": "sign-marketing",
+   "sprite": "sign-procurement",
    "x": 26,
    "y": 51,
    "w": 2,
@@ -2803,7 +2975,7 @@
    "y": 53,
    "w": 2,
    "h": 1,
-   "slot": "marketing-1"
+   "slot": "who-1"
   },
   {
    "sprite": "chair",
@@ -2820,7 +2992,7 @@
    "y": 53,
    "w": 2,
    "h": 1,
-   "slot": "marketing-2"
+   "slot": "who-2"
   },
   {
    "sprite": "chair",
@@ -2837,7 +3009,7 @@
    "y": 55,
    "w": 2,
    "h": 1,
-   "slot": "marketing-3"
+   "slot": "who-3"
   },
   {
    "sprite": "chair",
@@ -2854,7 +3026,7 @@
    "y": 56,
    "w": 2,
    "h": 1,
-   "slot": "marketing-4"
+   "slot": "who-4"
   },
   {
    "sprite": "chair",
@@ -2871,7 +3043,7 @@
    "y": 55,
    "w": 2,
    "h": 1,
-   "slot": "marketing-5"
+   "slot": "who-5"
   },
   {
    "sprite": "chair",
@@ -2948,7 +3120,7 @@
    "h": 1
   },
   {
-   "sprite": "sign-service",
+   "sprite": "sign-hr",
    "x": 25,
    "y": 59,
    "w": 2,
@@ -3029,7 +3201,7 @@
    "y": 61,
    "w": 2,
    "h": 1,
-   "slot": "service-1"
+   "slot": "pla-1"
   },
   {
    "sprite": "chair",
@@ -3046,7 +3218,7 @@
    "y": 63,
    "w": 2,
    "h": 1,
-   "slot": "service-2"
+   "slot": "pla-2"
   },
   {
    "sprite": "chair",
@@ -3063,7 +3235,7 @@
    "y": 61,
    "w": 2,
    "h": 1,
-   "slot": "service-3"
+   "slot": "pla-3"
   },
   {
    "sprite": "chair",
@@ -3080,7 +3252,7 @@
    "y": 63,
    "w": 2,
    "h": 1,
-   "slot": "service-4"
+   "slot": "pla-4"
   },
   {
    "sprite": "chair",
@@ -3097,7 +3269,7 @@
    "y": 64,
    "w": 2,
    "h": 1,
-   "slot": "service-5"
+   "slot": "pla-5"
   },
   {
    "sprite": "chair",

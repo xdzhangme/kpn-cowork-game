@@ -1,0 +1,205 @@
+{
+  "$comment": "Optional hand-polished scenario content layered over the KPN source JSON (public/data). Keys are use-case ids; each language may define situation.{lead,messages[{from,kind,text}],files[{name,detail,kind}]} and outcome.{kind,title,fileName,lines[{text,src}],value[]}. Missing fields fall back to the generated template. kind for messages: them | you | cowork. kind for files/outcome: word | excel | powerpoint | outlook | teams.",
+  "CON-01": {
+    "en": {
+      "situation": {
+        "lead": "Monday morning on the technical service desk. The same questions keep coming in, but nobody can show the pattern with evidence.",
+        "files": [
+          { "name": "contact-reasons_oct.xlsx", "detail": "4,120 rows, one per customer contact", "kind": "excel" },
+          { "name": "complaints_oct.xlsx", "detail": "310 complaint records", "kind": "excel" },
+          { "name": "service-channel_oct.txt", "detail": "Approved Teams exports from the service channel", "kind": "teams" }
+        ],
+        "messages": [
+          { "from": "Team lead, Technical Service", "kind": "them", "text": "Hi, management wants to know what is really driving contacts this month. Can you pull the top five issues together with a real example for each? They need it before Thursday's review." },
+          { "from": "Colleague, Complaints desk", "kind": "them", "text": "FYI the complaint export for October is in the shared folder. It's 310 lines. I didn't get to matching them to the contact reasons, sorry." },
+          { "from": "you", "kind": "you", "text": "I see the same WiFi and login questions every week, but turning three exports into one ranked, evidence-backed brief by hand is a full day of counting and matching." }
+        ]
+      },
+      "outcome": {
+        "kind": "word",
+        "title": "Customer issue signal brief, October (fictional example)",
+        "fileName": "Customer-issue-signal-brief_Oct.docx",
+        "lines": [
+          { "text": "1. WiFi drops after a router restart: 412 contacts [documented fact]. Example: \"Every time the router reboots my laptop loses the network for an hour\" (anonymised).", "src": "contact-reasons_oct.xlsx, service-channel_oct.txt" },
+          { "text": "2. Unclear bill after a plan change: 287 contacts [documented fact]. Example: \"My invoice shows two subscriptions after I switched\" (anonymised).", "src": "contact-reasons_oct.xlsx" },
+          { "text": "3. MijnKPN login problems: 198 contacts, 31 also in complaints [documented fact]. Example from a complaint record.", "src": "contact-reasons_oct.xlsx, complaints_oct.xlsx" },
+          { "text": "4. Modem light stays red after installation: 143 contacts [documented fact]. Likely cause labelled as inference: no matching complaint record found.", "src": "contact-reasons_oct.xlsx" },
+          { "text": "5. Delivery date moved without notice: 97 contacts [documented fact].", "src": "contact-reasons_oct.xlsx" },
+          { "text": "Draft actions (4), each linked to its evidence line. Update draft for the reviewers included, not sent." }
+        ],
+        "value": [
+          "One labelled brief with the counting, matching and anonymising already done. You review the ranking and decide what goes to Thursday's review.",
+          "Nothing was shared: the brief is a draft and the update is only a draft until you say so."
+        ]
+      }
+    },
+    "nl": {
+      "situation": {
+        "lead": "Maandagochtend op de technische servicedesk. Dezelfde vragen blijven binnenkomen, maar niemand kan het patroon met bewijs laten zien.",
+        "files": [
+          { "name": "contactredenen_okt.xlsx", "detail": "4.120 regels, één per klantcontact", "kind": "excel" },
+          { "name": "klachten_okt.xlsx", "detail": "310 klachtrecords", "kind": "excel" },
+          { "name": "servicekanaal_okt.txt", "detail": "Goedgekeurde Teams-exports uit het servicekanaal", "kind": "teams" }
+        ],
+        "messages": [
+          { "from": "Teamlead Technische Service", "kind": "them", "text": "Hoi, het management wil weten wat deze maand echt de contacten aanjaagt. Kun jij de top vijf problemen bij elkaar zetten met één echt voorbeeld per probleem? Ze hebben het nodig vóór de review van donderdag." },
+          { "from": "Collega Klachtendesk", "kind": "them", "text": "Ter info: de klachtenexport van oktober staat in de gedeelde map. 310 regels. Ik ben niet toegekomen aan het koppelen aan de contactredenen, sorry." },
+          { "from": "you", "kind": "you", "text": "Ik zie elke week dezelfde WiFi- en inlogvragen, maar drie exports met de hand omzetten in één gerangschikte, onderbouwde brief kost een volle dag tellen en koppelen." }
+        ]
+      },
+      "outcome": {
+        "kind": "word",
+        "title": "Signaalbrief klantproblemen, oktober (fictief voorbeeld)",
+        "fileName": "Signaalbrief-klantproblemen_okt.docx",
+        "lines": [
+          { "text": "1. WiFi valt weg na het herstarten van de router: 412 contacten [gedocumenteerd feit]. Voorbeeld: \"Elke keer als de router herstart is mijn laptop een uur het netwerk kwijt\" (geanonimiseerd).", "src": "contactredenen_okt.xlsx, servicekanaal_okt.txt" },
+          { "text": "2. Onduidelijke factuur na een abonnementswijziging: 287 contacten [gedocumenteerd feit]. Voorbeeld: \"Mijn factuur toont twee abonnementen na de overstap\" (geanonimiseerd).", "src": "contactredenen_okt.xlsx" },
+          { "text": "3. Inlogproblemen in MijnKPN: 198 contacten, 31 ook in klachten [gedocumenteerd feit]. Voorbeeld uit een klachtrecord.", "src": "contactredenen_okt.xlsx, klachten_okt.xlsx" },
+          { "text": "4. Modemlampje blijft rood na installatie: 143 contacten [gedocumenteerd feit]. Waarschijnlijke oorzaak gelabeld als inschatting: geen bijpassend klachtrecord gevonden.", "src": "contactredenen_okt.xlsx" },
+          { "text": "5. Leverdatum verschoven zonder bericht: 97 contacten [gedocumenteerd feit].", "src": "contactredenen_okt.xlsx" },
+          { "text": "Conceptacties (4), elk gekoppeld aan de bewijsregel. Concept-update voor de reviewers bijgevoegd, niet verstuurd." }
+        ],
+        "value": [
+          "Eén gelabelde brief waarin het tellen, koppelen en anonimiseren al gedaan is. Jij beoordeelt de rangschikking en bepaalt wat naar de review van donderdag gaat.",
+          "Er is niets gedeeld: de brief is een concept en de update blijft een concept tot jij akkoord geeft."
+        ]
+      }
+    }
+  },
+  "GEN-01": {
+    "en": {
+      "situation": {
+        "lead": "The Project Maple weekly sync ended an hour ago. Three files, thirty pages, and nobody agrees on what was decided.",
+        "files": [
+          { "name": "Maple-sync_2024-03-04_transcript.docx", "detail": "30-page meeting transcript", "kind": "word" },
+          { "name": "Maple-sync_agenda.docx", "detail": "Agenda with five items", "kind": "word" },
+          { "name": "Maple-sync_chat.txt", "detail": "Exported meeting chat with side remarks", "kind": "teams" }
+        ],
+        "messages": [
+          { "from": "Project lead, Maple", "kind": "them", "text": "Good meeting. Can you send the decision log and action list today? Finance is waiting on the revised plan and I want it clear who owns what." },
+          { "from": "Sam, Delivery", "kind": "them", "text": "Quick one: did we actually decide to move the pilot to 12 March, or was that still open? I heard both." },
+          { "from": "you", "kind": "you", "text": "I chair this meeting. Writing it up properly means re-reading the whole transcript and the chat, and separating what was agreed from what was only discussed." }
+        ]
+      },
+      "outcome": {
+        "kind": "word",
+        "title": "Project Maple weekly sync: decisions and actions (fictional example)",
+        "fileName": "Maple-sync_decisions-and-actions.docx",
+        "lines": [
+          { "text": "Decision: the pilot moves to 12 March (agreed by the project lead at 14:20).", "src": "transcript" },
+          { "text": "Decision: the risk register is reviewed every two weeks instead of monthly.", "src": "transcript" },
+          { "text": "Action: send the revised plan to Finance. Owner: Sam. Due: not stated in the files.", "src": "chat export" },
+          { "text": "Action: book the pilot-site walkthrough. Owner: project lead. Due: before 12 March.", "src": "transcript" },
+          { "text": "Discussed, not decided: whether to add a second pilot site.", "src": "transcript" },
+          { "text": "Inference (marked): the vendor demo seems to have slipped to April; nobody confirmed this." },
+          { "text": "Follow-up draft to attendees: prepared after your OK, not sent." }
+        ],
+        "value": [
+          "Every line cites where it came from, so the \"did we decide this?\" question answers itself.",
+          "Missing dates are flagged, not invented. You confirm them before anything is saved or sent."
+        ]
+      }
+    },
+    "nl": {
+      "situation": {
+        "lead": "De wekelijkse sync van Project Maple is een uur geleden afgelopen. Drie bestanden, dertig pagina's, en niemand is het eens over wat er besloten is.",
+        "files": [
+          { "name": "Maple-sync_2024-03-04_transcript.docx", "detail": "Transcript van 30 pagina's", "kind": "word" },
+          { "name": "Maple-sync_agenda.docx", "detail": "Agenda met vijf punten", "kind": "word" },
+          { "name": "Maple-sync_chat.txt", "detail": "Geëxporteerde vergaderchat met losse opmerkingen", "kind": "teams" }
+        ],
+        "messages": [
+          { "from": "Projectleider Maple", "kind": "them", "text": "Goede meeting. Kun je vandaag de besluitenlijst en actielijst sturen? Finance wacht op het herziene plan en ik wil duidelijk hebben wie wat oppakt." },
+          { "from": "Sam, Delivery", "kind": "them", "text": "Korte vraag: hebben we nu echt besloten de pilot naar 12 maart te verplaatsen, of stond dat nog open? Ik hoorde allebei." },
+          { "from": "you", "kind": "you", "text": "Ik zit dit overleg voor. Goed uitwerken betekent het hele transcript en de chat opnieuw lezen, en scheiden wat is afgesproken van wat alleen is besproken." }
+        ]
+      },
+      "outcome": {
+        "kind": "word",
+        "title": "Wekelijkse sync Project Maple: besluiten en acties (fictief voorbeeld)",
+        "fileName": "Maple-sync_besluiten-en-acties.docx",
+        "lines": [
+          { "text": "Besluit: de pilot gaat naar 12 maart (afgesproken door de projectleider om 14:20).", "src": "transcript" },
+          { "text": "Besluit: het risicoregister wordt elke twee weken bekeken in plaats van maandelijks.", "src": "transcript" },
+          { "text": "Actie: stuur het herziene plan naar Finance. Eigenaar: Sam. Deadline: niet vermeld in de bestanden.", "src": "chatexport" },
+          { "text": "Actie: plan de rondgang op de pilotlocatie. Eigenaar: projectleider. Deadline: vóór 12 maart.", "src": "transcript" },
+          { "text": "Besproken, niet besloten: of er een tweede pilotlocatie bij komt.", "src": "transcript" },
+          { "text": "Afleiding (gemarkeerd): de leveranciersdemo lijkt naar april te zijn geschoven; niemand heeft dit bevestigd." },
+          { "text": "Concept-opvolging aan de deelnemers: wordt na jouw akkoord gemaakt, niet verstuurd." }
+        ],
+        "value": [
+          "Elke regel noemt de bron, dus de vraag \"hebben we dit besloten?\" beantwoordt zichzelf.",
+          "Ontbrekende datums worden gemeld, niet verzonnen. Jij bevestigt ze voordat er iets wordt opgeslagen of verstuurd."
+        ]
+      }
+    }
+  },
+  "FIN-01": {
+    "en": {
+      "situation": {
+        "lead": "Month-end close for one business unit. The variances are known; the reasons behind them are scattered across four files and a dozen late replies.",
+        "files": [
+          { "name": "variance-report_Oct.xlsx", "detail": "Actuals vs budget per cost centre", "kind": "excel" },
+          { "name": "ledger-extracts_Oct.xlsx", "detail": "Postings behind the top variances", "kind": "excel" },
+          { "name": "owner-comments_Oct.msg", "detail": "E-mailed explanations from budget owners", "kind": "outlook" },
+          { "name": "variance-note_Sep.docx", "detail": "Last period's note, context only", "kind": "word" }
+        ],
+        "messages": [
+          { "from": "Business Controller", "kind": "them", "text": "Can you have the October variance note ready for the budget owners by Wednesday? Please make clear which explanations are actually backed by the ledger. Last month a 'cause' turned out to be a guess." },
+          { "from": "Sales Operations (budget owner)", "kind": "them", "text": "Re: licence income. The shortfall is a timing thing, a big renewal moved to November. Just put that in the note." },
+          { "from": "you", "kind": "you", "text": "I explain the cost-centre variances every month. Owners reply late, the story changes, and it is tempting to recycle last period's wording." }
+        ]
+      },
+      "outcome": {
+        "kind": "word",
+        "title": "Variance note, October (fictional example)",
+        "fileName": "Variance-note_Oct.docx",
+        "lines": [
+          { "text": "1. Contractor costs, 84k over budget: supported by data (ledger entries 4100-0231 and 4100-0232). Run-rate, not a one-off.", "src": "ledger-extracts_Oct.xlsx" },
+          { "text": "2. Licence income, 41k under budget: stated by the owner (Sales Operations: renewal moved to November). No ledger entry supports it yet.", "src": "owner-comments_Oct.msg" },
+          { "text": "3. Travel, 19k over budget: my hypothesis (timing of a customer event). Question marked for the owner.", "src": "variance-note_Sep.docx" },
+          { "text": "4. Facilities, 12k under budget: supported by data (deferred maintenance invoice). One-off.", "src": "ledger-extracts_Oct.xlsx" },
+          { "text": "5. Marketing, 9k over budget: stated by the owner (campaign brought forward). Ledger confirms the invoice date.", "src": "owner-comments_Oct.msg, ledger-extracts_Oct.xlsx" },
+          { "text": "Draft e-mail to the budget owners with the open questions: prepared, not sent." }
+        ],
+        "value": [
+          "Owner statements are never promoted to facts: every explanation carries a label that says how well it is evidenced.",
+          "You review the ranking and labels before the note is written and the e-mail is drafted. Nothing goes out without your OK."
+        ]
+      }
+    },
+    "nl": {
+      "situation": {
+        "lead": "Maandafsluiting voor één businessunit. De afwijkingen zijn bekend; de redenen erachter staan verspreid over vier bestanden en een dozijn late antwoorden.",
+        "files": [
+          { "name": "afwijkingsrapport_okt.xlsx", "detail": "Werkelijk vs budget per kostenplaats", "kind": "excel" },
+          { "name": "grootboekuittreksels_okt.xlsx", "detail": "Boekingen achter de grootste afwijkingen", "kind": "excel" },
+          { "name": "opmerkingen-eigenaren_okt.msg", "detail": "Gemailde verklaringen van budgethouders", "kind": "outlook" },
+          { "name": "afwijkingsnotitie_sep.docx", "detail": "Notitie van vorige periode, alleen als context", "kind": "word" }
+        ],
+        "messages": [
+          { "from": "Business Controller", "kind": "them", "text": "Kun jij de afwijkingsnotitie van oktober woensdag klaar hebben voor de budgethouders? Maak duidelijk welke verklaringen echt door het grootboek worden gedekt. Vorige maand bleek een 'oorzaak' een gok." },
+          { "from": "Sales Operations (budgethouder)", "kind": "them", "text": "Over de licentie-inkomsten: het tekort is een timingkwestie, een grote verlenging is naar november geschoven. Zet dat maar gewoon in de notitie." },
+          { "from": "you", "kind": "you", "text": "Ik verklaar elke maand de afwijkingen op de kostenplaatsen. Eigenaren reageren laat, het verhaal verandert en het is verleidelijk de tekst van vorige periode te hergebruiken." }
+        ]
+      },
+      "outcome": {
+        "kind": "word",
+        "title": "Afwijkingsnotitie, oktober (fictief voorbeeld)",
+        "fileName": "Afwijkingsnotitie_okt.docx",
+        "lines": [
+          { "text": "1. Kosten externe inhuur, 84k boven budget: onderbouwd door data (grootboekposten 4100-0231 en 4100-0232). Structureel, geen eenmalige post.", "src": "grootboekuittreksels_okt.xlsx" },
+          { "text": "2. Licentie-inkomsten, 41k onder budget: gesteld door de eigenaar (Sales Operations: verlenging naar november). Nog geen grootboekpost die dit onderbouwt.", "src": "opmerkingen-eigenaren_okt.msg" },
+          { "text": "3. Reiskosten, 19k boven budget: mijn hypothese (timing van een klantevent). Vraag voor de eigenaar gemarkeerd.", "src": "afwijkingsnotitie_sep.docx" },
+          { "text": "4. Facilitair, 12k onder budget: onderbouwd door data (uitgestelde onderhoudsfactuur). Eenmalig.", "src": "grootboekuittreksels_okt.xlsx" },
+          { "text": "5. Marketing, 9k boven budget: gesteld door de eigenaar (campagne naar voren gehaald). Grootboek bevestigt de factuurdatum.", "src": "opmerkingen-eigenaren_okt.msg, grootboekuittreksels_okt.xlsx" },
+          { "text": "Conceptmail aan de budgethouders met de open vragen: voorbereid, niet verstuurd." }
+        ],
+        "value": [
+          "Uitspraken van eigenaren worden nooit tot feiten verheven: elke verklaring draagt een label dat zegt hoe goed die onderbouwd is.",
+          "Jij beoordeelt de rangschikking en labels voordat de notitie wordt geschreven en de mail wordt opgesteld. Er gaat niets de deur uit zonder jouw akkoord."
+        ]
+      }
+    }
+  }
+}

@@ -3,12 +3,11 @@ import { tileAt } from './tilemap.js';
 
 export const DEPT_KEY = 'department';
 
-// Rooms that carry use cases: department rooms and the general meeting room.
-const caseRoom = (r) => r.type === 'department' || r.type === 'general';
-// Room dept ids that differ from the use case department ids.
-const DEPT_ALIAS = { ops: 'operations' };
+// Rooms that carry use cases: department rooms, the general room and the Chat vs Cowork intro room.
+const caseRoom = (r) => r.type === 'department' || r.type === 'general' || r.type === 'intro';
 
-export const roomDept = (room) => (room.type === 'general' ? 'general' : DEPT_ALIAS[room.dept] ?? room.dept);
+// Room ids double as use case department ids (con, sme, ... , general, intro).
+export const roomDept = (room) => (room.type === 'department' ? room.dept : room.id);
 
 export function roomAtPixel(map, x, y) {
   const t = map.tileSize;
@@ -79,5 +78,7 @@ export function doorFor(map, room) {
 }
 
 export function pickableRooms(map) {
-  return map.rooms.filter(caseRoom).filter((r) => r.type === 'department');
+  return map.rooms.filter((r) => r.type === 'department');
 }
+
+export const introRoom = (map) => map.rooms.find((r) => r.type === 'intro') ?? null;

@@ -1,54 +1,29 @@
 import { config } from './config.js';
-import { getLang, pick, t } from './i18n.js';
+import { pick, t } from './i18n.js';
+import { text } from './usecases.js';
+import { fullPrompt } from './scenario.js';
 
-const ICONS = {
-  chart: '📊',
-  people: '👥',
-  briefcase: '💼',
-  mail: '✉️',
-};
-
-const FILL_IN = /\{\{\s*([\w-]+)\s*\}\}/g;
-
-function el(tag, className, text) {
+function el(tag, className, content) {
   const node = document.createElement(tag);
   if (className) node.className = className;
-  if (text !== undefined) node.textContent = text;
+  if (content !== undefined) node.textContent = content;
   return node;
 }
 
-function chip(text, variant) {
-  return el('span', variant ? `uc-chip uc-chip--${variant}` : 'uc-chip', text);
+function chip(label, variant) {
+  return el('span', variant ? `uc-chip uc-chip--${variant}` : 'uc-chip', label);
 }
 
-function metaChips(meta) {
-  return [
-    chip(t(`chip.department.${meta.department}`)),
-    chip(meta.role, 'alt'),
-    chip(t(`chip.workload.${meta.workload}`), 'mark'),
-    chip(`${meta.credits} ${t('chip.credits')}`),
-    chip(t(`chip.executionMode.${meta.executionMode}`), 'alt'),
-    chip(meta.capability),
-    chip(t(`chip.collaborationScope.${meta.collaborationScope}`), 'alt'),
-  ];
-}
-
-// Plain text is kept as text nodes; {{fields}} become highlighted <mark> elements.
-function promptBlock(text) {
+// [Square bracket] placeholders become highlighted <mark> elements.
+function promptBlock(s) {
   const block = el('p', 'uc-prompt');
-  let last = 0;
-  for (const m of text.matchAll(FILL_IN)) {
-    block.append(text.slice(last, m.index));
-    block.append(el('mark', 'uc-fill', m[1]));
-    last = m.index + m[0].length;
-  }
-  block.append(text.slice(last));
+  String(s ?? '')
+    .split(/(\[[^\]]+\])/)
+    .forEach((part) => {
+      if (/^\[[^\]]+\]$/.test(part)) block.append(el('mark', 'uc-fill', part));
+      else if (part) block.append(part);
+    });
   return block;
-}
-
-// The prompt as copied: fill-ins stay as readable {{name}} placeholders.
-function copyText(text) {
-  return text.replace(FILL_IN, '{{$1}}');
 }
 
 function section(title, ...body) {
@@ -57,63 +32,86 @@ function section(title, ...body) {
   return details;
 }
 
+function labelled(key, value) {
+  const row = el('div', 'uc-row');
+  row.append(el('b', 'uc-label', t(key)), promptBlock(value));
+  return row;
+}
+
 /**
- * Builds a full use case card for the current language. Shared by the Library
- * and the game. Rebuild it (call again) when the language changes.
- * options.actions: extra buttons appended to the button row (e.g. "Open in game").
+ * Library card for one KPN use case in the current language. Rebuild on language change.
+ * options.actions: extra buttons appended to the button row (e.g. "Play scenario").
  */
 export function renderCard(useCase, { actions = [] } = {}) {
+  const d = text(useCase);
   const card = el('article', 'uc-card px-panel');
   card.dataset.id = useCase.id;
 
   const head = el('header', 'uc-head px-title');
-  head.append(
-    el('span', 'uc-icon', ICONS[useCase.icon] ?? '⭐'),
-    el('h3', 'uc-title', pick(useCase.title)),
-  );
+  head.append(el('span', 'uc-case-id', useCase.id), el('h3', 'uc-title', pick(useCase.title)));
 
   const body = el('div', 'uc-body');
   const chips = el('div', 'uc-chips');
-  chips.append(...metaChips(useCase.meta));
+  chips.append(chip(t(`dept.${useCase.meta.department}`)));
+  if (useCase.workload) chips.append(chip(t(`chip.workload.${useCase.workload.toLowerCase()}`), 'mark'));
+  if (useCase.collaborationScope) chips.append(chip(t(`chip.scope.${useCase.collaborationScope.toLowerCase()}`), 'alt'));
+  (useCase.capabilities ?? []).forEach((c) => chips.append(chip(c, 'alt')));
 
-  const promptText = pick(useCase.prompt);
-  const copyBtn = el('button', 'px-btn px-btn--primary', t('card.copy'));
+  const copyBtn = el('button', 'px-btn', t('card.copy'));
   copyBtn.type = 'button';
   copyBtn.addEventListener('click', async () => {
     try {
-      await navigator.clipboard.writeText(copyText(promptText));
+      await navigator.clipboard.writeText(fullPrompt(useCase));
       copyBtn.textContent = t('card.copied');
       setTimeout(() => (copyBtn.textContent = t('card.copy')), 1200);
     } catch {
       // Clipboard unavailable: the prompt stays selectable on screen.
     }
   });
-
   const tryLink = el('a', 'px-btn', t('card.try'));
   tryLink.href = config.coworkUrl;
   tryLink.target = '_blank';
   tryLink.rel = 'noopener noreferrer';
-
   const buttons = el('div', 'uc-actions');
-  buttons.append(copyBtn, tryLink, ...actions);
+  buttons.append(...actions, copyBtn, tryLink);
+
+  const p = d.prompt ?? {};
+  const promptBody = el('div', 'uc-prompt-rows');
+  [['card.outcome', p.outcome], ['card.inputs', p.inputs], ['card.doneWhen', p.doneWhen], ['card.constraints', p.constraints], ['card.approval', p.approval]]
+    .filter(([, v]) => v)
+    .forEach(([k, v]) => promptBody.append(labelled(k, v)));
 
   const steps = el('ol', 'uc-steps');
-  (useCase.seeItRun[getLang()] ?? useCase.seeItRun.en).forEach((s) =>
-    steps.append(el('li', '', s)),
-  );
+  (d.run?.steps ?? []).forEach((s) => steps.append(el('li', s.pause ? 'uc-step--pause' : '', s.text)));
 
+  const why = d.why ?? {};
+  const whyBody = el('div', 'uc-why');
+  if (why.lead) whyBody.append(el('p', '', why.lead));
+  const cols = el('div', 'uc-why-cols');
+  const col = (titleKey, items, verdict, cls) => {
+    const c = el('div', `uc-why-col ${cls}`);
+    c.append(el('b', '', t(titleKey)));
+    const ul = el('ul');
+    (items ?? []).forEach((x) => ul.append(el('li', '', x)));
+    c.append(ul);
+    if (verdict) c.append(el('p', 'uc-verdict', verdict));
+    return c;
+  };
+  cols.append(col('sc.compare.chat', why.chat, why.chatVerdict, 'uc-why-col--chat'), col('sc.compare.cowork', why.cowork, why.coworkVerdict, 'uc-why-col--cowork'));
+  whyBody.append(cols);
+
+  const roles = (d.roles ?? []).join(' · ');
+  body.append(el('p', 'uc-summary', pick(useCase.hook)), chips);
+  if (roles) body.append(el('p', 'uc-roles', `${t('card.roles')}: ${roles}`));
   body.append(
-    el('p', 'uc-summary', pick(useCase.summary)),
-    chips,
-    el('h4', 'uc-label', t('card.prompt')),
-    promptBlock(promptText),
     buttons,
+    section(t('card.situation'), el('p', '', d.situation ?? '')),
+    section(t('card.prompt'), promptBody),
     section(t('card.run'), steps),
-    section(t('card.fit'), el('p', '', pick(useCase.fitIntoWork))),
-    section(t('card.how'), el('p', '', pick(useCase.howItWorks))),
-    section(t('card.why'), el('p', '', pick(useCase.whyCowork))),
+    section(t('card.fit'), el('p', '', d.fit?.ownPlaceholder ?? ''), el('p', '', d.how?.tailor ?? '')),
+    section(t('card.how'), el('p', '', d.how?.intro ?? ''), el('p', '', d.how?.variation ?? '')),
+    section(t('card.why'), whyBody),
   );
-
   card.append(head, body);
   return card;
 }

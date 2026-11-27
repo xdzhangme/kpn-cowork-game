@@ -46,21 +46,23 @@ function desk(roomId, n, x, y) {
 // ---- department rooms ----
 // Rooms alternate between departments and functional rooms on both sides of the corridor.
 // `band` is the vertical slot (CAPS); `type` defaults to department. inset shifts the outer wall for an irregular outline.
+// Department ids match the KPN use case id prefixes (CON-01 -> con). `sign` reuses an existing plaque icon; `decor` reuses a furniture set.
 const LEFT = [
-  { id: 'finance', name: 'Finance', band: 1, inset: 0, tint: 'mint', floor: 'checker' },
+  { id: 'con', name: 'Consumer', band: 1, inset: 0, tint: 'mint', floor: 'checker', sign: 'service', decor: 'finance' },
   { id: 'print', name: 'Print room', type: 'tip', band: 2, inset: 1, tint: 'grey', floor: 'hatch' },
-  { id: 'hr', name: 'HR', band: 3, inset: 2, tint: 'lavender', floor: 'dots' },
-  { id: 'it', name: 'IT', band: 6, inset: 2, tint: 'ice', floor: 'tiles8' },
-  { id: 'procurement', name: 'Procurement', band: 7, inset: 1, tint: 'butter', floor: 'zigzag' },
+  { id: 'sme', name: 'Business SME', band: 3, inset: 2, tint: 'lavender', floor: 'dots', sign: 'sales', decor: 'hr' },
+  { id: 'noi', name: 'Network, Ops & IT', band: 6, inset: 2, tint: 'ice', floor: 'tiles8', sign: 'it', decor: 'it' },
+  { id: 'fin', name: 'Finance & Control', band: 7, inset: 1, tint: 'butter', floor: 'zigzag', sign: 'finance', decor: 'procurement' },
 ];
 const RIGHT = [
-  { id: 'sales', name: 'Sales', band: 1, inset: 0, tint: 'blush', floor: 'stripes' },
+  // The intro room sits right next to the lobby so new players reach it first.
+  { id: 'intro', name: 'Chat vs Cowork', type: 'intro', band: 1, inset: 0, tint: 'blush', floor: 'stripes', sign: 'intro', decor: 'intro' },
   { id: 'cafeteria', name: 'Cafeteria', type: 'tip', band: 2, inset: 1, tint: 'butter', floor: 'checker' },
-  { id: 'legal', name: 'Legal', band: 3, inset: 2, tint: 'sky', floor: 'planks' },
-  { id: 'ops', name: 'Operations', band: 4, inset: 1, tint: 'sage', floor: 'hatch' },
+  { id: 'tso', name: 'Tailored Solutions', band: 3, inset: 2, tint: 'sky', floor: 'planks', sign: 'legal', decor: 'legal' },
+  { id: 'lce', name: 'Business LCE', band: 4, inset: 1, tint: 'sage', floor: 'hatch', sign: 'ops', decor: 'ops' },
   { id: 'workspace', name: 'Open workspace', type: 'tip', band: 5, inset: 0, tint: 'sky', floor: 'dots' },
-  { id: 'marketing', name: 'Marketing', band: 6, inset: 1, tint: 'peach', floor: 'diamond' },
-  { id: 'service', name: 'Service', band: 7, inset: 2, tint: 'sand', floor: 'bands' },
+  { id: 'who', name: 'Wholesale', band: 6, inset: 1, tint: 'peach', floor: 'diamond', sign: 'procurement', decor: 'marketing' },
+  { id: 'pla', name: 'People & Learning', band: 7, inset: 2, tint: 'sand', floor: 'bands', sign: 'hr', decor: 'service' },
 ];
 
 // Five desk positions per layout as [dx, dy] from the room's top-left floor tile (dy 0 = storage row).
@@ -71,6 +73,7 @@ const LAYOUTS = {
   benches: [[1, 3], [4, 3], [7, 3], [2, 5], [6, 5]],
   ring: [[1, 3], [1, 5], [7, 3], [7, 5], [4, 6]],
   scatter: [[2, 3], [5, 3], [1, 5], [4, 6], [7, 5]],
+  solo: [[4, 4]],
 };
 
 // Per-department furniture. Entries: [sprite, dx, row, w]. Rows: 1 = back wall, 2 = storage row, 7 = bottom row.
@@ -126,6 +129,13 @@ const DECOR = {
     items: [['window', 0, 1], ['frame', 3, 1], ['clock', 5, 1], ['counter', 0, 2, 2], ['coffee-machine', 2, 2], ['plant', 3, 2], ['cabinet', 5, 2], ['bin', -1, 7]],
     rug: ['rug-4x2', 2, 4, 2],
     extra: [['poster', 7, 1], ['coat-rack', 6, 2], ['microwave', 1, 2], ['lamp', 0, 3], ['plant', 0, 6], ['armchair', 0, 7], ['cabinet', 0, 4], ['bin', -1, 3], ['cactus', -1, 6]],
+  },
+  intro: {
+    // A single demo desk in the middle, a big whiteboard and two monitors on the back wall: a briefing room.
+    layout: 'solo',
+    items: [['whiteboard', 1, 1, 2], ['monitors', 4, 1, 2], ['frame', 7, 1], ['plant', 0, 2], ['sofa', 1, 2, 2], ['shelf', 4, 2, 2], ['plant', -1, 2], ['cooler', -1, 7]],
+    rug: ['rug-4x2', 3, 4, 2],
+    extra: [['poster', 8, 1], ['pinboard', 9, 1, 2], ['cabinet', 0, 3], ['armchair', 0, 6], ['plant', 0, 7], ['lamp', -1, 3], ['bin', -1, 6], ['coffee-machine', 7, 2], ['mug', 6, 2]],
   },
   print: {
     items: [['window', 0, 1], ['poster', 4, 1], ['clock', 7, 1], ['plant', 0, 2], ['printer', 1, 2, 2], ['printer', 4, 2, 2], ['box-shelf', 7, 2, 2], ['boxes', 0, 6], ['boxes', 1, 6], ['cabinet', 3, 6], ['bin', -1, 7]],
@@ -198,7 +208,8 @@ function department(def, side) {
   doors.push({ x: doorX, y: cap + 4 }, { x: doorX, y: cap + 5 });
   grid[cap + 4][doorX] = 'D';
   grid[cap + 5][doorX] = 'D';
-  const decor = DECOR[def.id];
+  const decorKey = def.decor ?? def.id;
+  const decor = DECOR[decorKey];
   const at = (dx) => (dx < 0 ? xb + dx + 1 : xa + dx);
   if (decor.rug) rug(decor.rug[0], xa + decor.rug[1], cap + 4, decor.rug[2], decor.rug[3]);
   decor.items.forEach(([sprite, dx, row, w = 1]) => {
@@ -209,7 +220,7 @@ function department(def, side) {
     chair(xa + dx, cap + dy + 1);
   });
   if (decor.layout) LAYOUTS[decor.layout].forEach(([dx, dy], i) => desk(def.id, i + 1, xa + dx, cap + dy));
-  placeExtras([...(decor.extra ?? []), ...(MORE[def.id] ?? [])], at, { xa, xb, cap, floors: 6, doorX });
+  placeExtras([...(decor.extra ?? []), ...(MORE[decorKey] ?? [])], at, { xa, xb, cap, floors: 6, doorX });
 }
 LEFT.forEach((d) => department(d, 'L'));
 RIGHT.forEach((d) => department(d, 'R'));
@@ -218,7 +229,7 @@ RIGHT.forEach((d) => department(d, 'R'));
 {
   const cap = CAPS[4];
   const floors = CAPS[6] - cap - 2;
-  room({ id: 'general', name: 'General meeting room', type: 'general', tint: 'grey', floor: 'grid', xa: 1, xb: 11, cap, floors });
+  room({ id: 'general', name: 'General', type: 'general', tint: 'grey', floor: 'grid', xa: 1, xb: 11, cap, floors });
   doors.push({ x: 12, y: cap + 4 }, { x: 12, y: cap + 5 });
   grid[cap + 4][12] = 'D';
   grid[cap + 5][12] = 'D';
@@ -322,11 +333,20 @@ add('bin', 16, 64);
 // Re-apply the doorways that the corridor fill does not touch (wall columns 12 and 17).
 const tiles = grid.map((r) => r.join(''));
 
-// ---- objects bound to existing use cases ----
-const bind = { 'finance-1': 'finance-variance-summary', 'sales-1': 'sales-meeting-brief', 'hr-1': 'hr-onboarding-plan', 'general-1': 'general-inbox-triage' };
+// ---- objects bound to KPN use cases ----
+// Department slots `con-1..5` map to `CON-01..05`, general slots `general-1..10` to `GEN-01..10`,
+// and the single intro desk opens the Chat vs Cowork explainer.
+const INTRO_EXPLAINER_ID = 'intro-chat-vs-cowork';
+function useCaseFor(slot) {
+  const [roomId, n] = slot.id.split('-');
+  if (roomId === 'intro') return INTRO_EXPLAINER_ID;
+  const code = roomId === 'general' ? 'GEN' : roomId.toUpperCase();
+  const deptRoom = rooms.find((r) => r.id === roomId && (r.type === 'department' || r.type === 'general'));
+  return deptRoom ? `${code}-${String(n).padStart(2, '0')}` : null;
+}
 const objects = slots
-  .filter((s) => bind[s.id])
-  .map((s) => ({ id: `obj-${bind[s.id]}`, x: s.x, y: s.y, useCaseId: bind[s.id] }));
+  .map((s) => ({ id: `obj-${useCaseFor(s)}`, x: s.x, y: s.y, useCaseId: useCaseFor(s) }))
+  .filter((o) => o.useCaseId);
 
 const out = {
   tileSize: 16,

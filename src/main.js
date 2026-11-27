@@ -6,7 +6,8 @@ import officeMap from './data/office-map.json';
 import { blocked, createPlayer, drawPlayer } from './player.js';
 import { OPEN_USE_CASE } from './rules.js';
 import { createMapView } from './tilemap.js';
-import useCases from './data/use-cases.json';
+import { loadUseCases } from './usecases.js';
+import { EXPLAINER_ID, initScenarioPlayer } from './scenario.js';
 import { drawInteractables, loadObjects, nearestInteractable } from './interactables.js';
 import { initRules } from './rules.js';
 import { drawProp, propBase, sprite } from './art/atlas.js';
@@ -19,9 +20,28 @@ import { initGuide } from './guide.js';
 import { createNpcs } from './npcs.js';
 import npcData from './data/npcs.json';
 
-document.title = config.companyName;
-document.getElementById('badge').textContent = config.badge;
-document.getElementById('company').textContent = config.companyName;
+document.title = `${config.companyName} Cowork game`;
+const logo = document.getElementById('logo');
+if (config.logo) {
+  if (!logo.getAttribute('src').endsWith(config.logo)) logo.src = `${import.meta.env.BASE_URL}${config.logo}`;
+  logo.alt = config.companyName;
+  document.getElementById('badge').hidden = true;
+  document.getElementById('company').hidden = true;
+} else {
+  logo.hidden = true;
+  document.getElementById('badge').textContent = config.badge;
+  document.getElementById('company').textContent = config.companyName;
+}
+
+// The intro room's explainer object shares the object/progress pipeline with real cases.
+const EXPLAINER_STUB = {
+  id: EXPLAINER_ID,
+  icon: 'intro',
+  capabilities: [],
+  meta: { department: 'intro', code: 'INTRO' },
+  title: { en: 'Chat vs Cowork: start here', nl: 'Chat vs Cowork: begin hier' },
+  hook: { en: 'A three-minute tour of why Cowork beats pasting into Chat.', nl: 'Een rondleiding van drie minuten over waarom Cowork wint van plakken in Chat.' },
+};
 
 // A free tile next to the object (below first), as feet position; null if none is free.
 function standingSpot(map, o) {
@@ -65,6 +85,10 @@ document.getElementById('disclaimer-btn').addEventListener('click', () => dialog
 document.getElementById('disclaimer-close').addEventListener('click', () => dialog.close());
 
 const gamePanel = document.getElementById('panel-game');
+
+async function boot() {
+const kpnCases = await loadUseCases();
+const useCases = [EXPLAINER_STUB, ...kpnCases];
 const player = createPlayer(officeMap, () => !gamePanel.hidden);
 const objects = loadObjects(officeMap, useCases);
 
@@ -88,13 +112,16 @@ function openInGame(useCaseId) {
 }
 
 initLibrary(document.getElementById('library-list'), {
+  useCases: kpnCases,
   hasObject: (id) => objects.some((o) => o.useCaseId === id),
   onOpenInGame: openInGame,
 });
 applyI18n();
 let active = null;
 initRules(window, () => active, () => !gamePanel.hidden);
-initCardPanel(document.getElementById('card'), useCases);
+const guide = initGuide(officeMap, document.body);
+initCardPanel(document.getElementById('card'), useCases, { introSeen: guide.introSeen });
+initScenarioPlayer({ useCases: kpnCases });
 
 // Each bound object has a reward item two tiles to its right: grey silhouette until the case is finished.
 const rewardProps = objects
@@ -134,8 +161,7 @@ function playerColors() {
 }
 
 const npcs = createNpcs(officeMap, npcData.npcs, { reduceMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches });
-const guide = initGuide(officeMap, document.body);
-const caseRooms = officeMap.rooms.filter((r) => r.type === 'department' || r.type === 'general');
+const caseRooms = officeMap.rooms.filter((r) => r.type === 'department' || r.type === 'general' || r.type === 'intro');
 const signs = new Map(
   caseRooms.map((r) => [r.id, officeMap.props.find((p) => p.sprite.startsWith('sign-') && p.x >= r.x && p.x < r.x + r.w && p.y === r.y - 1)]),
 );
@@ -212,7 +238,7 @@ const mapView = createMapView(
       if (unlocked && at !== undefined && now - at < SPARKLE_MS) drawSparkle(ctx, officeMap, p, camX, camY, (now - at) / SPARKLE_MS);
     });
     const room = roomAtPixel(officeMap, player.x, player.y - 2);
-    if (room && room.id === guide.target()) guide.arrive();
+    if (room) guide.arrive(room.id);
     drawRoomSigns(ctx, camX, camY, colors);
     drawInteractables(ctx, officeMap, objects, active, camX, camY, colors, room, isCompleted);
     drawGuideArrow(ctx, now, camX, camY);
@@ -235,3 +261,10 @@ function frame(now) {
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
+}
+
+boot().catch((e) => {
+  console.error(e);
+  const card = document.getElementById('card');
+  if (card) card.textContent = `Could not load the KPN use cases: ${e.message}`;
+});

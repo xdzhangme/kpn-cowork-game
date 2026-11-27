@@ -1,7 +1,8 @@
 // Bottom pixel button bar (Today's tasks, Map, Tutorial, Menu) and the dialogs they open.
 import { getLang, LANGS, onLangChange, pick, setLang, t } from './i18n.js';
 import { blocked } from './player.js';
-import { completedIds, onProgressChange, resetProgress } from './progress.js';
+import { completedIds, onProgressChange, progressCounts, resetProgress } from './progress.js';
+import { roomDept } from './rooms.js';
 import { OPEN_USE_CASE } from './rules.js';
 import { setSoundEnabled, soundEnabled } from './sound.js';
 import { drawMap, mapSize } from './tilemap.js';
@@ -9,8 +10,6 @@ import { drawMap, mapSize } from './tilemap.js';
 const DEPT_KEY = 'department';
 const TUTORIAL_KEY = 'tutorial-seen';
 const TUTORIAL_STEPS = 4;
-// Map room ids that differ from the use case department ids.
-const DEPT_ALIAS = { ops: 'operations' };
 
 function el(tag, className, text) {
   const node = document.createElement(tag);
@@ -42,8 +41,6 @@ function load(key) {
     return null;
   }
 }
-
-const deptKey = (room) => DEPT_ALIAS[room.dept] ?? room.dept;
 
 function roomLabel(room) {
   const key = `room.${room.id}`;
@@ -99,10 +96,10 @@ export function initButtons({ container, map, useCases, player, mapView }) {
     const dept = load(DEPT_KEY);
     const done = new Set(completedIds());
     const mine = deptRooms.find((r) => r.id === dept);
-    const required = useCases.filter((u) => u.meta.department === 'general' || (mine && u.meta.department === deptKey(mine)));
-    const optional = useCases.filter((u) => !required.includes(u));
-    const requiredDone = required.filter((u) => done.has(u.id)).length;
-    const optionalDone = optional.filter((u) => done.has(u.id)).length;
+    const intro = useCases.filter((u) => u.meta.department === 'intro');
+    const required = useCases.filter((u) => u.meta.department === 'general' || (mine && u.meta.department === mine.id));
+    const optional = useCases.filter((u) => !required.includes(u) && !intro.includes(u));
+    const count = (list) => list.filter((u) => done.has(u.id)).length;
 
     const label = el('label', 'px-field', t('tasks.department'));
     const select = el('select', 'px-select');
@@ -123,15 +120,16 @@ export function initButtons({ container, map, useCases, player, mapView }) {
       list.forEach((u) => {
         const li = el('li', done.has(u.id) ? 'is-done' : '');
         li.append(el('span', 'px-check', done.has(u.id) ? '✓' : ''), el('span', '', pick(u.title)));
-        const room = rooms.find((r) => deptKey(r) === u.meta.department) ?? rooms.find((r) => r.type === 'general' && u.meta.department === 'general');
+        const room = rooms.find((r) => roomDept(r) === u.meta.department);
         if (room) li.append(button(t('map.jump'), 'px-btn--small', () => jumpTo(room)));
         ul.append(li);
       });
       body.append(ul);
     };
-    section('tasks.required', required, requiredDone);
+    if (intro.length) section('tasks.intro', intro, count(intro));
+    section('tasks.required', required, count(required));
     body.append(el('p', 'placeholder', t('tasks.required.hint')));
-    section('tasks.optional', optional, optionalDone);
+    section('tasks.optional', optional, count(optional));
     body.append(el('p', 'placeholder', t('tasks.optional.hint')));
   }
 
@@ -293,7 +291,8 @@ export function initButtons({ container, map, useCases, player, mapView }) {
   const summary = el('span', 'px-bar-summary');
   container.append(summary);
   const updateSummary = () => {
-    summary.textContent = `${completedIds().length} / ${useCases.length} ${t('panel.completed')}`;
+    const c = progressCounts(useCases.filter((u) => u.meta.department !== 'intro'));
+    summary.textContent = `${c.completed} / ${c.total} ${t('panel.completed')}`;
   };
   onProgressChange(updateSummary);
   onLangChange(updateSummary);

@@ -1,7 +1,5 @@
-import { renderCard } from './card.js';
 import { onLangChange, pick, t } from './i18n.js';
-import { completeUseCase, completedIds, isCompleted, onProgressChange, progressCounts } from './progress.js';
-import { OPEN_USE_CASE } from './rules.js';
+import { completedIds, onProgressChange, progressCounts } from './progress.js';
 
 function el(tag, className, text) {
   const node = document.createElement(tag);
@@ -17,81 +15,45 @@ function rewardName(id) {
 }
 
 /**
- * Right-side game panel: idle state (progress, unlocked rewards, next recommended case)
- * or the full shared use case card after pressing E near an object. Closing returns to idle.
+ * Right-side game panel: progress, unlocked rewards, next recommended case and how to play.
+ * Use cases themselves open in the scenario overlay (scenario.js), not here.
+ * options.introSeen(): hides the "visit the intro room" nudge once the player has been there.
  */
-export function initCardPanel(container, useCases, target = window) {
-  let openId = null;
+export function initCardPanel(container, useCases, { introSeen = () => true } = {}) {
+  const cases = useCases.filter((u) => u.meta.department !== 'intro');
 
-  function idleView() {
+  function render() {
     const done = new Set(completedIds());
-    const counts = progressCounts(useCases);
-    const cases = useCases.filter((u) => done.has(u.id));
-    const next = useCases.find((u) => !done.has(u.id));
+    const counts = progressCounts(cases);
+    const unlocked = cases.filter((u) => done.has(u.id) && u.rewardId);
+    const next = cases.find((u) => !done.has(u.id));
     const view = el('div', 'gp-idle');
     const head = el('header', 'uc-head px-title');
     head.append(el('h3', 'uc-title', t('panel.idle.title')));
     const body = el('div', 'uc-body');
-
+    body.append(el('p', 'gp-hint', t('panel.hint')));
+    if (!introSeen()) body.append(el('p', 'gp-nudge', t('panel.intro.hint')));
     body.append(
       el('h4', 'uc-label', t('panel.progress')),
       el('p', 'gp-progress', `${counts.completed} / ${counts.total} ${t('panel.completed')}`),
       el('p', 'gp-progress', `${counts.rewards} / ${counts.total} ${t('panel.unlocked')}`),
       el('h4', 'uc-label', t('panel.rewards')),
     );
-    if (cases.length) {
+    if (unlocked.length) {
       const list = el('ul', 'gp-rewards');
-      cases.forEach((u) => list.append(el('li', '', rewardName(u.rewardId))));
+      unlocked.forEach((u) => list.append(el('li', '', rewardName(u.rewardId))));
       body.append(list);
     } else {
       body.append(el('p', 'placeholder', t('panel.rewards.none')));
     }
     body.append(el('h4', 'uc-label', t('panel.next')));
-    body.append(next ? el('p', 'gp-next', pick(next.title)) : el('p', 'placeholder', t('panel.next.none')));
-    body.append(el('p', 'placeholder', t('game.placeholder')));
+    body.append(next ? el('p', 'gp-next', `${next.id} · ${pick(next.title)}`) : el('p', 'placeholder', t('panel.next.none')));
     view.append(head, body);
-    return view;
+    container.replaceChildren(view);
   }
 
-  function render() {
-    container.replaceChildren();
-    const useCase = useCases.find((u) => u.id === openId);
-    if (!useCase) {
-      openId = null;
-      container.append(idleView());
-      return;
-    }
-    const close = el('button', 'px-btn', t('panel.close'));
-    close.type = 'button';
-    close.addEventListener('click', closeCard);
-    const finish = el('button', 'px-btn px-btn--primary');
-    finish.type = 'button';
-    if (isCompleted(useCase.id)) {
-      finish.textContent = t('panel.finished');
-      finish.disabled = true;
-    } else {
-      finish.textContent = t('panel.finish');
-      finish.addEventListener('click', () => completeUseCase(useCase.id));
-    }
-    container.append(renderCard(useCase, { actions: [finish, close] }));
-  }
-
-  function closeCard() {
-    openId = null;
-    render();
-    container.focus();
-  }
-
-  target.addEventListener(OPEN_USE_CASE, (e) => {
-    openId = e.detail.useCaseId;
-    render();
-    container.scrollTop = 0;
-  });
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && openId && !document.querySelector('dialog[open]')) closeCard();
-  });
   onLangChange(render);
   onProgressChange(render);
   render();
-  return { close: closeCard };
+  return { refresh: render };
 }
