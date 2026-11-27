@@ -12,7 +12,7 @@ Run against the deployed GitHub Pages site (or `npm run preview`) in a desktop b
 ## Tabs
 - [ ] Four tabs are present: Tutorial Game, Use Case Library, How to start, Responsible AI.
 - [ ] Clicking each tab shows only its panel; the selected tab is highlighted.
-- [ ] How to start shows the five Play / Copy / Run / Review / Share steps (consistent with the guide); Responsible AI shows its steps and text.
+- [ ] How to start shows the hero with the mock Cowork run (steps light up, Approve completes it, Replay restarts), the Cowork vs Chat toggle, the five steps, Extend Cowork cards, the library guide and recurring workflows. Responsible AI shows four groups (Data, Oversight, Region and cost, Limits), ten tiles, the two "off" tenant chips and the banner. Both panes switch to Dutch with NL.
 - [ ] Disclaimer button opens the dialog; Close dismisses it.
 
 ## Language
@@ -37,7 +37,8 @@ Run against the deployed GitHub Pages site (or `npm run preview`) in a desktop b
 - [ ] Check at least CON-01, GEN-01 and FIN-01 (hand-polished: named files, several messages, a specific deliverable), one unpolished case (template-generated content, e.g. LCE-02) and NOI-05 (two approval pauses).
 
 ## Library
-- [ ] The Use Case Library lists 50 cases; the department filter and the search box narrow the list; no credits are shown anywhere.
+- [ ] The Use Case Library shows "50 of 50 use cases shown"; the search box narrows the list and shows title suggestions (clicking one opens that card); Try chips fill the search; ticking a Department or Role narrows the count and adds a removable chip; More filters reveals Workload, Scope, Capability and Execution mode; the Reset button in the empty state clears everything. No credits are shown anywhere.
+- [ ] Opening a card shows the prompt with highlighted brackets, Copy prompt copies it ("Copied"), See it run opens the run dialog (steps appear one by one, Proposed / Check / Weak tabs, flags and "Show me all" reveal), Fit it into your work rewrites the prompt from the chips and fields, and Why Cowork toggles between Chat and Cowork lists with a verdict.
 - [ ] Completed cases are marked as done.
 - [ ] "Play scenario" on a card opens the Tutorial Game tab with the scenario player for that case.
 

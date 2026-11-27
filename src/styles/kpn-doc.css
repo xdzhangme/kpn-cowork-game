@@ -1,0 +1,68 @@
+/* KPN brand overrides and small additions on top of the generated reference CSS
+   (ref-shell.css / ref-cards.css). Everything is scoped under .kpn-doc so the
+   pixel game keeps its own :root tokens. */
+
+.kpn-doc {
+  --ui-brand: #00c300;
+  --ui-on-brand: #111111;
+  --ui-text: #008900;
+  --ui-edge: #00ac00;
+  --ui-accent: #ddff44;
+  --ui-on-accent: #111111;
+  --ui-wash: color-mix(in srgb, #00c300 8%, #fff);
+  --ui-line: color-mix(in srgb, #00c300 22%, #d9dde3);
+}
+
+#lib-results {
+  --brand: #008900;
+  --brand2: color-mix(in srgb, #008900 75%, #fff);
+  --accent: #ddff44;
+  --on-accent: #111111;
+}
+
+/* The global dialog rule in style.css caps dialogs at 480px; the run dialog needs the reference width. */
+#lib-results dialog { max-width: none; }
+
+.kpn-doc.pane { padding: 1.5rem clamp(1rem, 3vw, 2.5rem) 3rem; max-width: 1280px; margin: 0 auto; }
+
+.kpn-doc .skip,
+#panel-library .skip {
+  position: absolute; left: -999px; top: .5rem; padding: .5rem .9rem; background: var(--ui-brand); color: var(--ui-on-brand);
+  border-radius: 6px; font-weight: 600; z-index: 20;
+}
+#panel-library .skip:focus { left: .75rem; }
+
+/* Library */
+.kpn-doc .lib-main { min-width: 0; }
+.kpn-doc #lib-results .gallery-case-body { padding: 0; }
+#lib-results .btn.game-link[disabled] { opacity: .55; cursor: not-allowed; }
+#lib-results .done-mark { background: var(--good-wash, #e8f5ee); color: var(--good, #1a7f4b); border-color: var(--good, #1a7f4b); }
+#lib-results .reveal { margin-top: .5rem; }
+#lib-results .fit .chip-row { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .75rem; margin: .6rem 0; }
+#lib-results .fit .chip-row .seg { display: inline-flex; flex-wrap: wrap; gap: 4px; background: var(--accent-wash); border-radius: 999px; padding: 4px; }
+#lib-results .fit .chip-row .seg button { border: 0; background: none; padding: .3rem .9rem; border-radius: 999px; font: inherit; font-size: .9rem; color: var(--muted); cursor: pointer; }
+#lib-results .fit .chip-row .seg button[aria-pressed="true"] { background: var(--brand); color: #fff; font-weight: 700; }
+#lib-results .fit .fit-msg { margin-left: .6rem; }
+#lib-results .fit .out { margin-top: .9rem; }
+#lib-results .why-cw .why-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .55rem; }
+#lib-results .why-cw .why-list li { display: flex; gap: .6rem; align-items: flex-start; }
+
+/* How to start */
+.kpn-doc .gs-hero-text { min-width: 0; }
+.kpn-doc .gs-hero-run { min-width: 0; }
+.kpn-doc .run-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; }
+.kpn-doc .run-replay { margin-left: auto; }
+.kpn-doc .gs-rec { margin: 0 0 3.25rem; }
+.kpn-doc .journey-list,
+.kpn-doc .rec-list { margin: 0; padding-left: 1.4rem; display: grid; gap: .85rem; }
+.kpn-doc .journey-list li::marker,
+.kpn-doc .rec-list li::marker { color: var(--ui-text); font-weight: 700; }
+.kpn-doc .rec-label { display: block; font-weight: 600; margin-bottom: .2rem; }
+.kpn-doc .requirements { margin: .35rem 0 0; padding-left: 1.1rem; color: var(--muted); font-size: var(--ui-type-label); }
+.kpn-doc .requirements li { margin: .15rem 0; }
+
+/* Responsible AI */
+.kpn-doc .gv-banner-ic { flex: none; display: grid; place-items: center; width: 32px; height: 32px; }
+.kpn-doc .gv-banner-ic svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.kpn-doc .gv-banner h3 { margin: 0 0 .25rem; font-size: var(--ui-type-title); }
+.kpn-doc .gv-banner p { margin: 0; }

@@ -24,9 +24,11 @@ A single-page static site with a header (company badge + name, EN/NL toggle, Dis
 button) and four tabs:
 
 1. **Tutorial Game** (first/default tab): the pixel-office game.
-2. **Use Case Library**: all use cases as full, readable cards.
-3. **How to start**: static content.
-4. **Responsible AI**: static content.
+2. **Use Case Library**: all use cases as full, readable cards (search, suggestions, department/role rail, more filters, active-filter chips, count), each with prompt, See it run, Fit it into your work, How it works and a Why Cowork section with a Chat/Cowork toggle.
+3. **How to start**: mock Cowork run, Cowork vs Chat comparison, five steps, extension options, library guide and recurring workflows.
+4. **Responsible AI**: grouped governance tiles (Data, Oversight, Region and cost, Limits) and tenant-setting chips.
+
+Tabs 2-4 follow the approved KPN use-case landing page design (its `card-styles` and `shell-styles` CSS, re-scoped under `.kpn-doc`; Segoe UI 17px body; ink/blue/wash/line/muted/teal tokens with KPN green as brand). The game tab keeps the pixel style. The reference page's opening "company landing" screen is not adopted because it depends on a multi-megabyte embedded preview.
 
 The Library is the content source. It serves two purposes: readable directly by users,
 and shared as the data that drives the game.
@@ -86,7 +88,7 @@ No win/lose condition. Progress indicator: number of use cases completed and rew
 - Completion on reaching the Outcome act and reward unlock, persisted in `localStorage`
 - Library tab with all use cases, shared JSON data, "Play scenario" deep link
 - EN/NL language toggle
-- Header, Disclaimer, How to start, Responsible AI as static content
+- Header and Disclaimer; Library, How to start and Responsible AI panes in the approved KPN landing-page design (`src/library-ui.js`, `src/doc-card.js`, `src/start-pane.js`, `src/governance-pane.js`)
 - Static deployment (no backend)
 
 ## 9. Later (not MVP)

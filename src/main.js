@@ -1,6 +1,11 @@
 import { config } from './config.js';
 import { applyI18n, setLang } from './i18n.js';
-import { initLibrary } from './library.js';
+import { initLibraryUI } from './library-ui.js';
+import { initStartPane } from './start-pane.js';
+import { initGovernancePane } from './governance-pane.js';
+import './styles/ref-shell.css';
+import './styles/ref-cards.css';
+import './styles/kpn-doc.css';
 import { loadTheme } from './theme.js';
 import officeMap from './data/office-map.json';
 import { blocked, createPlayer, drawPlayer } from './player.js';
@@ -117,11 +122,13 @@ function openInGame(useCaseId) {
   return true;
 }
 
-initLibrary(document.getElementById('library-list'), {
+initLibraryUI(document.getElementById('library-list'), {
   useCases: kpnCases,
   hasObject: (id) => objects.some((o) => o.useCaseId === id),
   onOpenInGame: openInGame,
 });
+initStartPane(document.getElementById('start-pane'));
+initGovernancePane(document.getElementById('rai-pane'));
 applyI18n();
 let active = null;
 initRules(window, () => active, () => !gamePanel.hidden);
