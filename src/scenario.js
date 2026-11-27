@@ -224,6 +224,34 @@ export function initScenarioPlayer({ useCases, coworkUrl = config.coworkUrl, tar
   const later = (fn, ms) => timers.push(setTimeout(fn, reduceMotion() ? 0 : ms));
 
   // ---- act renderers ----
+  // "Take it to work" box: copy the full prompt and open Cowork. Shown at the end of Act 2 and in Act 4.
+  function takeaway(uc) {
+    const box = el('aside', 'sc-takeaway');
+    box.append(el('h3', 'sc-h', t('sc.takeaway.title')), el('p', 'sc-small', t('sc.takeaway.text')));
+    const row = el('div', 'sc-takeaway-row');
+    const copy = button(t('sc.copy'), 'sc-copy', async () => {
+      try {
+        await navigator.clipboard.writeText(fullPrompt(uc));
+        copy.textContent = t('sc.copied');
+        copy.classList.add('is-copied');
+      } catch {
+        copy.textContent = t('sc.copyFailed');
+      }
+      // Plain timeout: the confirmation must stay visible even with reduced motion.
+      timers.push(setTimeout(() => {
+        copy.textContent = t('sc.copy');
+        copy.classList.remove('is-copied');
+      }, 1800));
+    });
+    const open = el('a', 'px-btn px-btn--primary sc-open-cowork', t('sc.try'));
+    open.href = coworkUrl;
+    open.target = '_blank';
+    open.rel = 'noopener';
+    row.append(copy, open);
+    box.append(row);
+    return box;
+  }
+
   function actSituation(uc) {
     const d = text(uc);
     const over = polish(uc)?.situation;
@@ -262,16 +290,21 @@ export function initScenarioPlayer({ useCases, coworkUrl = config.coworkUrl, tar
     [['outcome', p.outcome], ['inputs', p.inputs], ['doneWhen', p.doneWhen], ['constraints', p.constraints], ['approval', p.approval]].forEach(([k, v]) => {
       if (!v) return;
       const row = el('div', 'sc-prompt-row');
-      row.append(el('b', '', t(`sc.prompt.${k}`)), el('p', '', withBrackets(v)));
+      const para = el('p');
+      para.append(withBrackets(v));
+      row.append(el('b', '', t(`sc.prompt.${k}`)), para);
       full.append(row);
     });
     full.hidden = true;
-    view.append(full);
+    const take = takeaway(uc);
+    take.hidden = true;
+    view.append(full, take);
 
     const message = d.run?.userMsg ?? p.outcome ?? '';
     const reply = () => {
       caret.remove();
       full.hidden = false;
+      take.hidden = false;
       later(() => {
         chat.append(bubble(t('sc.cowork'), d.run?.coworkMsg ?? '', 'cowork'));
         body.scrollTop = body.scrollHeight;
@@ -398,6 +431,7 @@ export function initScenarioPlayer({ useCases, coworkUrl = config.coworkUrl, tar
     const value = polish(uc)?.outcome?.value ?? [d.why?.coworkVerdict, d.run?.good?.why ? `${t('sc.cowork')}: ${d.run.good.why}` : null].filter(Boolean);
     value.forEach((v) => right.append(el('p', 'sc-value', v)));
     if (d.run?.good?.notTouched) right.append(el('p', 'sc-small', `${t('sc.outcome.notTouched')}: ${d.run.good.notTouched}`));
+    right.append(takeaway(uc));
     grid.append(left, right);
     view.append(grid, comparison(uc));
 
@@ -411,20 +445,7 @@ export function initScenarioPlayer({ useCases, coworkUrl = config.coworkUrl, tar
       writeTried(cb.checked ? [...ids, uc.id] : ids);
     });
     tried.append(cb, el('span', '', t('sc.tried')));
-    const copy = button(t('sc.copy'), '', async () => {
-      try {
-        await navigator.clipboard.writeText(fullPrompt(uc));
-        copy.textContent = t('sc.copied');
-        later(() => (copy.textContent = t('sc.copy')), 1500);
-      } catch {
-        copy.textContent = t('sc.copy');
-      }
-    });
-    const open = el('a', 'px-btn px-btn--primary', t('sc.try'));
-    open.href = coworkUrl;
-    open.target = '_blank';
-    open.rel = 'noopener';
-    actions.append(tried, copy, open);
+    actions.append(tried);
     view.append(actions);
     return view;
   }

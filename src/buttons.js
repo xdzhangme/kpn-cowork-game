@@ -1,4 +1,4 @@
-// Bottom pixel button bar (Today's tasks, Map, Tutorial, Menu) and the dialogs they open.
+// Bottom pixel button bar (Today's tasks, Map, How to play, Menu) and the dialogs they open.
 import { getLang, LANGS, onLangChange, pick, setLang, t } from './i18n.js';
 import { blocked } from './player.js';
 import { completedIds, onProgressChange, progressCounts, resetProgress } from './progress.js';
@@ -9,7 +9,9 @@ import { drawMap, mapSize } from './tilemap.js';
 
 const DEPT_KEY = 'department';
 const TUTORIAL_KEY = 'tutorial-seen';
-const TUTORIAL_STEPS = 4;
+const TUTORIAL_STEPS = 6;
+// Dispatch this on window (e.g. from the header Guide button) to open the How to play guide.
+export const OPEN_GUIDE = 'open-guide';
 
 function el(tag, className, text) {
   const node = document.createElement(tag);
@@ -189,21 +191,30 @@ export function initButtons({ container, map, useCases, player, mapView }) {
     body.append(el('p', 'placeholder', t('map.hint')), layout);
   }
 
-  // ---- Tutorial ----
+  // ---- How to play guide ----
   let step = 0;
   function tutorialBody(body) {
+    const dots = el('ol', 'px-steps');
+    for (let i = 0; i < TUTORIAL_STEPS; i++) {
+      const li = el('li', i === step ? 'is-current' : i < step ? 'is-done' : '', String(i + 1));
+      li.setAttribute('aria-current', i === step ? 'step' : 'false');
+      dots.append(li);
+    }
     body.append(
       el('p', 'px-step-count', `${step + 1} / ${TUTORIAL_STEPS}`),
+      dots,
       el('h3', 'px-h', t(`tutorial.${step}.title`)),
       el('p', '', t(`tutorial.${step}.text`)),
+      el('p', 'px-tip', t(`tutorial.${step}.tip`)),
     );
+    const last = step === TUTORIAL_STEPS - 1;
+    if (last) body.append(el('p', 'px-muted', t('tutorial.reopen')));
     const foot = el('div', 'px-dialog-foot');
     const back = button(t('tutorial.back'), '', () => {
       step -= 1;
       refresh('tutorial');
     });
     back.disabled = step === 0;
-    const last = step === TUTORIAL_STEPS - 1;
     const next = button(last ? t('tutorial.done') : t('tutorial.next'), 'px-btn--primary', () => {
       if (last) dialogs.tutorial.dlg.close();
       else {
@@ -211,6 +222,7 @@ export function initButtons({ container, map, useCases, player, mapView }) {
         refresh('tutorial');
       }
     });
+    next.id = 'tutorial-next';
     foot.append(back, next);
     body.append(foot);
   }
@@ -270,12 +282,18 @@ export function initButtons({ container, map, useCases, player, mapView }) {
   onLangChange(refreshOpen);
   onProgressChange(refreshOpen);
   window.addEventListener(OPEN_USE_CASE, () => Object.values(dialogs).forEach((d) => d.dlg.open && d.dlg.close()));
+  const openGuide = () => {
+    step = 0;
+    document.querySelectorAll('dialog[open]').forEach((d) => d !== dialogs.tutorial.dlg && d.close());
+    open('tutorial');
+  };
+  window.addEventListener(OPEN_GUIDE, openGuide);
 
   // ---- Bar ----
   const items = [
     ['tasks', 'bar.tasks', () => open('tasks')],
     ['map', 'bar.map', () => open('map')],
-    ['tutorial', 'bar.tutorial', () => { step = 0; open('tutorial'); }],
+    ['tutorial', 'bar.tutorial', openGuide],
     ['menu', 'bar.menu', () => open('menu')],
   ];
   container.replaceChildren();
@@ -298,12 +316,12 @@ export function initButtons({ container, map, useCases, player, mapView }) {
   onLangChange(updateSummary);
   updateSummary();
 
-  // First run: show the guided path once.
+  // First run: show the How to play guide once, after the department picker.
   if (!load(TUTORIAL_KEY)) {
     store(TUTORIAL_KEY, '1');
     step = 0;
     const picker = document.getElementById('department-dialog');
-    if (picker?.open) picker.addEventListener('close', () => open('tutorial'));
+    if (picker?.open) picker.addEventListener('close', () => open('tutorial'), { once: true });
     else open('tutorial');
   }
 }

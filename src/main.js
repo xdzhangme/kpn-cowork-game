@@ -12,7 +12,7 @@ import { drawInteractables, loadObjects, nearestInteractable } from './interacta
 import { initRules } from './rules.js';
 import { drawProp, propBase, sprite } from './art/atlas.js';
 import { initCardPanel } from './panel.js';
-import { initButtons } from './buttons.js';
+import { initButtons, OPEN_GUIDE } from './buttons.js';
 import { playBlip } from './sound.js';
 import { isCompleted, completedIds, onProgressChange } from './progress.js';
 import { decorLevel, decorSpots, doorFor, roomAtPixel, roomProgress } from './rooms.js';
@@ -83,6 +83,11 @@ document.querySelectorAll('.lang button').forEach((b) =>
 const dialog = document.getElementById('disclaimer-dialog');
 document.getElementById('disclaimer-btn').addEventListener('click', () => dialog.showModal());
 document.getElementById('disclaimer-close').addEventListener('click', () => dialog.close());
+// The header Guide button switches to the game tab and reopens the How to play guide.
+document.getElementById('guide-btn').addEventListener('click', () => {
+  document.getElementById('tab-game')?.click();
+  window.dispatchEvent(new CustomEvent(OPEN_GUIDE));
+});
 
 const gamePanel = document.getElementById('panel-game');
 

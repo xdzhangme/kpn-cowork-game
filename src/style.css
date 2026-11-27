@@ -195,6 +195,13 @@ button {
   margin-left: 8px;
 }
 
+.dis--guide {
+  border-color: var(--kpn-green-700);
+  background: var(--kpn-green-700);
+  color: #fff;
+  font-weight: 700;
+}
+
 .tabs {
   display: flex;
   background: var(--kpn-grey-100);
@@ -613,6 +620,50 @@ dialog.px-dialog::backdrop {
   font-family: var(--font-pixel);
   color: var(--accent-dark);
   margin: 0;
+}
+
+/* How to play guide: step dots, tip line, reopen note */
+.px-steps {
+  display: flex;
+  gap: 6px;
+  list-style: none;
+  margin: 8px 0 12px;
+  padding: 0;
+}
+
+.px-steps li {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--ink);
+  background: #fff;
+  font-family: var(--font-pixel);
+  font-size: 16px;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.px-steps li.is-current {
+  background: var(--kpn-green);
+  color: #fff;
+}
+
+.px-steps li.is-done {
+  background: var(--kpn-green-800);
+  color: #fff;
+}
+
+.px-tip {
+  margin: 10px 0 0;
+  padding: 8px 10px;
+  border: 2px solid var(--marker);
+  background: #fff8e4;
+  font-size: 14px;
+}
+
+.px-muted {
+  font-size: 13px;
+  color: var(--kpn-grey-800);
 }
 
 /* ---------- Library toolbar and card additions ---------- */
@@ -1465,6 +1516,39 @@ dialog.sc-dialog::backdrop {
 
 .sc-actions a.px-btn {
   text-decoration: none;
+}
+
+/* Take it to work: copy prompt + open Cowork */
+.sc-takeaway {
+  margin-top: 18px;
+  padding: 12px 14px;
+  border: 3px solid var(--kpn-green-700);
+  background: var(--kpn-green-50, #eefbee);
+  box-shadow: 4px 4px 0 var(--kpn-green-800);
+}
+
+.sc-takeaway .sc-h {
+  margin-top: 0;
+}
+
+.sc-takeaway-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.sc-takeaway-row a.px-btn {
+  text-decoration: none;
+}
+
+.sc-copy.is-copied {
+  background: var(--kpn-green);
+  color: #fff;
+}
+
+.sc-act--prompt .sc-takeaway {
+  max-width: 760px;
 }
 
 .sc-tried {

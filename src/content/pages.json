@@ -2,12 +2,13 @@
   "en": {
     "start": {
       "title": "How to start",
-      "intro": "Pick one small task and try an AI assistant on it today.",
+      "intro": "Play one case in the game, then take its prompt into Cowork at work. Use the Guide button in the header for the controls.",
       "steps": [
-        "Choose a routine task that takes you 15 to 30 minutes, such as summarising notes or drafting an email.",
-        "Open an approved AI assistant and describe the task, the audience and the format you want.",
-        "Review the answer critically, correct mistakes and ask follow-up questions to improve it.",
-        "Share what worked with your team so others can reuse it."
+        "Play: walk to a desk with a yellow bubble and press E. Follow the four acts (Situation, Prompt, Cowork runs, Result). Start in the Chat vs Cowork room.",
+        "Copy: in the Prompt or Result act, press Copy prompt. Replace the [square bracket] placeholders with your own folder, names and dates.",
+        "Run: press Open Cowork to open Cowork in Microsoft 365 Copilot, point it at a folder with your own files, paste the prompt and let it work. Approve or adjust when it pauses.",
+        "Review: you stay responsible for the result. Check facts, numbers and names before anything leaves your team.",
+        "Share: tick \"I tried this at work\" in the game and tell your team what worked, so the case can be reused."
       ]
     },
     "rai": {
@@ -30,13 +31,14 @@
   },
   "nl": {
     "start": {
-      "title": "Hoe te beginnen",
-      "intro": "Kies één kleine taak en probeer er vandaag een AI-assistent bij.",
+      "title": "Hoe begin je",
+      "intro": "Speel één case in het spel en neem de prompt daarna mee naar Cowork op je werk. Gebruik de knop Gids in de kop voor de besturing.",
       "steps": [
-        "Kies een routinetaak van 15 tot 30 minuten, zoals aantekeningen samenvatten of een e-mail opstellen.",
-        "Open een goedgekeurde AI-assistent en beschrijf de taak, het publiek en het gewenste formaat.",
-        "Beoordeel het antwoord kritisch, verbeter fouten en stel vervolgvragen om het te verfijnen.",
-        "Deel wat werkte met je team, zodat anderen het kunnen hergebruiken."
+        "Speel: loop naar een bureau met een gele bel en druk op E. Volg de vier aktes (Situatie, Prompt, Cowork werkt, Resultaat). Begin in de ruimte Chat vs Cowork.",
+        "Kopieer: druk in de akte Prompt of Resultaat op Prompt kopiëren. Vervang de [vierkante haken] door je eigen map, namen en datums.",
+        "Voer uit: druk op Cowork openen om Cowork in Microsoft 365 Copilot te openen, wijs een map met je eigen bestanden aan, plak de prompt en laat het werken. Geef akkoord of stuur bij als het pauzeert.",
+        "Controleer: jij blijft verantwoordelijk voor het resultaat. Check feiten, cijfers en namen voordat iets je team verlaat.",
+        "Deel: vink \"Ik heb dit op mijn werk geprobeerd\" aan in het spel en vertel je team wat werkte, zodat de case hergebruikt kan worden."
       ]
     },
     "rai": {
